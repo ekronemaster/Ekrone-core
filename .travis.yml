@@ -1,0 +1,22 @@
+dist: focal
+language: cpp
+
+branches:
+  only:
+    - master
+    - travis
+
+addons:
+  apt:
+    update: true
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - libboost-all-dev
+      - g++
+
+script:
+  - mkdir build
+  - cd build
+  - cmake -DCMAKE_BUILD_TYPE=Release -DSTATIC=true ..
+  - make -j2
