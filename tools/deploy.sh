@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GIT_URL="https://github.com/EkroneNetwork/ekrone-core"
+GIT_URL="https://github.com/ekronemaster/Ekrone-core"
 BIN_DIR="$HOME/.local/src/ekrone-core/build/src"
 WALLETBIN="ekronewallet"
 BRANCH="master"
