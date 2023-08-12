@@ -6,7 +6,7 @@
 [![build](https://img.shields.io/github/actions/workflow/status/ekronemaster/Ekrone/master-ci.yml?branch=master)](https://github.com/ekronemaster/Ekrone/actions/workflows/master-ci.yml)
 [![release](https://img.shields.io/github/v/release/ekronemaster/Ekrone)](https://img.shields.io/github/v/release/ekronemaster/Ekrone)
 [![license](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://opensource.org/licenses/GPLv3)
-[![discord](https://img.shields.io/discord/1136264162549436496?label=discord)](https://discord.gg/Usf5kH3g)
+[![discord](https://img.shields.io/discord/1136264162549436496?label=discord)](https://discord.gg/StA2mh7UfZ)
 
 Ekrone (XEKR) is a decentralized blockchain based on CryptoNote, which forms the basis for many currencies. CryptoNote is a so-called “application layer” protocol that enables private transactions, messages and arbitrary data storage, completely decentralized. We made this for internal use, but decided you can use it. Mining is for all with a PC, no need expensive equipment.You can also deposit XEKR on the blockchain and earn interest. Warning: This a project still under development, so be sure you are updated. Happy journey, learn and have fun.
 Feel free to add us anywhere you use Ekrone, including pools and exchanges.
@@ -55,7 +55,7 @@ Feel free to add us anywhere you use Ekrone, including pools and exchanges.
 - Web: https://ekrone.eu
 - Docs: https://docs.ekrone.eu
 - GitHub: https://github.com/ekronemaster
-- Discord:
+- Discord: https://discord.gg/StA2mh7UfZ
 - Telegram:
 - It is HIGHLY recommended to join Discord if you want to contribute and stay up to date on what is happening on the project.
 - Twitter: https://twitter.com/ekrone
@@ -424,7 +424,7 @@ To deploy your own node, please follow the instructions on our Wiki: [https://do
 
 ## Help and Support
 
-For questions and support please use the channel #support in [Ekrone]() Discord server. The issue tracker is for bug reports and feature discussions only.
+For questions and support please use the channel #support in [Ekrone](https://discord.gg/StA2mh7UfZ) Discord server. The issue tracker is for bug reports and feature discussions only.
 
 ## Thanks
 
