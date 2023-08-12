@@ -428,7 +428,7 @@ For questions and support please use the channel #support in [Ekrone]() Discord 
 
 ## Thanks
 
-Cryptonote Developers, Bytecoin Developers, Monero Developers, Forknote Project, TurtleCoin Community, Ekrone Developers
+Cryptonote Developers, Bytecoin Developers, Monero Developers, Forknote Project, The Conceal Developers, The Circle Foundation, Ekrone Developers
 
 ## Copypasta for license when editing files
 
