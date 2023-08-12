@@ -2,19 +2,12 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+The current supported version is v1.1.0, but we encourage everyone to update to latest versions as often as possible. But it's not a requirement as long as it's above or the same as the supported version in the table below.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 6.6.0   | :white_check_mark: |
-| 6.5.2   | :white_check_mark: |
-| 6.4.9   | :white_check_mark: |
+| 1.1.x   | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
-
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+If you find any vulnerability, please report them as an issue here or on [Discord](https://discord.gg/Usf5kH3g) in the group "Ekrone".

@@ -1,170 +1,456 @@
-![image](https://github.com/EkroneNetwork/ekrone-imagery/blob/master/logos/splash.png)
+<a href="https://github.com/ekrone/ekrone">
+  <img align="right" width="200" height="120" alt="Ekrone" src="resources/ekrone.svg">
+</a>
 
-# Ekrone Core (CLI)
+# Ekrone
+[![build](https://img.shields.io/github/actions/workflow/status/ekronemaster/Ekrone/master-ci.yml?branch=master)](https://github.com/ekronemaster/Ekrone/actions/workflows/master-ci.yml)
+[![release](https://img.shields.io/github/v/release/ekronemaster/Ekrone)](https://img.shields.io/github/v/release/ekronemaster/Ekrone)
+[![license](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://opensource.org/licenses/GPLv3)
+[![discord](https://img.shields.io/discord/1136264162549436496?label=discord)](https://discord.gg/Usf5kH3g)
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/EkroneNetwork/ekrone-core)](https://github.com/EkroneNetwork/ekrone-core/releases/latest)
-[![Ubuntu 20.04](https://github.com/EkroneNetwork/ekrone-core/actions/workflows/ubuntu20.yml/badge.svg)](https://github.com/EkroneNetwork/ekrone-core/actions/workflows/ubuntu20.yml)
-[![Ubuntu 22.04](https://github.com/EkroneNetwork/ekrone-core/actions/workflows/ubuntu22.yml/badge.svg)](https://github.com/EkroneNetwork/ekrone-core/actions/workflows/ubuntu22.yml)
-[![Windows](https://github.com/EkroneNetwork/ekrone-core/actions/workflows/windows.yml/badge.svg)](https://github.com/EkroneNetwork/ekrone-core/actions/workflows/windows.yml)
-[![macOS](https://github.com/EkroneNetwork/ekrone-core/actions/workflows/macOS.yml/badge.svg)](https://github.com/EkroneNetwork/ekrone-core/actions/workflows/macOS.yml)
+Ekrone is a decentralized blockchain based on CryptoNote, which forms the basis for many currencies. CryptoNote is a so-called “application layer” protocol that enables private transactions, messages and arbitrary data storage, completely decentralized. We made this for internal use, but decided you can use it. Mining is for all with a PC, no need expensive equipment. Happy journey, learn and have fun.
+Feel free to add us anywhere you use Ekrone, including pools and exchanges.
 
-Maintained by Ekrone Developers, overseen by Ekrone Team and driven by Ekrone Community.
+## Table of Contents
 
-## What's Ekrone Network?
+- [Development Resources](#development-resources)
+- [Getting Help](#getting-help)
+- [Reporting Issues](#reporting-issues)
+- [Versioning](#versioning)
+- [CI/CD](#cicd)
+- [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Ubuntu](#ubuntu)
+    - [Build using GCC](#build-using-gcc)
+    - [Build using Clang](#build-using-clang)
+  - [Generic Linux](#generic-linux)
+    - [Build](#build)
+  - [OSX/Apple](#osxapple)
+    - [Prerequisites](#prerequisites-1)
+    - [Build using GCC](#build-using-gcc-1)
+    - [Build using Clang](#build-using-clang-1)
+  - [Windows](#windows)
+    - [Prerequisites](#prerequisites-2)
+    - [Build using Visual C++ 2019](#build-using-visual-c-2019)
+    - [Build using Visual C++ 2022](#build-using-visual-c-2022)
+  - [Raspberry Pi 3 B+ (AARCH64/ARM64)](#raspberry-pi-3-b-aarch64arm64)
+    - [Known working images](#known-working-images)
+    - [Build](#build-1)
+- [Setup testnet](#setup-testnet)
+  - [Install Docker](#install-docker)
+  - [Start the orchestration of Docker containers](#start-the-orchestration-of-docker-containers)
+  - [Stop all Docker containers](#stop-all-docker-containers)
+  - [Start all Docker containers again](#start-all-docker-containers-again)
+  - [Removing all data](#removing-all-data)
+- [Deploy node](#deploy-node)
+- [Checklist before release](#checklist-before-release)
+- [Help and Support](#help-and-support)
+- [Thanks](#thanks)
+- [Copypasta for license when editing files](#copypasta-for-license-when-editing-files)
+- [Contributors](#contributors)
+- [License](#license)
 
-Ekrone Network is a peer-to-peer privacy-preserving network made for Private DeFi and Encrypted Communications. Ekrone offers protocol-level private transactions, blockchain deposits, and on-chain encrypted messages. These unique functionalities make it effortless for everyday users to manage their finances and communicate securely and privately.
+## Development Resources
 
-Ekrone provides the ability for individuals to communicate and financially interact with each other in a totally anonymous manner. Two persons may exchange messages, conduct business, and transact funds without ever knowing the true name, or legal identity, of the other. Interactions over networks are untraceable, via cryptographic protocols with nearly perfect assurance against any tampering.
+- Web: https://ekrone.eu
+- Docs: https://docs.ekrone.eu
+- GitHub: https://github.com/ekronemaster
+- Discord:
+- Telegram:
+- It is HIGHLY recommended to join Discord if you want to contribute and stay up to date on what is happening on the project.
+- Twitter: https://twitter.com/ekrone
 
-₡CCX mimics the properties of cash. Nobody knows how or where you spend your folding cash. You go to the ATM, take out money and you can buy an ice-cream or that pretty old chair at the neighborhood yard sale and there is no record of it anywhere, unlike with a credit card. These powerful privacy-preserving abilities will act as a critical bulwark against the inevitable rise of Panopticon digital money. They may be our only hope. The end of cash means the end of free choice. That’s where Ekrone comes into the picture.
+## Getting Help
 
-A lot of people say there is no killer app for crypto. They’re wrong. We’ve figured out how to mimic cash in an environment that is entirely focused on privacy: The biggest feature of cash is that it’s really hard to track. In other words, anonymity is the main feature of cash. Only the two parties that conducted business know it happened. Ekrone (₡CCX) is the death of blockchain analysis. Ekrone brings back the true anonymity of cash.
+Are you having trouble with Ekrone? We want to help!
 
-Ekrone is open-source, community driven and truly decentralized. No one owns it, everyone can take part.
+- Read through all documentation on our Wiki: https://docs.ekrone.eu
 
-## Resources
+- If you are upgrading, read the release notes for upgrade instructions and "new and noteworthy" features.
 
--   Web: <https://ekrone.network>
--   GitHub: <https://github.com/EkroneNetwork>
--   Wiki: <https://ekrone.network/wiki>
--   Explorer: <https://explorer.ekrone.network>
--   Discord: <https://discord.gg/YbpHVSd>
--   Twitter: <https://twitter.com/EkroneNetwork>
--   Telegram Official (News Feed): <https://t.me/ekronenetwork>
--   Telegram User Group (Chat Group): <https://t.me/ekronenetworkusers>
--   Medium: <https://medium.com/@EkroneNetwork>
--   Reddit: <https://www.reddit.com/r/EkroneNetwork>
--   Bitcoin Talk: <https://bitcointalk.org/index.php?topic=4515873>
--   Paperwallet: <https://ekrone.network/paperwallet>
+- Ask a question we monitor stackoverflow.com for questions tagged with ekrone. You can also chat with the community on Telegram or Discord.
 
-## Compiling Ekrone from source
+- Report bugs with Ekrone at https://github.com/ekronemaster/Ekrone/issues.
 
-### System Memory
+- Join the Discussion and be part of the community at Discord: 
 
-The build process can consume upto 13GB of memory and may fail if enough resources are not available.
-In some build scenarios it may be necessary to increase the size of the SWAP to compensate for less RAM.
+## Reporting Issues
 
-For example if you have 8GB of RAM, then your SWAP size should be 5GB
+Ekrone uses GitHub’s integrated issue tracking system to record bugs and feature requests. If you want to raise an issue, please follow the recommendations below:
 
--   Ubuntu / Debian
+- Before you log a bug, please search the issue tracker to see if someone has already reported the problem.
 
-```bash
-sudo fallocate -l 5G /swapfile
-sudo chmod 600 /swapfile
-sudo mkswap /swapfile
-sudo swapon /swapfile
-```
+- If the issue doesn’t already exist, create a new issue.
 
--   Rasberry Pi OS
+- Please provide as much information as possible with the issue report. We like to know the Ekrone version, operating system, and JVM version you’re using.
 
-```bash
-sudo dphys-swapfile swapoff
-sudo nano /etc/dphys-swapfile
-CONF_SWAPSIZE=5120
-sudo nano /sbin/dphys-swapfile
-#CONF_MAXSWAP=2048
-sudo dphys-swapfile setup
-sudo dphys-swapfile swapon
-```
+- If you need to paste code or include a stack trace, use Markdown. ``` escapes before and after your text.
 
-### Linux
+- If possible, try to create a test case or project that replicates the problem and attach it to the issue.
+
+## Versioning
+
+Ekrone uses [Semantic Versioning Standard 2.0.0](https://semver.org/).
+
+Given a version number MAJOR.MINOR.PATCH, increment the:
+
+- MAJOR version when you make incompatible API changes
+- MINOR version when you add functionality in a backwards compatible manner
+- PATCH version when you make backwards compatible bug fixes
+
+Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+
+## CI/CD
+
+This project is automatically built and tested using GitHub Actions. We have two pipelines:
+
+- **Ekrone Main Pipeline** - This is the pipeline that runs the code merged into our main branch.
+- **Ekrone Pull Request Pipeline** - This is the pipeline that runs each time a pull request come in so the reviewer has some help evaluating the code status.
+
+The Ekrone Main Pipeline do everything the Ekrone Pull Request Pipeline does in addition to generate Doxygen and building and publishing a Docker Image to
+the project tagged by the project name, owner, repository and short form of commit SHA value.
+
+The purpose of publishing prepared Docker images is to make it faster and easier to deploy a Ekrone node/pool.
+
+## Installation
+
+We offer binary images of the latest releases here: https://github.com/ekronemaster/Ekrone/releases
+
+If you would like to compile yourself, read on.
+
+### Prerequisites
+
+You will need the following packages: boost, cmake (3.8 or higher), make, and git.
+
+You will also need either GCC/G++, or Clang.
+
+If you are using GCC, you will need GCC-11.0 or higher.
+
+If you are using Clang, you will need Clang 6.0 or higher. You will also need libstdc++\-6.0 or higher.
+
+### Ubuntu
+
+#### Build using GCC
+
+If you are using Ubuntu 22.04 LTS GCC11 and C++11 now comes as default and no need to install this.
+
+- `sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y`
+- `sudo apt-get update`
+- `sudo apt-get install aptitude python3-pip -y`
+- `sudo aptitude install -y build-essential g++-11 gcc-11 git libboost-all-dev`
+- `sudo pip3 install cmake`
+- `export CC=gcc-11`
+- `export CXX=g++-11`
+- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone`
+- `cd ekrone`
+- `mkdir build`
+- `cd build`
+- `cmake ..`
+- `make`
+
+The binaries will be in the `src` folder when you are complete.
+
+- `cd src`
+- `./ekrone --version`
+
+#### Build using Clang
+
+- `sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y`
+- `wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -`
+
+You need to modify the below command for your version of ubuntu - see https://apt.llvm.org/
+
+- Ubuntu 14.04 (Trusty)
+
+* `sudo add-apt-repository "deb https://apt.llvm.org/trusty/ llvm-toolchain-trusty 6.0 main"`
+
+- Ubuntu 16.04 (Xenial)
+
+* `sudo add-apt-repository "deb https://apt.llvm.org/xenial/ llvm-toolchain-xenial 6.0 main"`
+
+- Ubuntu 18.04 (Bionic)
+
+* `sudo add-apt-repository "deb https://apt.llvm.org/bionic/ llvm-toolchain-bionic 6.0 main"`
+
+* `sudo apt-get update`
+* `sudo apt-get install aptitude -y`
+* `sudo aptitude install -y -o Aptitude::ProblemResolver::SolutionCost='100*canceled-actions,200*removals' build-essential clang-6.0 libstdc++-7-dev git libboost-all-dev python-pip`
+* `sudo pip install cmake`
+* `export CC=clang-6.0`
+* `export CXX=clang++-6.0`
+* `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone`
+* `cd ekrone`
+* `mkdir build`
+* `cd build`
+* `cmake ..`
+* `make`
+
+The binaries will be in the `src` folder when you are complete.
+
+- `cd src`
+- `./ekrone --version`
+
+### Generic Linux
+
+#### Build
+
+- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone`
+- `cd turtlecoin`
+- `mkdir build`
+- `cd build`
+- `cmake ..`
+- `make`
+
+The binaries will be in the `src` folder when you are complete.
+
+- `cd src`
+- `./ekrone --version`
+
+### OSX/Apple
 
 #### Prerequisites
 
--   You will need the following dependencies to build the Ekrone CLI: boost, cmake, git, gcc, g++, python, and make:
+- Install XCode and Developer Tools.
 
-##### Ubuntu and Debian Based Systems
+#### Build using GCC
 
-```bash
-sudo apt update
-sudo apt install -y build-essential python3-dev git cmake libboost-all-dev
-```
+If using M1 chip, switch gcc@8 to gcc@11 when installing through brew.
 
-#### Building
+- `which brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+- `brew install --force cmake boost llvm gcc@8`
+- `export CC=gcc-8`
+- `export CXX=g++-8`
+- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone`
+- `cd ekrone`
+- `mkdir build`
+- `cd build`
+- `cmake ..`
+- `make`
 
--   On Linux Systems:
+The binaries will be in the `src` folder when you are complete.
 
-```bash
-git clone https://github.com/EkroneNetwork/ekrone-core
-cd ekrone-core
-mkdir build
-cd build
-cmake ..
-make
-```
+- `cd src`
+- `./ekrone --version`
 
-If the build is successful the binaries will be in the `src` folder.
+#### Build using Clang
 
-### ARM / Raspberry Pi
+- `which brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+- `brew install --force cmake boost llvm`
+- `export CC=/usr/local/opt/llvm/bin/clang`
+- `export CXX=/usr/local/opt/llvm/bin/clang++`
+- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone`
+- `cd ekrone`
+- `mkdir build`
+- `cd build`
+- `cmake ..`
+- `make`
 
-Tested on a Raspberry Pi 4 with Raspberry Pi OS (32/64bit) images.
+Note that if you are using x64 you need to set the flag by running cmake with:
 
-Other ARM CPU/OS combinations should be possible if the CPU supports Neon/AES.
+`cmake -DCMAKE_OSX_ARCHITECTURES=x86_64 ..`
 
--   Follow the Linux / Ubuntu procedure to build.
+Or with macOS m1:
 
-### Windows 10
+`cmake -DCMAKE_OSX_ARCHITECTURES=arm64 ..`
 
-#### Prerequisites
+The binaries will be in the `src` folder when you are complete.
 
--   Install [Visual Studio 2019 Community Edition](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&rel=16)
-    > When installing Visual Studio, you need to install **Desktop development with C++** and the **MSVC v142 - VS 2019 C++ x64/x86 build tools** components. The option to install the v142 build tools can be found by expanding the "**Desktop development with C++**" node on the right. You will need this for the project to build correctly.
--   Install [CMake](https://cmake.org/download/)
--   Install [Boost](https://sourceforge.net/projects/boost/files/boost-binaries/1.78.0/boost_1_78_0-msvc-14.2-64.exe/download), **ensuring** you download the installer for **MSVC 14.2**. 
-    > The instructions will be given for Boost 1.78.0. Using a different version should be supported but you will have to change the version where required.
+- `cd src`
+- `./ekrone --version`
 
-#### Building
-
--   From the start menu, open 'x64 Native Tools Command Prompt for vs2019' or run "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\Tools\\VsMSBuildCmd.bat" from any command prompt.
-
-```ps
-git clone https://github.com/EkroneNetwork/ekrone-core
-cd ekrone-core
-mkdir build
-cd build
-cmake .. -G "Visual Studio 16 2019" -A x64 -DBOOST_ROOT="c:\local\boost_1_78_0"
-msbuild ekroneX.sln /p:Configuration=Release /m
-```
-
-If the build is successful the binaries will be in the `src/Release` folder.
-
-### macOS
+### Windows
 
 #### Prerequisites
 
--   In order to install prerequisites, [XCode](https://developer.apple.com/xcode/) and [Homebrew](https://brew.sh/) needs to be installed.
-    Once both are ready, open Terminal app and run the following command to install additional tools:
+- Install [Visual Studio 2019 Community Edition](https://visualstudio.microsoft.com/vs/older-downloads/)
+- Install [Visual Studio 2022 Community Edition](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022&source=VSLandingPage&cid=2030&passive=false)
+- When installing Visual Studio, it is **required** that you install **Desktop development with C++**.  Select MSVC v141 Build Tools.
+- Install the latest version of [Boost](https://sourceforge.net/projects/boost/files/boost-binaries/1.68.0/boost_1_68_0-msvc-14.1-64.exe/download) - Currently Boost 1.68.
+
+#### Build using Visual C++ 2019
+
+- From the start menu, open 'x64 Native Tools Command Prompt for vs2019'.
+- `cd <your_ekrone_directory>`
+- `mkdir build`
+- `cd build`
+- `set PATH="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin";%PATH%`
+- `cmake -G "Visual Studio 16 2019" -A x64 .. -DBOOST_ROOT=C:/local/boost_1_68_0`
+
+If you have errors on this step about not being able to find the following static libraries, you may need to update your cmake. Open 'Visual Studio Installer' and click 'Update'.
+
+- `MSBuild ekrone.sln /p:Configuration=Release /p:PlatformToolset=v141`
+
+#### Build using Visual C++ 2022
+
+- From the start menu, open 'x64 Native Tools Command Prompt for vs2022'.
+- `cd <your_ekrone_directory>`
+- `mkdir build`
+- `cd build`
+- `set PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin";%PATH%`
+- `cmake -G "Visual Studio 17 2022" .. -DBOOST_ROOT=C:/local/boost_1_68_0 `
+
+If you have errors on this step about not being able to find the following static libraries, you may need to update your cmake. Open 'Visual Studio Installer' and click 'Update'.
+
+- `MSBuild ekrone.sln /p:Configuration=Release /p:PlatformToolset=v141 /p:Platform="x64" /m`
+
+
+The binaries will be in the `src/Release` folder when you are complete.
+
+- `cd src`
+- `cd Release`
+- `ekrone.exe --version`
+
+### Raspberry Pi 3 B+ (AARCH64/ARM64)
+
+The following images are known to work. Your operation system image **MUST** be 64 bit.
+
+#### Known working images
+
+- https://fedoraproject.org/wiki/Architectures/ARM/Raspberry_Pi#aarch64_supported_images_for_Raspberry_Pi_3
+- https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3
+
+Once you have a 64 bit image installed, setup proceeds the same as any Linux distribution. Ensure you have at least 2GB of ram, or the build is likely to fail. You may need to setup swap space.
+
+#### Build
+
+- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone`
+- `cd ekrone`
+- `mkdir build`
+- `cd build`
+- `cmake ..`
+- `make`
+
+The binaries will be in the `src` folder when you are complete.
+
+- `cd src`
+- `./ekrone --version`
+
+## Setup testnet
+
+### Install Docker
+
+On Windows or Mac it's enough to install Docker Desktop and we will have everything we need in order to setup. For GNU/Linux however there is a slightly different process. We are going through the steps for doing it on a Ubuntu distribution, it should work on all Debian derived distributions. Read below.
+
+Update our headers:
 
 ```bash
-xcode-select --install
+sudo apt-get update
 ```
 
--   On newer macOS versions (v10.14 and higher) this step is done through Software Update in System Preferences.
-
--   After that, proceed with installing dependencies:
+Installing necessary dependencies for Docker:
 
 ```bash
-brew install git cmake boost
+sudo apt-get -y install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
 ```
 
-#### Building
-
--   When all dependencies are installed, build Ekrone Core binaries:
+Setting up the keyring:
 
 ```bash
-git clone https://github.com/EkroneNetwork/ekrone-core
-cd ekrone-core
-mkdir build
-cd build
-cmake ..
-make
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 ```
 
-If the build is successful the binaries will be located in the `src` folder.
+Updating our sources.list for be able to download Docker:
 
-#### Special Thanks
+```bash
+echo \
+"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
 
-Special thanks goes out to the developers from Cryptonote, Bytecoin, Ryo, Monero, Forknote, TurtleCoin, Karbo and Masari.
+Installing Docker and Docker Compose:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose
+```
+
+### Start the orchestration of Docker containers
+
+So now we have everything in place in order for us to build and orchestrate up a local testnet. We do not need to install all dependencies mentioned before this section of Docker on your computer. When we start the process of setting up the testnet we will build a Docker Image that installs everything for us automatically.
+
+So to start from scratch we will use the shell script `setup-testnet.sh` but before that we must make sure that all our shell scripts that we need are executable on our system. To make the shell scripts executable:
+
+```bash
+sudo chmod +x setup-testnet.sh \
+              remove-testnet.sh \
+              start-testnet.sh \
+              teardown-testnet.sh
+```
+
+To start:
+
+- `./setup-testnet.sh`
+
+So now the first time when starting the script it will take a while to compile and link all the files (around 15-20 minutes depending on how powerful computer you have). So when it's done you will see a lot of output of the Daemons starting on three nodes. The miner do not have any output on the terminal.
+
+### Stop all Docker containers
+
+So all of these containers running will take up some memory and CPU usage on your system so it could be wise to stop these when not using them. To do that just run the shell script:
+
+- `./teardown-testnet.sh`
+
+This makes sure that we still have the image saved locally so we don't need to build it again when we will start it.
+
+### Start all Docker containers again
+
+Instead of using `setup-testnet.sh` file we will use the file `start-testnet.sh`:
+
+- `./start-testnet.sh`
+
+The difference here is that we will not build the image again and thus has to wait a while. Now this will only take seconds. And now we have our testnet up again!
+
+### Removing all data
+
+When we want to do a full cleanup on our system with Docker we can start the script `remove-testnet.sh`:
+
+- `./remove-testnet.sh`
+
+Now we will remove networks, volumes, images and containers existing on our system. If you after removing everything want to start again. Just use the file `setup-testnet.sh` again.
 
 
-Copyright (c) 2017-2023 Ekrone Community, Ekrone Network & Ekrone Devs
+
+To deploy your own node, please follow the instructions on our Wiki: [https://docs.ekrone.eu/guides/ekrone/deploy-your-own-full-node](https://docs.ekrone.eu/guides/ekrone/deploy-your-own-full-node)
+
+## Checklist before release
+
+1. Edit the file in `config/version.h.in` and bump up the version.
+2. Create PR and wait for review + merge.
+3. Create a tag on master `git tag v*.*.*`
+4. Push the changes `git push origin <tag_name>` to trigger a new build and to publish to various package managers.
+
+## Help and Support
+
+For questions and support please use the channel #support in [Ekrone]() Discord server. The issue tracker is for bug reports and feature discussions only.
+
+## Thanks
+
+Cryptonote Developers, Bytecoin Developers, Monero Developers, Forknote Project, TurtleCoin Community, Ekrone Developers
+
+## Copypasta for license when editing files
+
+Hi Ekrone contributor, thanks for forking and sending back Pull Requests. Extensive docs about contributing are in the works or elsewhere. For now this is the bit we need to get into all the files we touch. Please add it to the top of the files.
+
+```
+// Copyright (c) 2012-2017 The Cryptonote developers
+// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
+// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+//
+// Please see the included LICENSE file for more information.
+```
+
+## Contributors
+
+The following contributors have either helped to start this project, have contributed
+code, are actively maintaining it (including documentation), or in other ways
+being awesome contributors to this project.
+
+None yet.....Is it you?
+
+
+## License
+
+The GPL-3.0 License.
