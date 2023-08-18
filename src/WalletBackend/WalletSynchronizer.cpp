@@ -3,7 +3,7 @@
 // Please see the included LICENSE file for more information.
 
 /////////////////////////////////////////////
-#include <walletbackend/WalletSynchronizer.h>
+#include <WalletBackend/WalletSynchronizer.h>
 /////////////////////////////////////////////
 
 #include <common/StringTools.h>
@@ -16,7 +16,7 @@
 #include <utilities/ThreadSafeDeque.h>
 #include <utilities/ThreadSafeQueue.h>
 #include <utilities/Utilities.h>
-#include <walletbackend/Constants.h>
+#include <WalletBackend/Constants.h>
 
 ///////////////////////////////////
 /* CONSTRUCTORS / DECONSTRUCTORS */

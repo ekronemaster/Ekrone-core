@@ -450,7 +450,7 @@ void NodeRpcProxy::getTransactionsByPaymentId(const crypto::Hash& paymentId, std
     return;
   }
 
-  syncStatus = getPeerCount() > 0 && m_nodeHeight + 1 >= getLastKnownBlockHeight();
+  // TODO NOT IMPLEMENTED
   callback(std::error_code());
 }
 

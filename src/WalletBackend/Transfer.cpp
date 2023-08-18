@@ -3,7 +3,7 @@
 // Please see the included LICENSE file for more information.
 
 ///////////////////////////////////
-#include <walletbackend/Transfer.h>
+#include <WalletBackend/Transfer.h>
 ///////////////////////////////////
 
 #include <common/Varint.h>
@@ -15,7 +15,7 @@
 #include <utilities/FormatTools.h>
 #include <utilities/Mixins.h>
 #include <utilities/Utilities.h>
-#include <walletbackend/WalletBackend.h>
+#include <WalletBackend/WalletBackend.h>
 
 namespace SendTransaction
 {

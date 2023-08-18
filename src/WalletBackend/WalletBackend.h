@@ -13,8 +13,8 @@
 #include <subwallets/SubWallets.h>
 #include <tuple>
 #include <vector>
-#include <walletbackend/WalletSynchronizer.h>
-#include <walletbackend/WalletSynchronizerRAIIWrapper.h>
+#include <WalletBackend/WalletSynchronizer.h>
+#include <WalletBackend/WalletSynchronizerRAIIWrapper.h>
 
 class WalletBackend
 {

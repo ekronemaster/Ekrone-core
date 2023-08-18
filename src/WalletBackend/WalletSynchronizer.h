@@ -10,9 +10,9 @@
 #include <subwallets/SubWallets.h>
 #include <utilities/ThreadSafeDeque.h>
 #include <utilities/ThreadSafePriorityQueue.h>
-#include <walletbackend/BlockDownloader.h>
-#include <walletbackend/EventHandler.h>
-#include <walletbackend/SynchronizationStatus.h>
+#include <WalletBackend/BlockDownloader.h>
+#include <WalletBackend/EventHandler.h>
+#include <WalletBackend/SynchronizationStatus.h>
 
 typedef std::vector<std::tuple<Crypto::PublicKey, WalletTypes::TransactionInput>> BlockInputsAndOwners;
 

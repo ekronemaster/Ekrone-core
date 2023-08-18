@@ -10,7 +10,7 @@
 #include <subwallets/SubWallets.h>
 #include <utilities/ThreadSafeDeque.h>
 #include <vector>
-#include <walletbackend/SynchronizationStatus.h>
+#include <WalletBackend/SynchronizationStatus.h>
 
 class BlockDownloader
 {

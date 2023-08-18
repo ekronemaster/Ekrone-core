@@ -3,10 +3,10 @@
 // Please see the included LICENSE file for more information.
 
 ////////////////////////////////////////////////
-#include <walletbackend/SynchronizationStatus.h>
+#include <WalletBackend/SynchronizationStatus.h>
 ////////////////////////////////////////////////
 
-#include <walletbackend/Constants.h>
+#include <WalletBackend/Constants.h>
 
 /////////////////////
 /* CLASS FUNCTIONS */

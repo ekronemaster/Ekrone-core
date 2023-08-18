@@ -3,7 +3,7 @@
 // Please see the included LICENSE file for more information.
 
 ////////////////////////////////////////
-#include <walletbackend/WalletBackend.h>
+#include <WalletBackend/WalletBackend.h>
 ////////////////////////////////////////
 
 #include "JsonHelper.h"
@@ -31,8 +31,8 @@
 #include <mnemonics/Mnemonics.h>
 #include <utilities/Addresses.h>
 #include <utilities/Utilities.h>
-#include <walletbackend/Constants.h>
-#include <walletbackend/Transfer.h>
+#include <WalletBackend/Constants.h>
+#include <WalletBackend/Transfer.h>
 
 using namespace rapidjson;
 
