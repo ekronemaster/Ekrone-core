@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.0)
+
 include(CheckCXXCompilerFlag)
 set(VERSION "1.0.0")
 set(VERSION_BUILD_NO "Murphle")
