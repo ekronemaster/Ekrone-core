@@ -125,7 +125,9 @@ int main(int argc, char* argv[])
 
     po::options_description desc_options("Allowed options");
     desc_options.add(desc_cmd_only).add(desc_cmd_sett);
-
+	  
+    desc_cmd_sett.add_options() 
+      ("enable-blockchain-indexes,i", po::bool_switch()->default_value(false), "Enable blockchain indexes");
     po::variables_map vm;
     CoreConfig coreConfig;
     bool r = command_line::handle_error_helper(desc_options, [&]() {
