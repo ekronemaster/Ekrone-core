@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2022 Ekrone Infinity Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -40,6 +40,7 @@ struct COMMAND_RPC_GET_HEIGHT {
 
     void serialize(ISerializer &s) {
       KV_MEMBER(height)
+      //KV_MEMBER(network_height)
       KV_MEMBER(status)
     }
   };
@@ -91,27 +92,6 @@ struct COMMAND_RPC_GET_TRANSACTIONS {
     }
   };
 };
-
-struct block_short_response
-{
-  uint64_t timestamp;
-  uint32_t height;
-  std::string hash;
-  uint64_t transactions_count;
-  uint64_t cumulative_size;
-  difficulty_type difficulty;
-
-  void serialize(ISerializer &s)
-  {
-    KV_MEMBER(timestamp)
-    KV_MEMBER(height)
-    KV_MEMBER(hash)
-    KV_MEMBER(cumulative_size)
-    KV_MEMBER(transactions_count)
-    KV_MEMBER(difficulty)
-  }
-};
-
 //-----------------------------------------------
 struct COMMAND_RPC_GET_POOL_CHANGES {
   struct request {
@@ -134,23 +114,6 @@ struct COMMAND_RPC_GET_POOL_CHANGES {
       KV_MEMBER(isTailBlockActual)
       KV_MEMBER(addedTxs)
       serializeAsBinary(deletedTxsIds, "deletedTxsIds", s);
-      KV_MEMBER(status)
-    }
-  };
-};
-
-struct COMMAND_RPC_GET_ALT_BLOCKS_LIST
-{
-  typedef EMPTY_STRUCT request;
-
-  struct response
-  {
-    std::vector<block_short_response> alt_blocks;
-    std::string status;
-
-    void serialize(ISerializer &s)
-    {
-      KV_MEMBER(alt_blocks)
       KV_MEMBER(status)
     }
   };
@@ -237,7 +200,6 @@ struct COMMAND_RPC_GET_RANDOM_OUTPUTS_FOR_AMOUNTS_outs_for_amount {
     serializeAsBinary(outs, "outs", s);
   }
 };
-
 
 struct COMMAND_RPC_GET_RANDOM_OUTPUTS_FOR_AMOUNTS_outs_for_amount_json {
   uint64_t amount;
@@ -332,7 +294,7 @@ struct COMMAND_RPC_GET_INFO {
 
   struct response {
     std::string status;
-    std::string version;
+    
     std::string fee_address;
     std::string top_block_hash;
     uint64_t height;
@@ -351,12 +313,13 @@ struct COMMAND_RPC_GET_INFO {
     uint64_t last_block_reward;
     uint64_t last_block_timestamp;
     uint64_t last_block_difficulty;
+    std::string version;
     std::vector<std::string> connections;
 
     void serialize(ISerializer &s) {
       KV_MEMBER(status)
       KV_MEMBER(height)
-      KV_MEMBER(version)
+      
       KV_MEMBER(difficulty)
       KV_MEMBER(top_block_hash)
       KV_MEMBER(tx_count)
@@ -374,6 +337,7 @@ struct COMMAND_RPC_GET_INFO {
       KV_MEMBER(last_block_reward)
       KV_MEMBER(last_block_timestamp)
       KV_MEMBER(last_block_difficulty)
+      KV_MEMBER(version)
       KV_MEMBER(connections)      
     }
   };
@@ -434,8 +398,6 @@ struct COMMAND_RPC_GET_FEE_ADDRESS {
     }
   };
 };
-
-
 
 struct COMMAND_RPC_GETBLOCKHASH {
   typedef std::vector<uint64_t> request;
@@ -641,10 +603,12 @@ struct currency_core {
   uint64_t DIFFICULTY_TARGET;
   uint64_t CRYPTONOTE_DISPLAY_DECIMAL_POINT;
   std::string MONEY_SUPPLY;
+ // uint64_t GENESIS_BLOCK_REWARD;
   uint64_t DEFAULT_DUST_THRESHOLD;
   uint64_t MINIMUM_FEE;
   uint64_t CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW;
   uint64_t CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE;
+//  uint64_t CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1;
   uint64_t CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX;
   uint64_t P2P_DEFAULT_PORT;
   uint64_t RPC_DEFAULT_PORT;
@@ -653,7 +617,8 @@ struct currency_core {
   uint64_t UPGRADE_HEIGHT;
   uint64_t DIFFICULTY_CUT;
   uint64_t DIFFICULTY_LAG;
-  std::string BLOCKCHAIN_DIR;
+  //std::string BYTECOIN_NETWORK;
+  std::string CRYPTONOTE_NAME;
   std::string GENESIS_COINBASE_TX_HEX;
   std::vector<std::string> CHECKPOINTS;
 
@@ -663,10 +628,12 @@ struct currency_core {
     KV_MEMBER(DIFFICULTY_TARGET)
     KV_MEMBER(CRYPTONOTE_DISPLAY_DECIMAL_POINT)
     KV_MEMBER(MONEY_SUPPLY)
+ //   KV_MEMBER(GENESIS_BLOCK_REWARD)
     KV_MEMBER(DEFAULT_DUST_THRESHOLD)
     KV_MEMBER(MINIMUM_FEE)
     KV_MEMBER(CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW)
     KV_MEMBER(CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE)
+//    KV_MEMBER(CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1)
     KV_MEMBER(CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX)
     KV_MEMBER(P2P_DEFAULT_PORT)
     KV_MEMBER(RPC_DEFAULT_PORT)
@@ -675,7 +642,8 @@ struct currency_core {
     KV_MEMBER(UPGRADE_HEIGHT)
     KV_MEMBER(DIFFICULTY_CUT)
     KV_MEMBER(DIFFICULTY_LAG)
-    KV_MEMBER(BLOCKCHAIN_DIR)
+//    KV_MEMBER(BYTECOIN_NETWORK)
+    KV_MEMBER(CRYPTONOTE_NAME)
     KV_MEMBER(GENESIS_COINBASE_TX_HEX)
     KV_MEMBER(CHECKPOINTS)
   }
@@ -899,56 +867,6 @@ struct reserve_proof {
 	}
 };
 
-struct COMMAND_RPC_GET_BLOCK_TIMESTAMP_BY_HEIGHT
-{
-  struct request
-  {
-    uint64_t height;
-
-    void serialize(ISerializer &s)
-    {
-      KV_MEMBER(height)
-    }
-  };
-
-  struct response
-  {
-    uint64_t timestamp;
-    std::string status;
-
-    void serialize(ISerializer &s)
-    {
-      KV_MEMBER(timestamp)
-      KV_MEMBER(status)
-    }
-  };
-};
-
-struct COMMAND_RPC_GET_BLOCK_DETAILS_BY_HEIGHT
-{
-  struct request
-  {
-    uint64_t height;
-
-    void serialize(ISerializer &s)
-    {
-      KV_MEMBER(height)
-    }
-  };
-
-  struct response
-  {
-    f_block_details_response block;
-    std::string status;
-
-    void serialize(ISerializer &s)
-    {
-      KV_MEMBER(status)
-      KV_MEMBER(block)
-    }
-  };
-};
-
 struct tx_with_output_global_indexes {
   TransactionPrefix transaction;
   crypto::Hash hash;
@@ -1010,6 +928,59 @@ struct COMMAND_RPC_GET_RAW_TRANSACTIONS_POOL {
     }
   };
 };
+
+struct COMMAND_RPC_GET_BLOCK_TIMESTAMP_BY_HEIGHT
+{
+  struct request
+  {
+    uint32_t height;
+
+    void serialize(ISerializer &s)
+    {
+      KV_MEMBER(height)
+    }
+  };
+
+  struct response
+  {
+    uint64_t timestamp;
+    std::string status;
+
+    void serialize(ISerializer &s)
+    {
+      KV_MEMBER(timestamp)
+      KV_MEMBER(status)
+    }
+  };
+};
+
+
+struct COMMAND_RPC_GET_BLOCK_DETAILS_BY_HEIGHT
+{
+  struct request
+  {
+    uint32_t blockHeight;
+
+    void serialize(ISerializer &s)
+    {
+      KV_MEMBER(blockHeight)
+    }
+  };
+
+  struct response
+  {
+    f_block_details_response block;
+    std::string status;
+
+    void serialize(ISerializer &s)
+    {
+      KV_MEMBER(status)
+      KV_MEMBER(block)
+    }
+  };
+};
+
+
 
 struct K_COMMAND_RPC_CHECK_TX_PROOF {
     struct request {
