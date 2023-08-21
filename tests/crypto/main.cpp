@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2014-2016 SDN developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
       vector<char> data;
       crypto::EllipticCurveScalar expected, actual;
       get(input, data, expected);
-      crypto::hash_to_scalar(data.data(), data.size(), actual);
+      hash_to_scalar(data.data(), data.size(), actual);
       if (expected != actual) {
         goto error;
       }

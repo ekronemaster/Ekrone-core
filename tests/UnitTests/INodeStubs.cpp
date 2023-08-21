@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2014-2016 SDN developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -514,24 +514,6 @@ void INodeTrivialRefreshStub::getTransactions(const std::vector<crypto::Hash>& t
   task.detach();
 }
 
-void INodeTrivialRefreshStub::getTransaction(const crypto::Hash &transactionHash, cn::Transaction &transaction, const Callback &callback)
-{
-  m_asyncCounter.addAsyncContext();
-
-  std::thread task(
-      std::bind(
-          static_cast<
-              void (INodeTrivialRefreshStub::*)(
-                  const crypto::Hash &,
-                  Transaction &,
-                  const Callback &)>(&INodeTrivialRefreshStub::doGetTransaction),
-          this,
-          std::cref(transactionHash),
-          std::ref(transaction),
-          callback));
-  task.detach();
-}
-
 void INodeTrivialRefreshStub::doGetTransactions(const std::vector<crypto::Hash>& transactionHashes, std::vector<TransactionDetails>& transactions, const Callback& callback) {
   ContextCounterHolder counterHolder(m_asyncCounter);
   std::unique_lock<std::mutex> lock(m_walletLock);
@@ -558,26 +540,6 @@ void INodeTrivialRefreshStub::doGetTransactions(const std::vector<crypto::Hash>&
 
   lock.unlock();
   callback(std::error_code());
-}
-
-void INodeTrivialRefreshStub::doGetTransaction(const crypto::Hash &transactionHashes, cn::Transaction &transaction, const Callback &callback)
-{
-  ContextCounterHolder counterHolder(m_asyncCounter);
-  std::unique_lock<std::mutex> lock(m_walletLock);
-  if (m_blockchainGenerator.getTransactionByHash(transactionHashes, transaction, false))
-  {
-    getObjectHash(transaction);
-  }
-  else if (m_blockchainGenerator.getTransactionByHash(transactionHashes, transaction, true))
-  {
-    getObjectHash(transaction);
-  }
-  else
-  {
-    lock.unlock();
-    callback(std::error_code(EDOM, std::generic_category()));
-    return;
-  }
 }
 
 void INodeTrivialRefreshStub::getPoolTransactions(uint64_t timestampBegin, uint64_t timestampEnd, uint32_t transactionsNumberLimit, std::vector<TransactionDetails>& transactions, uint64_t& transactionsNumberWithinTimestamps, const Callback& callback) {

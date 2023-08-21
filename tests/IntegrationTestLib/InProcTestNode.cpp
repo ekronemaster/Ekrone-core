@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2014-2016 SDN developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -61,7 +61,7 @@ void InProcTestNode::workerThread(std::promise<std::string>& initPromise) {
 
   try {
 
-    core.reset(new cn::core(m_currency, NULL, log, false, false));
+    core.reset(new cn::core(m_currency, NULL, log));
     protocol.reset(new cn::CryptoNoteProtocolHandler(m_currency, dispatcher, *core, NULL, log));
     p2pNode.reset(new cn::NodeServer(dispatcher, *protocol, log));
     protocol->set_p2p_endpoint(p2pNode.get());

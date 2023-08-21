@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2020 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -25,7 +25,7 @@ class INode;
 class WalletTransactionSender
 {
 public:
-  WalletTransactionSender(const Currency& currency, WalletUserTransactionsCache& transactionsCache, AccountKeys keys, ITransfersContainer& transfersContainer, INode& node, bool testnet);
+  WalletTransactionSender(const Currency& currency, WalletUserTransactionsCache& transactionsCache, AccountKeys keys, ITransfersContainer& transfersContainer, INode& node);
 
   void stop();
 
@@ -57,7 +57,7 @@ public:
                                                             std::deque<std::unique_ptr<WalletLegacyEvent>>& events,
                                                             const std::vector<DepositId>& depositIds,
                                                             uint64_t fee);
-
+                                                            
 std::shared_ptr<WalletRequest> makeSendFusionRequest(TransactionId& transactionId, std::deque<std::unique_ptr<WalletLegacyEvent>>& events,
                                                      const std::vector<WalletLegacyTransfer>& transfers, const std::list<TransactionOutputInformation>& fusionInputs,
                                                      uint64_t fee, const std::string& extra = "", uint64_t mixIn = 0, uint64_t unlockTimestamp = 0);
@@ -129,7 +129,6 @@ private:
   ITransfersContainer& m_transferDetails;
 
   INode& m_node; //used solely to get last known block height for calculateInterest
-  bool m_testnet;
 };
 
 } /* namespace cn */

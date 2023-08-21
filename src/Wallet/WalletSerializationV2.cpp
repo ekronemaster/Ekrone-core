@@ -499,4 +499,4 @@ void WalletSerializerV2::saveUnlockTransactionsJobs(cn::ISerializer& serializer)
   }
 }
 
-} //namespace cn
+} //namespace CryptoNote

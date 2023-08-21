@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2022 Ekrone Infinity developers
 //
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -17,8 +18,6 @@
 #include "CryptoNoteCore/Currency.h"
 #include "CryptoNoteConfig.h"
 #include <Logging/LoggerRef.h>
-
-#undef ERROR
 
 namespace cn {
   class UpgradeDetectorBase {
@@ -48,7 +47,7 @@ namespace cn {
           m_votingCompleteHeight = UNDEF_HEIGHT;
 
         } else if (m_targetVersion - 1 == m_blockchain.back().bl.majorVersion) {
-          m_votingCompleteHeight = findVotingCompleteHeight(m_blockchain.size() - 1);
+          m_votingCompleteHeight = findVotingCompleteHeight(static_cast<uint32_t>( m_blockchain.size() ) - 1);
 
         } else if (m_targetVersion <= m_blockchain.back().bl.majorVersion) {
           auto it = std::lower_bound(m_blockchain.begin(), m_blockchain.end(), m_targetVersion,
@@ -58,7 +57,7 @@ namespace cn {
             return false;
           }
 
-          uint32_t upgradeHeight = it - m_blockchain.begin();
+          uint32_t upgradeHeight = static_cast<uint32_t>( it - m_blockchain.begin() );
           m_votingCompleteHeight = findVotingCompleteHeight(upgradeHeight);
           if (m_votingCompleteHeight == UNDEF_HEIGHT) {
             logger(logging::ERROR, logging::BRIGHT_RED) << "Internal error: voting complete height isn't found, upgrade height = " << upgradeHeight;
@@ -126,21 +125,13 @@ namespace cn {
 
           if (m_blockchain.size() % (60 * 60 / m_currency.difficultyTarget()) == 0) {
             auto interval = m_currency.difficultyTarget() * (upgradeHeight() - m_blockchain.size() + 2);
-            char upgradeTimeStr[32];
-            struct tm upgradeTimeTm;
             time_t upgradeTimestamp = time(nullptr) + static_cast<time_t>(interval);
-#ifdef _WIN32
-            gmtime_s(&upgradeTimeTm, &upgradeTimestamp);
-#else
-            gmtime_r(&upgradeTimestamp, &upgradeTimeTm);
-#endif
-            if (!std::strftime(upgradeTimeStr, sizeof(upgradeTimeStr), "%c", &upgradeTimeTm))
-            {
-              throw std::runtime_error("time buffer is too small");
-            }
+            struct tm* upgradeTime = localtime(&upgradeTimestamp);;
+            char upgradeTimeStr[40];
+            strftime(upgradeTimeStr, 40, "%H:%M:%S %Y.%m.%d", upgradeTime);
 
             logger(logging::TRACE, logging::BRIGHT_GREEN) << "###### UPGRADE is going to happen after block index " << upgradeHeight() << " at about " <<
-              upgradeTimeStr << " UTC" << " (in " << common::timeIntervalToString(interval) << ")! Current last block index " << (m_blockchain.size() - 1) <<
+              upgradeTimeStr << " (in " << common::timeIntervalToString(interval) << ")! Current last block index " << (m_blockchain.size() - 1) <<
               ", hash " << get_block_hash(m_blockchain.back().bl);
           }
         } else if (m_blockchain.size() == upgradeHeight() + 1) {
@@ -153,7 +144,7 @@ namespace cn {
         }
 
       } else {
-        uint32_t lastBlockHeight = m_blockchain.size() - 1;
+        uint32_t lastBlockHeight = static_cast<uint32_t>( m_blockchain.size() ) - 1;
         if (isVotingComplete(lastBlockHeight)) {
           m_votingCompleteHeight = lastBlockHeight;
           logger(logging::TRACE, logging::BRIGHT_GREEN) << "###### UPGRADE voting complete at block index " << m_votingCompleteHeight <<

@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -62,7 +61,6 @@ public:
 
   virtual void getBlocks(const std::vector<uint32_t>& blockHeights, std::vector<std::vector<BlockDetails>>& blocks, const Callback& callback) override;
   virtual void getBlocks(const std::vector<crypto::Hash>& blockHashes, std::vector<BlockDetails>& blocks, const Callback& callback) override;
-  virtual void getTransaction(const crypto::Hash &transactionHash, cn::Transaction &transaction, const Callback &callback) override;
   virtual void getBlocks(uint64_t timestampBegin, uint64_t timestampEnd, uint32_t blocksNumberLimit, std::vector<BlockDetails>& blocks, uint32_t& blocksNumberWithinTimestamps, const Callback& callback) override;
   virtual void getTransactions(const std::vector<crypto::Hash>& transactionHashes, std::vector<TransactionDetails>& transactions, const Callback& callback) override;
   virtual void getTransactionsByPaymentId(const crypto::Hash& paymentId, std::vector<TransactionDetails>& transactions, const Callback& callback) override;
@@ -120,8 +118,6 @@ private:
   void isSynchronizedAsync(bool& syncStatus, const Callback& callback);
   std::error_code doIsSynchronized(bool& syncStatus);
 
-  void getTransactionAsync(const crypto::Hash &transactionHash, cn::Transaction &transaction, const Callback &callback);
-  std::error_code doGetTransaction(const crypto::Hash &transactionHash, cn::Transaction &transaction);
   void workerFunc();
   bool doShutdown();
 

@@ -1,0 +1,11 @@
+C:/Users/Administrator/Desktop/ekroneultra/ultranotei-core-master/external/out/build/x64-Debug/CMakeFiles/install/local.dir
+C:/Users/Administrator/Desktop/ekroneultra/ultranotei-core-master/external/out/build/x64-Debug/CMakeFiles/install.dir
+C:/Users/Administrator/Desktop/ekroneultra/ultranotei-core-master/external/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/Administrator/Desktop/ekroneultra/ultranotei-core-master/external/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Administrator/Desktop/ekroneultra/ultranotei-core-master/external/out/build/x64-Debug/CMakeFiles/list_install_components.dir
+C:/Users/Administrator/Desktop/ekroneultra/ultranotei-core-master/external/out/build/x64-Debug/miniupnpc/CMakeFiles/upnpc-static.dir
+C:/Users/Administrator/Desktop/ekroneultra/ultranotei-core-master/external/out/build/x64-Debug/miniupnpc/CMakeFiles/install/local.dir
+C:/Users/Administrator/Desktop/ekroneultra/ultranotei-core-master/external/out/build/x64-Debug/miniupnpc/CMakeFiles/install.dir
+C:/Users/Administrator/Desktop/ekroneultra/ultranotei-core-master/external/out/build/x64-Debug/miniupnpc/CMakeFiles/edit_cache.dir
+C:/Users/Administrator/Desktop/ekroneultra/ultranotei-core-master/external/out/build/x64-Debug/miniupnpc/CMakeFiles/rebuild_cache.dir
+C:/Users/Administrator/Desktop/ekroneultra/ultranotei-core-master/external/out/build/x64-Debug/miniupnpc/CMakeFiles/list_install_components.dir

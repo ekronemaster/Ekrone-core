@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2014-2016 SDN developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -34,15 +34,14 @@ public:
     cn::decompose_amount_into_digits(this->m_source_amount, 0,
       [&](uint64_t chunk) { destinations.push_back(cn::TransactionDestinationEntry(chunk, address)); },
       [&](uint64_t a_dust) { destinations.push_back(cn::TransactionDestinationEntry(a_dust, address)); });
-    crypto::SecretKey txSK;
-    cn::constructTransaction(this->m_miners[this->real_source_idx].getAccountKeys(), this->m_sources, destinations, std::vector<uint8_t>(), tx, unlockTime, m_logger, txSK);
+
+    cn::constructTransaction(this->m_miners[this->real_source_idx].getAccountKeys(), this->m_sources, destinations, std::vector<uint8_t>(), tx, unlockTime, m_logger);
   }
 
   void generateSingleOutputTx(const AccountPublicAddress& address, uint64_t amount, Transaction& tx) {
     std::vector<TransactionDestinationEntry> destinations;
     destinations.push_back(TransactionDestinationEntry(amount, address));
-    crypto::SecretKey txSK;
-    constructTransaction(this->m_miners[this->real_source_idx].getAccountKeys(), this->m_sources, destinations, std::vector<uint8_t>(), tx, 0, m_logger, txSK);
+    constructTransaction(this->m_miners[this->real_source_idx].getAccountKeys(), this->m_sources, destinations, std::vector<uint8_t>(), tx, 0, m_logger);
   }
 };
 

@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2014-2016 SDN developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -28,7 +28,7 @@
 
 namespace concolor
 {
-  using namespace common::console;
+  using namespace common::Console;
 
   inline std::basic_ostream<char, std::char_traits<char> >& bright_white(std::basic_ostream<char, std::char_traits<char> >& ostr)
   {
@@ -388,7 +388,6 @@ inline bool do_replay_events(std::vector<test_event_entry>& events, t_test_class
   boost::program_options::options_description desc("Allowed options");
   cn::CoreConfig::initOptions(desc);
   command_line::add_arg(desc, command_line::arg_data_dir);
-  command_line::add_arg(desc, command_line::arg_testnet_on);
   boost::program_options::variables_map vm;
   bool r = command_line::handle_error_helper(desc, [&]()
   {

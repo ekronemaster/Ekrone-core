@@ -1,7 +1,7 @@
-// Copyright (c) 2012-2016, The CryptoNote developers, The Bytecoin developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2011-2017 The Cryptonote developers
+// Copyright (c) 2014-2017 XDN developers
+// Copyright (c) 2016-2017 BXC developers
+// Copyright (c) 2017 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -12,7 +12,6 @@
 #include <CryptoTypes.h>
 #include "generic-ops.h"
 #include <boost/align/aligned_alloc.hpp>
-#include "pow_hash/cn_slow_hash.hpp"
 
 /* Standard Cryptonight */
 #define CN_PAGE_SIZE                    2097152
@@ -47,6 +46,8 @@ namespace crypto {
   class cn_context {
   public:
 
+    //cn_context();
+    //~cn_context();
     cn_context()
     {
         long_state = (uint8_t*)boost::alignment::aligned_alloc(4096, CN_PAGE_SIZE);
@@ -64,15 +65,15 @@ namespace crypto {
     cn_context(const cn_context &) = delete;
     void operator=(const cn_context &) = delete;
 
-    cn_v3_hash_t cn_gpu_state;
-    uint8_t* long_state = nullptr;
-    uint8_t* hash_state = nullptr;
+     uint8_t* long_state = nullptr;
+     uint8_t* hash_state = nullptr;
+     
+    void *data;
   };
 
-  void cn_slow_hash_v0(cn_context &context, const void *data, size_t length, Hash &hash);
+  void cn_slow_hash(cn_context &context, const void *data, size_t length, Hash &hash);
   void cn_fast_slow_hash_v1(cn_context &context, const void *data, size_t length, Hash &hash);
-  void cn_ekrone_slow_hash_v0(cn_context &context, const void *data, size_t length, Hash &hash);  
-  void cn_gpu_hash_v0(cn_context &context, const void *data, size_t length, Hash &hash);  
+  void cn_conceal_slow_hash_v0(cn_context &context, const void *data, size_t length, Hash &hash);  
 
   inline void tree_hash(const Hash *hashes, size_t count, Hash &root_hash) {
     tree_hash(reinterpret_cast<const char (*)[HASH_SIZE]>(hashes), count, reinterpret_cast<char *>(&root_hash));

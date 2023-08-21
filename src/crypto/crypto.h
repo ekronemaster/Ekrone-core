@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2014-2017 XDN developers
+// Copyright (c) 2016-2017 BXC developers
+// Copyright (c) 2017 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -34,6 +34,10 @@ namespace crypto {
 
     static void generate_keys(PublicKey &, SecretKey &);
     friend void generate_keys(PublicKey &, SecretKey &);
+    static void generate_deterministic_keys(PublicKey &pub, SecretKey &sec, SecretKey& second);
+    friend void generate_deterministic_keys(PublicKey &pub, SecretKey &sec, SecretKey& second);
+    static SecretKey generate_m_keys(PublicKey &pub, SecretKey &sec, const SecretKey& recovery_key = SecretKey(), bool recover = false);
+  	friend SecretKey generate_m_keys(PublicKey &pub, SecretKey &sec, const SecretKey& recovery_key, bool recover);
     static void generate_keys_from_seed(PublicKey &, SecretKey &, SecretKey &);
     friend void generate_keys_from_seed(PublicKey &, SecretKey &, SecretKey &);
     static bool check_key(const PublicKey &);
@@ -113,7 +117,7 @@ namespace crypto {
       return (std::numeric_limits<T>::max)();
     }
 #else
-    constexpr static T(min)() {
+   constexpr static T(min)() {
       return (std::numeric_limits<T>::min)();
     }
 
@@ -134,6 +138,20 @@ namespace crypto {
     crypto_ops::generate_keys(pub, sec);
   }
 
+  /* Generate a new key pair from a seed
+   */
+  inline void generate_keys_from_seed(PublicKey &pub, SecretKey &sec, SecretKey &seed) {
+    crypto_ops::generate_keys_from_seed(pub, sec, seed);
+  }
+
+   inline void generate_deterministic_keys(PublicKey &pub, SecretKey &sec, SecretKey& second) {
+     crypto_ops::generate_deterministic_keys(pub, sec, second);
+   }
+   
+  inline SecretKey generate_m_keys(PublicKey &pub, SecretKey &sec, const SecretKey& recovery_key = SecretKey(), bool recover = false) {
+    return crypto_ops::generate_m_keys(pub, sec, recovery_key, recover);
+  }
+
   /* Check a public key. Returns true if it is valid, false otherwise.
    */
   inline bool check_key(const PublicKey &key) {
@@ -144,12 +162,6 @@ namespace crypto {
    */
   inline bool secret_key_to_public_key(const SecretKey &sec, PublicKey &pub) {
     return crypto_ops::secret_key_to_public_key(sec, pub);
-  }
-
-/* Generate a new key pair from a seed
-   */
-  inline void generate_keys_from_seed(PublicKey &pub, SecretKey &sec, SecretKey &seed) {
-    crypto_ops::generate_keys_from_seed(pub, sec, seed);
   }
 
   /* To generate an ephemeral key used to send money to:

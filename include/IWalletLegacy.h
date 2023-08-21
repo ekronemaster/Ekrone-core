@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2020 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -93,8 +93,6 @@ public:
   virtual void pendingBalanceUpdated(uint64_t pendingBalance) {}
   virtual void actualDepositBalanceUpdated(uint64_t actualDepositBalance) {}
   virtual void pendingDepositBalanceUpdated(uint64_t pendingDepositBalance) {}
-  virtual void actualInvestmentBalanceUpdated(uint64_t actualInvestmentBalance) {}
-  virtual void pendingInvestmentBalanceUpdated(uint64_t pendingInvestmentBalance) {}  
   virtual void externalTransactionCreated(TransactionId transactionId) {}
   virtual void sendTransactionCompleted(TransactionId transactionId, std::error_code result) {}
   virtual void transactionUpdated(TransactionId transactionId) {}
@@ -126,10 +124,8 @@ public:
 
   virtual uint64_t pendingBalance() = 0;
   virtual uint64_t actualDepositBalance() = 0;
-  virtual uint64_t actualInvestmentBalance() = 0;
-  virtual uint64_t getWalletMaximum() = 0;
   virtual uint64_t pendingDepositBalance() = 0;
-  virtual uint64_t pendingInvestmentBalance() = 0;  
+    
 
   virtual size_t getTransactionCount() = 0;
   virtual size_t getTransferCount() = 0;
@@ -143,7 +139,7 @@ public:
   virtual bool getTransfer(TransferId transferId, WalletLegacyTransfer& transfer) = 0;
   virtual bool getDeposit(DepositId depositId, Deposit& deposit) = 0;
   virtual std::vector<Payments> getTransactionsByPaymentIds(const std::vector<PaymentId>& paymentIds) const = 0;
-  virtual bool getTxProof(crypto::Hash& txid, cn::AccountPublicAddress& address, crypto::SecretKey& tx_key, std::string& sig_str) = 0;
+  virtual bool getTxProof(crypto::Hash& txid, cn::AccountPublicAddress& address, crypto::SecretKey& tx_key, std::string& sig_str) = 0;	
   virtual std::string getReserveProof(const uint64_t &reserve, const std::string &message) = 0;
   virtual crypto::SecretKey getTxKey(crypto::Hash& txid) = 0;
   virtual bool get_tx_key(crypto::Hash& txid, crypto::SecretKey& txSecretKey) = 0;
@@ -157,8 +153,6 @@ public:
   virtual TransactionId withdrawDeposits(const std::vector<DepositId>& depositIds, uint64_t fee) = 0;
   virtual std::error_code cancelTransaction(size_t transferId) = 0;
   virtual Deposit get_deposit(DepositId depositId) = 0;
-
-
 };
 
 }

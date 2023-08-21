@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2020 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -71,7 +71,7 @@ public:
           logger(INFO, BRIGHT_YELLOW) << "Sending from " << shortAddress(srcWallet.getAddress()) << " to " << shortAddress(transfer.address) << " amount = " << m_currency.formatAmount(transfer.amount);
           std::vector<cn::TransactionMessage> messages;
           std::string extraString;
-          uint64_t fee = cn::parameters::MINIMUM_FEE_V2;
+          uint64_t fee = cn::parameters::MINIMUM_FEE;
           uint64_t mixIn = 0;
           uint64_t unlockTimestamp = 0;
           uint64_t ttl = 0;

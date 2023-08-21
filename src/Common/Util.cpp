@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -19,6 +18,7 @@
 #else 
 #include <sys/utsname.h>
 #endif
+
 #pragma warning(disable : 4996)
 
 namespace tools
@@ -286,35 +286,35 @@ std::string get_nix_version_display_string()
   }
 #endif
 
-  std::string getDefaultDataDirectory(bool testnet)
+  std::string getDefaultDataDirectory()
   {
     //namespace fs = boost::filesystem;
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\BLOCKCHAIN_DIR
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\BLOCKCHAIN_DIR
-    // Mac: ~/Library/Application Support/BLOCKCHAIN_DIR
-    // Unix: ~/.BLOCKCHAIN_DIR
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\CRYPTONOTE_NAME
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\CRYPTONOTE_NAME
+    // Mac: ~/Library/Application Support/CRYPTONOTE_NAME
+    // Unix: ~/.CRYPTONOTE_NAME
     std::string config_folder;
 #ifdef _WIN32
     // Windows
-    config_folder = get_special_folder_path(CSIDL_APPDATA, true) + "/" + cn::BLOCKCHAIN_DIR;
+    config_folder = get_special_folder_path(CSIDL_APPDATA, true) + "/" + cn::CRYPTONOTE_NAME;
 #else
     std::string pathRet;
-    const char* pszHome = getenv("HOME");
-    if (pszHome == nullptr || strlen(pszHome) == 0)
+    char* pszHome = getenv("HOME");
+    if (pszHome == NULL || strlen(pszHome) == 0)
       pathRet = "/";
     else
       pathRet = pszHome;
 #ifdef MAC_OSX
     // Mac
     pathRet /= "Library/Application Support";
-    config_folder =  (pathRet + "/" + cn::BLOCKCHAIN_DIR);
+    config_folder =  (pathRet + "/" + cn::CRYPTONOTE_NAME);
 #else
     // Unix
-    config_folder = (pathRet + "/." + cn::BLOCKCHAIN_DIR);
+    config_folder = (pathRet + "/." + cn::CRYPTONOTE_NAME);
 #endif
 #endif
 
-    return config_folder + (testnet ? "/testnet" : "");
+    return config_folder;
   }
 
   bool create_directories_if_necessary(const std::string& path)

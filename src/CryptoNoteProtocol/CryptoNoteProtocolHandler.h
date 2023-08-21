@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -82,10 +81,7 @@ namespace cn
     int handle_response_get_objects(int command, NOTIFY_RESPONSE_GET_OBJECTS::request& arg, CryptoNoteConnectionContext& context);
     int handle_request_chain(int command, NOTIFY_REQUEST_CHAIN::request& arg, CryptoNoteConnectionContext& context);
     int handle_response_chain_entry(int command, NOTIFY_RESPONSE_CHAIN_ENTRY::request& arg, CryptoNoteConnectionContext& context);
-    int handle_request_tx_pool(int command, NOTIFY_REQUEST_TX_POOL::request &arg, CryptoNoteConnectionContext &context);
-    int handle_notify_new_lite_block(int command, NOTIFY_NEW_LITE_BLOCK::request &arg, CryptoNoteConnectionContext &context);
-    int handle_notify_missing_txs(int command, NOTIFY_MISSING_TXS::request &arg, CryptoNoteConnectionContext &context);
-
+    int handleRequestTxPool(int command, NOTIFY_REQUEST_TX_POOL::request& arg, CryptoNoteConnectionContext& context);
 
     //----------------- i_cryptonote_protocol ----------------------------------
     virtual void relay_block(NOTIFY_NEW_BLOCK::request& arg) override;
@@ -101,8 +97,6 @@ namespace cn
     logging::LoggerRef logger;
 
   private:
-    int doPushLiteBlock(NOTIFY_NEW_LITE_BLOCK::request block, CryptoNoteConnectionContext &context, std::vector<BinaryArray> missingTxs);
-
     platform_system::Dispatcher& m_dispatcher;
     ICore& m_core;
     const Currency& m_currency;

@@ -26,9 +26,10 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 //
-// Unit test for gtest_prod.h.
+// Author: wan@google.com (Zhanyong Wan)
+//
+// Unit test for gtest/gtest_prod.h.
 
 #include "production.h"
 #include "gtest/gtest.h"

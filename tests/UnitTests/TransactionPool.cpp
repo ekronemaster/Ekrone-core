@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2014-2016 SDN developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -25,19 +25,19 @@ using namespace cn;
 using namespace cn;
 
 class TransactionValidator : public cn::ITransactionValidator {
-  bool checkTransactionInputs(const cn::Transaction& tx, BlockInfo& maxUsedBlock) override {
+  virtual bool checkTransactionInputs(const cn::Transaction& tx, BlockInfo& maxUsedBlock) override {
     return true;
   }
 
-  bool checkTransactionInputs(const cn::Transaction& tx, BlockInfo& maxUsedBlock, BlockInfo& lastFailed) override {
+  virtual bool checkTransactionInputs(const cn::Transaction& tx, BlockInfo& maxUsedBlock, BlockInfo& lastFailed) override {
     return true;
   }
 
-  bool haveSpentKeyImages(const cn::Transaction& tx) override {
+  virtual bool haveSpentKeyImages(const cn::Transaction& tx) override {
     return false;
   }
 
-  bool checkTransactionSize(size_t blobSize) override {
+  virtual bool checkTransactionSize(size_t blobSize) override {
     return true;
   }
 };
@@ -103,17 +103,15 @@ public:
   }
 
   void construct(uint64_t amount, uint64_t fee, size_t outputs, Transaction& tx) {
-    
+
     std::vector<TransactionDestinationEntry> destinations;
     uint64_t amountPerOut = (amount - fee) / outputs;
-    uint64_t lastAmount = amountPerOut + (amount - fee) % outputs;
 
-    for (size_t i = 1; i < outputs; ++i) {
-      destinations.emplace_back(amountPerOut, rv_acc.getAccountKeys().address);
+    for (size_t i = 0; i < outputs; ++i) {
+      destinations.push_back(TransactionDestinationEntry(amountPerOut, rv_acc.getAccountKeys().address));
     }
-    destinations.emplace_back(lastAmount, rv_acc.getAccountKeys().address);
-    crypto::SecretKey txSK;
-    constructTransaction(m_realSenderKeys, m_sources, destinations, std::vector<uint8_t>(), tx, 0, m_logger, txSK);
+
+    constructTransaction(m_realSenderKeys, m_sources, destinations, std::vector<uint8_t>(), tx, 0, m_logger);
   }
 
   std::vector<AccountBase> m_miners;
@@ -199,7 +197,7 @@ namespace
     bl.majorVersion = majorVersion;
     bl.minorVersion = 0;
     bl.nonce = 0;
-    bl.timestamp = time(nullptr);
+    bl.timestamp = time(0);
     bl.previousBlockHash = NULL_HASH;
   }
 
@@ -293,8 +291,8 @@ TEST_F(tx_pool, fillblock_same_fee)
   size_t totalSize = 0;
   uint64_t txFee = 0;
   uint64_t median = 5000;
-  uint32_t height;
-  ASSERT_TRUE(pool.fill_block_template(bl, median, textMaxCumulativeSize, 0, totalSize, txFee, height));
+
+  ASSERT_TRUE(pool.fill_block_template(bl, median, textMaxCumulativeSize, 0, totalSize, txFee));
   ASSERT_TRUE(totalSize * 100 < median * 125);
 
   // now, check that the block is opimally filled
@@ -302,7 +300,7 @@ TEST_F(tx_pool, fillblock_same_fee)
 
   size_t maxOuts = 0;
 
-  for (const auto& th : bl.transactionHashes) {
+  for (auto& th : bl.transactionHashes) {
     auto iter = transactions.find(th);
     ASSERT_TRUE(iter != transactions.end());
 
@@ -327,7 +325,7 @@ TEST_F(tx_pool, fillblock_same_size)
 
 
   // generate transactions
-  for (size_t i = 0; i <= totalTransactions; ++i) {
+  for (int i = 0; i <= totalTransactions; ++i) {
 
     TestTransactionGenerator txGenerator(currency, 1);
     txGenerator.createSources();
@@ -353,8 +351,8 @@ TEST_F(tx_pool, fillblock_same_size)
   size_t totalSize = 0;
   uint64_t txFee = 0;
   uint64_t median = 5000;
-  uint32_t height;
-  ASSERT_TRUE(pool.fill_block_template(bl, median, textMaxCumulativeSize, 0, totalSize, txFee, height));
+
+  ASSERT_TRUE(pool.fill_block_template(bl, median, textMaxCumulativeSize, 0, totalSize, txFee));
   ASSERT_TRUE(totalSize * 100 < median * 125);
 
   // check that fill_block_template prefers transactions with double fee
@@ -752,12 +750,12 @@ public:
       fusionTxs.emplace(getObjectHash(tx), std::move(tx));
     }
 
-    for (const auto& pair : ordinaryTxs) {
+    for (auto pair : ordinaryTxs) {
       tx_verification_context tvc = boost::value_initialized<tx_verification_context>();
       ASSERT_TRUE(pool->add_tx(pair.second, tvc, false, 0));
     }
 
-    for (const auto& pair : fusionTxs) {
+    for (auto pair : fusionTxs) {
       tx_verification_context tvc = boost::value_initialized<tx_verification_context>();
       ASSERT_TRUE(pool->add_tx(pair.second, tvc, false, 0));
     }
@@ -765,12 +763,11 @@ public:
     Block block;
     size_t totalSize;
     uint64_t totalFee;
-    uint32_t height;
-    ASSERT_TRUE(pool->fill_block_template(block, currency.blockGrantedFullRewardZone(), std::numeric_limits<size_t>::max(), 0, totalSize, totalFee, height));
+    ASSERT_TRUE(pool->fill_block_template(block, currency.blockGrantedFullRewardZone(), std::numeric_limits<size_t>::max(), 0, totalSize, totalFee));
 
     size_t fusionTxCount = 0;
     size_t ordinaryTxCount = 0;
-    for (const auto& txHash : block.transactionHashes) {
+    for (auto txHash : block.transactionHashes) {
       if (fusionTxs.count(txHash) > 0) {
         ++fusionTxCount;
       } else {

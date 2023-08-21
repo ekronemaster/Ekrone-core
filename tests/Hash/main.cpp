@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2014-2016 SDN developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,7 +10,6 @@
 #include <string>
 
 #include "crypto/hash.h"
-#include "crypto/keccak.c"
 #include "../Io.h"
 
 using namespace std;
@@ -31,7 +30,7 @@ extern "C" {
   }
 
   static void slow_hash(const void *data, size_t length, char *hash) {
-    cn_slow_hash_v0(*context, data, length, *reinterpret_cast<chash *>(hash));
+    cn_slow_hash(*context, data, length, *reinterpret_cast<chash *>(hash));
   }
 }
 
@@ -39,7 +38,9 @@ extern "C" typedef void hash_f(const void *, size_t, char *);
 struct hash_func {
   const string name;
   hash_f &f;
-} hashes[] = {{"fast", crypto::cn_fast_hash}, {"slow", slow_hash}, {"tree", hash_tree}};
+} hashes[] = {{"fast", crypto::cn_fast_hash}, {"slow", slow_hash}, {"tree", hash_tree},
+  {"extra-blake", crypto::hash_extra_blake}, {"extra-groestl", crypto::hash_extra_groestl},
+  {"extra-jh", crypto::hash_extra_jh}, {"extra-skein", crypto::hash_extra_skein}};
 
 int main(int argc, char *argv[]) {
   hash_f *f;

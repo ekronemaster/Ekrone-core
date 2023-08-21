@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2014-2016 SDN developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -81,11 +81,6 @@ bool ICoreStub::handle_incoming_tx(cn::BinaryArray const& tx_blob, cn::tx_verifi
   return true;
 }
 
-bool ICoreStub::handle_incoming_block(const cn::Block &b, cn::block_verification_context &bvc, bool control_miner, bool relay_block)
-{
-  return false;
-}
-
 void ICoreStub::set_blockchain_top(uint32_t height, const crypto::Hash& top_id) {
   topHeight = height;
   topId = top_id;
@@ -104,11 +99,6 @@ void ICoreStub::set_random_outs(const cn::COMMAND_RPC_GET_RANDOM_OUTPUTS_FOR_AMO
 
 std::vector<cn::Transaction> ICoreStub::getPoolTransactions() {
   return std::vector<cn::Transaction>();
-}
-
-bool ICoreStub::getPoolTransaction(const crypto::Hash &tx_hash, cn::Transaction &transaction)
-{
-  return false;
 }
 
 bool ICoreStub::getPoolChanges(const crypto::Hash& tailBlockId, const std::vector<crypto::Hash>& knownTxsIds,
@@ -225,11 +215,6 @@ bool ICoreStub::getBlockHeight(const crypto::Hash& blockId, uint32_t& blockHeigh
   return true;
 }
 
-bool ICoreStub::getTransaction(const crypto::Hash &id, cn::Transaction &tx, bool checkTxPool)
-{
-  return false;
-}
-
 void ICoreStub::getTransactions(const std::vector<crypto::Hash>& txs_ids, std::list<cn::Transaction>& txs, std::list<crypto::Hash>& missed_txs, bool checkTxPool) {
   for (const crypto::Hash& hash : txs_ids) {
     auto iter = transactions.find(hash);
@@ -252,11 +237,6 @@ void ICoreStub::getTransactions(const std::vector<crypto::Hash>& txs_ids, std::l
       }
     }
   }
-}
-
-bool ICoreStub::getTransactionsWithOutputGlobalIndexes(const std::vector<crypto::Hash> &txs_ids, std::list<crypto::Hash> &missed_txs, std::vector<std::pair<cn::Transaction, std::vector<uint32_t>>> &txs)
-{
-  return false;
 }
 
 bool ICoreStub::getBackwardBlocksSizes(uint32_t fromHeight, std::vector<size_t>& sizes, size_t count) {

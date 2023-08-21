@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2014-2016 SDN developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -48,7 +48,6 @@ public:
   virtual void getBlocks(const std::vector<crypto::Hash>& blockHashes, std::vector<cn::BlockDetails>& blocks, const Callback& callback) override { callback(std::error_code()); };
   virtual void getBlocks(uint64_t timestampBegin, uint64_t timestampEnd, uint32_t blocksNumberLimit, std::vector<cn::BlockDetails>& blocks, uint32_t& blocksNumberWithinTimestamps, const Callback& callback) override { callback(std::error_code()); };
   virtual void getTransactions(const std::vector<crypto::Hash>& transactionHashes, std::vector<cn::TransactionDetails>& transactions, const Callback& callback) override { callback(std::error_code()); };
-  void getTransaction(const crypto::Hash &transactionHash, cn::Transaction &transaction, const Callback &callback) override { callback(std::error_code()); }
   virtual void getTransactionsByPaymentId(const crypto::Hash& paymentId, std::vector<cn::TransactionDetails>& transactions, const Callback& callback) override { callback(std::error_code()); };
   virtual void getPoolTransactions(uint64_t timestampBegin, uint64_t timestampEnd, uint32_t transactionsNumberLimit, std::vector<cn::TransactionDetails>& transactions, uint64_t& transactionsNumberWithinTimestamps, const Callback& callback) override { callback(std::error_code()); };
   virtual void isSynchronized(bool& syncStatus, const Callback& callback) override { callback(std::error_code()); };
@@ -87,7 +86,6 @@ public:
   virtual void getBlocks(const std::vector<crypto::Hash>& blockHashes, std::vector<cn::BlockDetails>& blocks, const Callback& callback) override;
   virtual void getBlocks(uint64_t timestampBegin, uint64_t timestampEnd, uint32_t blocksNumberLimit, std::vector<cn::BlockDetails>& blocks, uint32_t& blocksNumberWithinTimestamps, const Callback& callback) override;
   virtual void getTransactions(const std::vector<crypto::Hash>& transactionHashes, std::vector<cn::TransactionDetails>& transactions, const Callback& callback) override;
-  void getTransaction(const crypto::Hash &transactionHash, cn::Transaction &transaction, const Callback &callback) override;
   virtual void getTransactionsByPaymentId(const crypto::Hash& paymentId, std::vector<cn::TransactionDetails>& transactions, const Callback& callback)  override;
   virtual void getPoolTransactions(uint64_t timestampBegin, uint64_t timestampEnd, uint32_t transactionsNumberLimit, std::vector<cn::TransactionDetails>& transactions, uint64_t& transactionsNumberWithinTimestamps, const Callback& callback)  override;
   virtual void isSynchronized(bool& syncStatus, const Callback& callback) override;
@@ -127,7 +125,6 @@ protected:
   void doGetBlocks(const std::vector<crypto::Hash>& blockHashes, std::vector<cn::BlockDetails>& blocks, const Callback& callback);
   void doGetBlocks(uint64_t timestampBegin, uint64_t timestampEnd, uint32_t blocksNumberLimit, std::vector<cn::BlockDetails>& blocks, uint32_t& blocksNumberWithinTimestamps, const Callback& callback);
   void doGetTransactions(const std::vector<crypto::Hash>& transactionHashes, std::vector<cn::TransactionDetails>& transactions, const Callback& callback);
-  void doGetTransaction(const crypto::Hash &transactionHashes, cn::Transaction &transaction, const Callback &callback);
   void doGetPoolTransactions(uint64_t timestampBegin, uint64_t timestampEnd, uint32_t transactionsNumberLimit, std::vector<cn::TransactionDetails>& transactions, uint64_t& transactionsNumberWithinTimestamps, const Callback& callback);
   void doGetTransactionsByPaymentId(const crypto::Hash& paymentId, std::vector<cn::TransactionDetails>& transactions, const Callback& callback);
   void doGetOutByMSigGIndex(uint64_t amount, uint32_t gindex, cn::MultisignatureOutput& out, const Callback& callback);

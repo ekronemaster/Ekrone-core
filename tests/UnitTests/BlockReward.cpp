@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2014-2016 SDN developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -42,8 +42,6 @@ using cn::parameters::CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE;
 
   TEST_F(block_reward_and_height, calculates_correctly)
   {
-    const uint64_t REWARD_INCREMENT = 250000;
-
     do_test(0);
     ASSERT_TRUE(m_block_not_too_big);
     ASSERT_EQ(m_block_reward, START_BLOCK_REWARD);
@@ -58,43 +56,35 @@ using cn::parameters::CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE;
 
     do_test(REWARD_INCREASE_INTERVAL);
     ASSERT_TRUE(m_block_not_too_big);
-    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD + REWARD_INCREMENT);
+    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD * 2);
 
     do_test(2 * REWARD_INCREASE_INTERVAL - 1);
     ASSERT_TRUE(m_block_not_too_big);
-    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD + REWARD_INCREMENT);
+    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD * 2);
 
     do_test(2 * REWARD_INCREASE_INTERVAL);
     ASSERT_TRUE(m_block_not_too_big);
-    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD + (REWARD_INCREMENT * 2));
+    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD * 3);
 
     do_test(3 * REWARD_INCREASE_INTERVAL - 1);
     ASSERT_TRUE(m_block_not_too_big);
-    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD + (REWARD_INCREMENT * 2));
+    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD * 3);
 
     do_test(3 * REWARD_INCREASE_INTERVAL);
     ASSERT_TRUE(m_block_not_too_big);
-    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD + (REWARD_INCREMENT * 3));
+    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD * 4);
 
     do_test(4 * REWARD_INCREASE_INTERVAL);
     ASSERT_TRUE(m_block_not_too_big);
-    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD + (REWARD_INCREMENT * 4));
+    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD * 4);
 
     do_test(5 * REWARD_INCREASE_INTERVAL);
     ASSERT_TRUE(m_block_not_too_big);
-    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD + (REWARD_INCREMENT * 5));
+    ASSERT_EQ(m_block_reward, MAX_BLOCK_REWARD);
 
-    do_test(10 * REWARD_INCREASE_INTERVAL);
+    do_test(19 * REWARD_INCREASE_INTERVAL);
     ASSERT_TRUE(m_block_not_too_big);
-    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD + (REWARD_INCREMENT * 10));
-
-    do_test(parameters::UPGRADE_HEIGHT_V8);
-    ASSERT_TRUE(m_block_not_too_big);
-    ASSERT_EQ(m_block_reward, START_BLOCK_REWARD + (REWARD_INCREMENT * 30));
-
-    do_test(parameters::UPGRADE_HEIGHT_V8 + 1);
-    ASSERT_TRUE(m_block_not_too_big);
-    ASSERT_EQ(m_block_reward, MAX_BLOCK_REWARD_V1);
+    ASSERT_EQ(m_block_reward, MAX_BLOCK_REWARD);
   }
   //--------------------------------------------------------------------------------------------------------------------
   class block_reward_and_current_block_size : public ::testing::Test

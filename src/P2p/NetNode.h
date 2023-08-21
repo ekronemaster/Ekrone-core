@@ -1,9 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2019 The TurtleCoin developers
-// Copyright (c) 2016-2020 The Karbo developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,8 +10,6 @@
 #include <unordered_map>
 
 #include <boost/functional/hash.hpp>
-#include <list>
-#include <boost/uuid/uuid.hpp>
 
 #include <System/Context.h>
 #include <System/ContextGroup.h>
@@ -57,7 +52,11 @@ namespace cn
       type(type), command(command), buffer(buffer), returnCode(returnCode) {
     }
 
-    size_t size() const {
+    P2pMessage(P2pMessage&& msg) :
+      type(msg.type), command(msg.command), buffer(std::move(msg.buffer)), returnCode(msg.returnCode) {
+    }
+
+    size_t size() {
       return buffer.size();
     }
 
@@ -72,14 +71,27 @@ namespace cn
     using Clock = std::chrono::steady_clock;
     using TimePoint = Clock::time_point;
 
-    platform_system::Context<void>* context = nullptr;
-    PeerIdType peerId = 0;
+    platform_system::Context<void>* context;
+    PeerIdType peerId;
     platform_system::TcpConnection connection;
 
     P2pConnectionContext(platform_system::Dispatcher& dispatcher, logging::ILogger& log, platform_system::TcpConnection&& conn) :
+      context(nullptr),
+      peerId(0),
       connection(std::move(conn)),
       logger(log, "node_server"),
-      queueEvent(dispatcher) {
+      queueEvent(dispatcher),
+      stopped(false) {
+    }
+
+    P2pConnectionContext(P2pConnectionContext&& ctx) :
+      CryptoNoteConnectionContext(std::move(ctx)),
+      context(ctx.context),
+      peerId(ctx.peerId),
+      connection(std::move(ctx.connection)),
+      logger(ctx.logger.getLogger(), "node_server"),
+      queueEvent(std::move(ctx.queueEvent)),
+      stopped(std::move(ctx.stopped)) {
     }
 
     bool pushMessage(P2pMessage&& msg);
@@ -94,7 +106,7 @@ namespace cn
     platform_system::Event queueEvent;
     std::vector<P2pMessage> writeQueue;
     size_t writeQueueSize = 0;
-    bool stopped = false;
+    bool stopped;
   };
 
   class NodeServer :  public IP2pEndpoint
@@ -109,103 +121,95 @@ namespace cn
     bool init(const NetNodeConfig& config);
     bool deinit();
     bool sendStopSignal();
-    uint32_t get_this_peer_port() const { return m_listeningPort; }
+    uint32_t get_this_peer_port(){return m_listeningPort;}
     cn::CryptoNoteProtocolHandler& get_payload_object();
 
     void serialize(ISerializer& s);
 
     // debug functions
-    bool log_peerlist() const;
-    bool log_connections() const;
-    uint64_t get_connections_count() override;
-    size_t get_outgoing_connections_count() const;
+    bool log_peerlist();
+    bool log_connections();
+    virtual uint64_t get_connections_count() override;
+    size_t get_outgoing_connections_count();
 
     cn::PeerlistManager& getPeerlistManager() { return m_peerlist; }
 
   private:
-    enum PeerType
-    {
-      anchor = 0,
-      white,
-      gray
-    };
+
     int handleCommand(const LevinProtocol::Command& cmd, BinaryArray& buff_out, P2pConnectionContext& context, bool& handled);
 
     //----------------- commands handlers ----------------------------------------------
-    int handle_handshake(int command, const COMMAND_HANDSHAKE::request& arg, COMMAND_HANDSHAKE::response& rsp, P2pConnectionContext& context);
-    int handle_timed_sync(int command, const COMMAND_TIMED_SYNC::request& arg, COMMAND_TIMED_SYNC::response& rsp, P2pConnectionContext& context);
-    int handle_ping(int command, const COMMAND_PING::request& arg, COMMAND_PING::response& rsp, const P2pConnectionContext& context) const;
+    int handle_handshake(int command, COMMAND_HANDSHAKE::request& arg, COMMAND_HANDSHAKE::response& rsp, P2pConnectionContext& context);
+    int handle_timed_sync(int command, COMMAND_TIMED_SYNC::request& arg, COMMAND_TIMED_SYNC::response& rsp, P2pConnectionContext& context);
+    int handle_ping(int command, COMMAND_PING::request& arg, COMMAND_PING::response& rsp, P2pConnectionContext& context);
 
 #ifdef ALLOW_DEBUG_COMMANDS
-    int handle_get_stat_info(int command, COMMAND_REQUEST_STAT_INFO::request &arg, COMMAND_REQUEST_STAT_INFO::response &rsp, P2pConnectionContext &context);
-    int handle_get_network_state(int command, COMMAND_REQUEST_NETWORK_STATE::request &arg, COMMAND_REQUEST_NETWORK_STATE::response &rsp, P2pConnectionContext &context);
-    int handle_get_peer_id(int command, COMMAND_REQUEST_PEER_ID::request &arg, COMMAND_REQUEST_PEER_ID::response &rsp, P2pConnectionContext &context);
-    bool check_trust(const proof_of_trust &tr);
+    int handle_get_stat_info(int command, COMMAND_REQUEST_STAT_INFO::request& arg, COMMAND_REQUEST_STAT_INFO::response& rsp, P2pConnectionContext& context);
+    int handle_get_network_state(int command, COMMAND_REQUEST_NETWORK_STATE::request& arg, COMMAND_REQUEST_NETWORK_STATE::response& rsp, P2pConnectionContext& context);
+    int handle_get_peer_id(int command, COMMAND_REQUEST_PEER_ID::request& arg, COMMAND_REQUEST_PEER_ID::response& rsp, P2pConnectionContext& context);
 #endif
 
     bool init_config();
     bool make_default_config();
     bool store_config();
+    bool check_trust(const proof_of_trust& tr);
     void initUpnp();
 
     bool handshake(cn::LevinProtocol& proto, P2pConnectionContext& context, bool just_take_peerlist = false);
     bool timedSync();
     bool handleTimedSyncResponse(const BinaryArray& in, P2pConnectionContext& context);
-    void forEachConnection(const std::function<void(P2pConnectionContext &)> &action);
+    void forEachConnection(std::function<void(P2pConnectionContext&)> action);
 
     void on_connection_new(P2pConnectionContext& context);
     void on_connection_close(P2pConnectionContext& context);
 
     //----------------- i_p2p_endpoint -------------------------------------------------------------
-    void relay_notify_to_all(int command, const BinaryArray &data_buff, const net_connection_id *excludeConnection) override;
-    bool invoke_notify_to_peer(int command, const BinaryArray &req_buff, const CryptoNoteConnectionContext &context) override;
-    void drop_connection(CryptoNoteConnectionContext &context, bool add_fail) override;
-    void for_each_connection(const std::function<void(cn::CryptoNoteConnectionContext &, PeerIdType)> &f) override;
-    void externalRelayNotifyToAll(int command, const BinaryArray &data_buff, const net_connection_id *excludeConnection) override;
-    void externalRelayNotifyToList(int command, const BinaryArray &data_buff, const std::list<boost::uuids::uuid> &relayList) override;
+    virtual void relay_notify_to_all(int command, const BinaryArray& data_buff, const net_connection_id* excludeConnection) override;
+    virtual bool invoke_notify_to_peer(int command, const BinaryArray& req_buff, const CryptoNoteConnectionContext& context) override;
+    virtual void for_each_connection(std::function<void(cn::CryptoNoteConnectionContext&, PeerIdType)> f) override;
+    virtual void externalRelayNotifyToAll(int command, const BinaryArray& data_buff) override;
+
     //-----------------------------------------------------------------------------------------------
     bool handle_command_line(const boost::program_options::variables_map& vm);
-    bool is_addr_recently_failed(const uint32_t address_ip);
     bool handleConfig(const NetNodeConfig& config);
     bool append_net_address(std::vector<NetworkAddress>& nodes, const std::string& addr);
     bool idle_worker();
     bool handle_remote_peerlist(const std::list<PeerlistEntry>& peerlist, time_t local_time, const CryptoNoteConnectionContext& context);
-    bool get_local_node_data(basic_node_data& node_data) const;
+    bool get_local_node_data(basic_node_data& node_data);
+
     bool merge_peerlist_with_local(const std::list<PeerlistEntry>& bs);
-    bool fix_time_delta(std::list<PeerlistEntry>& local_peerlist, time_t local_time, int64_t& delta) const;
+    bool fix_time_delta(std::list<PeerlistEntry>& local_peerlist, time_t local_time, int64_t& delta);
 
     bool connections_maker();
     bool make_new_connection_from_peerlist(bool use_white_list);
-    bool make_new_connection_from_anchor_peerlist(const std::vector<AnchorPeerlistEntry> &anchor_peerlist);
-    bool try_to_connect_and_handshake_with_new_peer(const NetworkAddress &na, bool just_take_peerlist = false, uint64_t last_seen_stamp = 0, PeerType peer_type = white, uint64_t first_seen_stamp = 0);
-    bool is_peer_used(const PeerlistEntry &peer) const;
-    bool is_peer_used(const AnchorPeerlistEntry &peer) const;
-    bool is_addr_connected(const NetworkAddress& peer) const;
-    bool try_ping(const basic_node_data& node_data, const P2pConnectionContext& context);
-    bool make_expected_connections_count(PeerType peer_type, size_t expected_connections);
+    bool try_to_connect_and_handshake_with_new_peer(const NetworkAddress& na, bool just_take_peerlist = false, uint64_t last_seen_stamp = 0, bool white = true);
+    bool is_peer_used(const PeerlistEntry& peer);
+    bool is_addr_connected(const NetworkAddress& peer);
+    bool try_ping(basic_node_data& node_data, P2pConnectionContext& context);
+    bool make_expected_connections_count(bool white_list, size_t expected_connections);
     bool is_priority_node(const NetworkAddress& na);
 
     bool connect_to_peerlist(const std::vector<NetworkAddress>& peers);
 
     bool parse_peers_and_add_to_container(const boost::program_options::variables_map& vm,
-      const command_line::arg_descriptor<std::vector<std::string> > & arg, std::vector<NetworkAddress>& container) const;
+      const command_line::arg_descriptor<std::vector<std::string> > & arg, std::vector<NetworkAddress>& container);
 
     //debug functions
-    std::string print_connections_container() const;
+    std::string print_connections_container();
 
-    using ConnectionContainer = std::unordered_map<boost::uuids::uuid, P2pConnectionContext, boost::hash<boost::uuids::uuid>>;
-    using ConnectionIterator = ConnectionContainer::iterator;
+    typedef std::unordered_map<boost::uuids::uuid, P2pConnectionContext, boost::hash<boost::uuids::uuid>> ConnectionContainer;
+    typedef ConnectionContainer::iterator ConnectionIterator;
     ConnectionContainer m_connections;
 
     void acceptLoop();
     void connectionHandler(const boost::uuids::uuid& connectionId, P2pConnectionContext& connection);
-    void writeHandler(P2pConnectionContext& ctx) const;
+    void writeHandler(P2pConnectionContext& ctx);
     void onIdle();
     void timedSyncLoop();
     void timeoutLoop();
 
     template<typename T>
-    void safeInterrupt(T& obj) const;
+    void safeInterrupt(T& obj);
 
     struct config
     {
@@ -226,8 +230,8 @@ namespace cn
     uint32_t m_listeningPort;
     uint32_t m_external_port;
     uint32_t m_ip_address;
-    bool m_allow_local_ip = false;
-    bool m_hide_my_port = false;
+    bool m_allow_local_ip;
+    bool m_hide_my_port;
     std::string m_p2p_state_filename;
 
     platform_system::Dispatcher& m_dispatcher;
@@ -237,13 +241,14 @@ namespace cn
     platform_system::Timer m_timeoutTimer;
     platform_system::TcpListener m_listener;
     logging::LoggerRef logger;
-    std::atomic<bool> m_stop{false};
+    std::atomic<bool> m_stop;
 
     CryptoNoteProtocolHandler& m_payload_handler;
     PeerlistManager m_peerlist;
 
-    OnceInInterval m_connections_maker_interval = OnceInInterval(1);
-    OnceInInterval m_peerlist_store_interval = OnceInInterval(60 * 30, false);
+    // OnceInInterval m_peer_handshake_idle_maker_interval;
+    OnceInInterval m_connections_maker_interval;
+    OnceInInterval m_peerlist_store_interval;
     platform_system::Timer m_timedSyncTimer;
 
     std::string m_bind_ip;
@@ -256,8 +261,6 @@ namespace cn
     std::vector<NetworkAddress> m_seed_nodes;
     std::list<PeerlistEntry> m_command_line_peers;
     uint64_t m_peer_livetime;
-    boost::uuids::uuid m_network_id = CRYPTONOTE_NETWORK;
-    std::map<uint32_t, uint64_t> m_host_fails_score;
-    mutable std::mutex mutex;
+    boost::uuids::uuid m_network_id;
   };
 }

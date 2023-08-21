@@ -1,10 +1,9 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2014-2017 XDN developers
+// Copyright (c) 2016-2017 BXC developers
+// Copyright (c) 2017 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
 #include <alloca.h>
 #include <cassert>
 #include <cstddef>
@@ -48,6 +47,13 @@ namespace crypto {
 
 
   mutex random_lock;
+  struct s_comm_2
+  {
+      Hash msg;
+      EllipticCurvePoint D;
+      EllipticCurvePoint X;
+      EllipticCurvePoint Y;
+  };
 
   static inline void random_scalar(EllipticCurveScalar &res) {
     unsigned char tmp[64];
@@ -56,10 +62,9 @@ namespace crypto {
     memcpy(&res, tmp, 32);
   }
 
-  void hash_to_scalar(const void *data, size_t length, EllipticCurveScalar &res)
-  {
+  void hash_to_scalar(const void *data, size_t length, EllipticCurveScalar &res) {
     cn_fast_hash(data, length, reinterpret_cast<Hash &>(res));
-    sc_reduce32(reinterpret_cast<unsigned char *>(&res));
+    sc_reduce32(reinterpret_cast<unsigned char*>(&res));
   }
 
   void crypto_ops::generate_keys(PublicKey &pub, SecretKey &sec) {
@@ -78,6 +83,34 @@ namespace crypto {
     ge_p3_tobytes(reinterpret_cast<unsigned char*>(&pub), &point);
   }
 
+  void crypto_ops::generate_deterministic_keys(PublicKey &pub, SecretKey &sec, SecretKey& second) {
+    lock_guard<mutex> lock(random_lock);
+    ge_p3 point;
+    sec = second;
+    sc_reduce32(reinterpret_cast<unsigned char*>(&sec)); // reduce in case second round of keys (sendkeys)
+    ge_scalarmult_base(&point, reinterpret_cast<unsigned char*>(&sec));
+    ge_p3_tobytes(reinterpret_cast<unsigned char*>(&pub), &point);
+  }
+
+  SecretKey crypto_ops::generate_m_keys(PublicKey &pub, SecretKey &sec, const SecretKey& recovery_key, bool recover) {
+    lock_guard<mutex> lock(random_lock);
+    ge_p3 point;
+    SecretKey rng;
+    if (recover)
+    {
+     rng = recovery_key;
+    }
+    else
+    {
+      random_scalar(reinterpret_cast<EllipticCurveScalar&>(rng));
+   }
+    sec = rng;
+    sc_reduce32(reinterpret_cast<unsigned char*>(&sec)); // reduce in case second round of keys (sendkeys)
+    ge_scalarmult_base(&point, reinterpret_cast<unsigned char*>(&sec));
+    ge_p3_tobytes(reinterpret_cast<unsigned char*>(&pub), &point);
+
+    return rng;
+  }
   bool crypto_ops::check_key(const PublicKey &key) {
     ge_p3 point;
     return ge_frombytes_vartime(&point, reinterpret_cast<const unsigned char*>(&key)) == 0;
@@ -257,13 +290,6 @@ namespace crypto {
     Hash h;
     EllipticCurvePoint key;
     EllipticCurvePoint comm;
-  };
-
-  struct s_comm_2 {
-    Hash msg;
-    EllipticCurvePoint D;
-    EllipticCurvePoint X;
-    EllipticCurvePoint Y;
   };
 
   void crypto_ops::generate_signature(const Hash &prefix_hash, const PublicKey &pub, const SecretKey &sec, Signature &sig) {

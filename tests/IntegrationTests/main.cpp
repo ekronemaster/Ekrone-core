@@ -1,5 +1,6 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2014-2016 SDN developers
+// Copyright (c) 2017-2020 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -241,7 +242,7 @@ public:
 
   bool perform1()
   {
-    using namespace Tests::common;
+    using namespace Tests::Common;
     using namespace cn;
     const uint64_t FEE = 1000000;
     launchTestnet(2);
@@ -301,7 +302,7 @@ public:
 
     std::vector<cn::TransactionMessage> messages;
     std::string extraString;
-    uint64_t fee = cn::parameters::MINIMUM_FEE_V2;
+    uint64_t fee = cn::parameters::MINIMUM_FEE;
     uint64_t mixIn = 0;
     uint64_t unlockTimestamp = 0;
     uint64_t ttl = 0;
@@ -389,7 +390,7 @@ public:
 
   bool perform2(size_t blocksCount = 10)
   {
-    using namespace Tests::common;
+    using namespace Tests::Common;
     launchTestnet(3, Line);
     std::this_thread::sleep_for(std::chrono::milliseconds(10000));
     LOG_TRACE("STEP 1 PASSED");
@@ -429,7 +430,7 @@ public:
   bool perform4()
   {
     using namespace cn;
-    using namespace Tests::common;
+    using namespace Tests::Common;
     launchTestnet(3, Star);
     LOG_TRACE("STEP 1 PASSED");
 
@@ -564,7 +565,7 @@ public:
 
   bool perform5()
   {
-    using namespace Tests::common;
+    using namespace Tests::Common;
     using namespace cn;
     const uint64_t FEE = 1000000;
     launchTestnetWithInprocNode(2);
@@ -636,7 +637,7 @@ public:
     wallet2->addObserver(&poolTxWaiter);
     std::vector<cn::TransactionMessage> messages;
     std::string extraString;
-    uint64_t fee = cn::parameters::MINIMUM_FEE_V2;
+    uint64_t fee = cn::parameters::MINIMUM_FEE;
     uint64_t mixIn = 0;
     uint64_t unlockTimestamp = 0;
     uint64_t ttl = 0;
@@ -719,7 +720,7 @@ public:
 
   bool perform6()
   {
-    using namespace Tests::common;
+    using namespace Tests::Common;
     using namespace cn;
     const uint64_t FEE = 1000000;
     launchTestnetWithInprocNode(2);
@@ -790,7 +791,7 @@ public:
     wallet2->addObserver(&poolTxWaiter);
     std::vector<cn::TransactionMessage> messages;
     std::string extraString;
-    uint64_t fee = cn::parameters::MINIMUM_FEE_V2;
+    uint64_t fee = cn::parameters::MINIMUM_FEE;
     uint64_t mixIn = 0;
     uint64_t unlockTimestamp = 0;
     uint64_t ttl = 0;

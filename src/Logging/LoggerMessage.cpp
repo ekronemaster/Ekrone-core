@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -30,10 +29,10 @@ LoggerMessage::~LoggerMessage() {
 LoggerMessage::LoggerMessage(LoggerMessage&& other)
   : std::ostream(std::move(other))
   , std::streambuf(std::move(other))
-  , message(other.message)
   , category(other.category)
   , logLevel(other.logLevel)
   , logger(other.logger)
+  , message(other.message)
   , timestamp(boost::posix_time::microsec_clock::local_time())
   , gotText(false) {
   this->set_rdbuf(this);
@@ -65,6 +64,8 @@ LoggerMessage::LoggerMessage(LoggerMessage&& other)
 
     //streambuf swap
     char *_Pfirst = pbase();
+    char *_Pnext = pptr();
+    std::ignore = _Pnext;
     char *_Pend = epptr();
     char *_Gfirst = eback();
     char *_Gnext = gptr();

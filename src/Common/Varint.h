@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -60,6 +59,6 @@ namespace tools {
 
     template<typename InputIt, typename T>
     int read_varint(InputIt &&first, InputIt &&last, T &i) {
-        return read_varint<std::numeric_limits<T>::digits, InputIt, T>(std::forward<InputIt>(first), std::forward<InputIt>(last), i);
+        return read_varint<std::numeric_limits<T>::digits, InputIt, T>(std::move(first), std::move(last), i);
     }
 }

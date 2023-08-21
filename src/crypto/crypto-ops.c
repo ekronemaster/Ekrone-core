@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2014-2017 XDN developers
+// Copyright (c) 2016-2017 BXC developers
+// Copyright (c) 2017 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -21,7 +21,7 @@ static void ge_p2_0(ge_p2 *);
 static void ge_p3_dbl(ge_p1p1 *, const ge_p3 *);
 static void fe_divpowm1(fe, const fe, const fe);
 
-/* common functions */
+/* Common functions */
 
 static uint64_t load_3(const unsigned char *in) {
   uint64_t result;
@@ -1239,13 +1239,12 @@ int ge_frombytes_vartime(ge_p3 *h, const unsigned char *s) {
   int64_t carry7;
   int64_t carry8;
   int64_t carry9;
-  
-          /* Validate the number to be canonical - Testnet */
+
+  /* Validate the number to be canonical */
   if (h9 == 33554428 && h8 == 268435440 && h7 == 536870880 && h6 == 2147483520 &&
     h5 == 4294967295 && h4 == 67108860 && h3 == 134217720 && h2 == 536870880 &&
     h1 == 1073741760 && h0 >= 4294967277) {
     return -1;
- 
   }
 
   carry9 = (h9 + (int64_t) (1<<24)) >> 25; h0 += carry9 * 19; h9 -= carry9 << 25;

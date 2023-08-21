@@ -1,12 +1,11 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2020 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "TestWalletLegacy.h"
-#include <thread>
 
 namespace Tests
 {
@@ -23,7 +22,7 @@ TestWalletLegacy::TestWalletLegacy(platform_system::Dispatcher &dispatcher, cons
                                                                                                             m_someTransactionUpdated(dispatcher),
                                                                                                             m_currency(currency),
                                                                                                             m_node(node),
-                                                                                                            m_wallet(new cn::WalletLegacy(currency, node, m_logger, true)),
+                                                                                                            m_wallet(new cn::WalletLegacy(currency, node, m_logger)),
                                                                                                             m_currentHeight(0)
 {
   m_wallet->addObserver(this);
@@ -90,7 +89,7 @@ std::error_code TestWalletLegacy::sendTransaction(const std::string &address, ui
   WalletLegacyTransfer transfer{address, static_cast<int64_t>(amount)};
   std::vector<cn::TransactionMessage> messages;
   std::string extraString;
-  uint64_t fee = cn::parameters::MINIMUM_FEE_V2;
+  uint64_t fee = cn::parameters::MINIMUM_FEE;
   uint64_t mixIn = 0;
   uint64_t unlockTimestamp = 0;
   uint64_t ttl = 0;

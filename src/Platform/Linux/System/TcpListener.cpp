@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -65,6 +64,7 @@ TcpListener::TcpListener(Dispatcher& dispatcher, const Ipv4Address& addr, uint16
 
     int result = close(listener);
     assert(result != -1);
+    std::ignore = result;
   }
 
   throw std::runtime_error("TcpListener::TcpListener, " + message);
@@ -84,6 +84,7 @@ TcpListener::~TcpListener() {
     assert(context == nullptr);
     int result = close(listener);
     assert(result != -1);
+    std::ignore = result;
   }
 }
 
@@ -178,6 +179,7 @@ TcpConnection TcpListener::accept() {
 
       int result = close(connection);
       assert(result != -1);
+      std::ignore = result;
     }
   }
 

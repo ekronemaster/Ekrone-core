@@ -1,4 +1,5 @@
 // Copyright (c) 2012-2016, The CryptoNote developers, The Bytecoin developers
+// Copyright (c) 2017-2020 Ekrone developers
 //
 // This file is part of Bytecoin.
 //
@@ -16,18 +17,17 @@
 // along with Bytecoin.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Dispatcher.h"
-
-#include <System/ErrorMessage.h>
 #include <cassert>
-#include <fcntl.h>
-#include <stdexcept>
-#include <string.h>
+
 #include <sys/epoll.h>
 #include <sys/eventfd.h>
 #include <sys/timerfd.h>
+#include <fcntl.h>
+#include <string.h>
 #include <ucontext.h>
 #include <unistd.h>
-#include <pthread.h>
+#include <stdexcept>
+#include "ErrorMessage.h"
 
 namespace platform_system {
 
@@ -58,7 +58,7 @@ private:
 static_assert(Dispatcher::SIZEOF_PTHREAD_MUTEX_T == sizeof(pthread_mutex_t), "invalid pthread mutex size");
 
 //const size_t STACK_SIZE = 64 * 1024;
-const size_t STACK_SIZE = 512 * 1024;
+const size_t STACK_SIZE = 64 * 1024;
 
 };
 
@@ -92,6 +92,7 @@ Dispatcher::Dispatcher() {
           mainContext.group = &contextGroup;
           mainContext.groupPrev = nullptr;
           mainContext.groupNext = nullptr;
+          mainContext.inExecutionQueue = false;
           contextGroup.firstContext = nullptr;
           contextGroup.lastContext = nullptr;
           contextGroup.firstWaiter = nullptr;
@@ -105,11 +106,13 @@ Dispatcher::Dispatcher() {
 
         auto result = close(remoteSpawnEvent);
         assert(result == 0);
+        std::ignore = result;
       }
     }
 
     auto result = close(epoll);
     assert(result == 0);
+    std::ignore = result;
   }
 
   throw std::runtime_error("Dispatcher::Dispatcher, "+message);
@@ -136,6 +139,7 @@ Dispatcher::~Dispatcher() {
   while (!timers.empty()) {
     int result = ::close(timers.top());
     assert(result == 0);
+    std::ignore = result;
     timers.pop();
   }
 
@@ -145,6 +149,7 @@ Dispatcher::~Dispatcher() {
   assert(result == 0);
   result = pthread_mutex_destroy(reinterpret_cast<pthread_mutex_t*>(this->mutex));
   assert(result == 0);
+  std::ignore = result;
 }
 
 void Dispatcher::clear() {
@@ -172,6 +177,8 @@ void Dispatcher::dispatch() {
     if (firstResumingContext != nullptr) {
       context = firstResumingContext;
       firstResumingContext = context->next;
+      assert(context->inExecutionQueue);
+      context->inExecutionQueue = false;
       break;
     }
 
@@ -254,7 +261,12 @@ bool Dispatcher::interrupted() {
 
 void Dispatcher::pushContext(NativeContext* context) {
   assert(context != nullptr);
+  
+  if (context->inExecutionQueue)
+    return;
+    
   context->next = nullptr;
+  context->inExecutionQueue = true;
   if(firstResumingContext != nullptr) {
     assert(lastResumingContext != nullptr);
     lastResumingContext->next = context;
@@ -325,18 +337,22 @@ void Dispatcher::yield() {
         }
 
         if ((events[i].events & EPOLLOUT) != 0) {
-          if(contextPair->writeContext != nullptr) {
-            if(contextPair->writeContext->context != nullptr) {
+          if (contextPair->writeContext != nullptr) {
+            if (contextPair->writeContext->context != nullptr) {
               contextPair->writeContext->context->interruptProcedure = nullptr;
             }
+            pushContext(contextPair->writeContext->context);
+            contextPair->writeContext->events = events[i].events;
           }
           pushContext(contextPair->writeContext->context);
           contextPair->writeContext->events = events[i].events;
         } else if ((events[i].events & EPOLLIN) != 0) {
-          if(contextPair->readContext != nullptr) {
-            if(contextPair->readContext->context != nullptr) {
+          if (contextPair->readContext != nullptr) {
+            if (contextPair->readContext->context != nullptr) {
               contextPair->readContext->context->interruptProcedure = nullptr;
             }
+            pushContext(contextPair->readContext->context);
+            contextPair->readContext->events = events[i].events;
           }
           pushContext(contextPair->readContext->context);
           contextPair->readContext->events = events[i].events;
@@ -403,7 +419,7 @@ int Dispatcher::getTimer() {
   if (timers.empty()) {
     timer = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK);
     epoll_event timerEvent;
-    timerEvent.events = 0;
+    timerEvent.events = EPOLLONESHOT;
     timerEvent.data.ptr = nullptr;
 
     if (epoll_ctl(getEpoll(), EPOLL_CTL_ADD, timer, &timerEvent) == -1) {
@@ -427,6 +443,7 @@ void Dispatcher::contextProcedure(void* ucontext) {
   context.ucontext = ucontext;
   context.interrupted = false;
   context.next = nullptr;
+  context.inExecutionQueue = false;
   firstReusableContext = &context;
   ucontext_t* oldContext = static_cast<ucontext_t*>(context.ucontext);
   if (swapcontext(oldContext, static_cast<ucontext_t*>(currentContext->ucontext)) == -1) {
@@ -437,7 +454,7 @@ void Dispatcher::contextProcedure(void* ucontext) {
     ++runningContextCount;
     try {
       context.procedure();
-    } catch(std::exception&) {
+    } catch(...) {
     }
 
     if (context.group != nullptr) {

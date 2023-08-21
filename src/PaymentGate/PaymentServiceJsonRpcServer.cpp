@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2023 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2023 Ekrone Infinity Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -42,8 +42,6 @@ PaymentServiceJsonRpcServer::PaymentServiceJsonRpcServer(platform_system::Dispat
   handlers.emplace("createIntegrated", jsonHandler<CreateIntegrated::Request, CreateIntegrated::Response>(std::bind(&PaymentServiceJsonRpcServer::handleCreateIntegrated, this, std::placeholders::_1, std::placeholders::_2)));
   handlers.emplace("splitIntegrated", jsonHandler<SplitIntegrated::Request, SplitIntegrated::Response>(std::bind(&PaymentServiceJsonRpcServer::handleSplitIntegrated, this, std::placeholders::_1, std::placeholders::_2)));
   handlers.emplace("reset", jsonHandler<Reset::Request, Reset::Response>(std::bind(&PaymentServiceJsonRpcServer::handleReset, this, std::placeholders::_1, std::placeholders::_2)));
-  handlers.emplace("exportWallet", jsonHandler<ExportWallet::Request, ExportWallet::Response>(std::bind(&PaymentServiceJsonRpcServer::handleExportWallet, this, std::placeholders::_1, std::placeholders::_2)));
-  handlers.emplace("exportWalletKeys", jsonHandler<ExportWalletKeys::Request, ExportWalletKeys::Response>(std::bind(&PaymentServiceJsonRpcServer::handleExportWalletKeys, this, std::placeholders::_1, std::placeholders::_2)));
   handlers.emplace("createAddress", jsonHandler<CreateAddress::Request, CreateAddress::Response>(std::bind(&PaymentServiceJsonRpcServer::handleCreateAddress, this, std::placeholders::_1, std::placeholders::_2)));
   handlers.emplace("createAddressList", jsonHandler<CreateAddressList::Request, CreateAddressList::Response>(std::bind(&PaymentServiceJsonRpcServer::handleCreateAddressList, this, std::placeholders::_1, std::placeholders::_2)));
   handlers.emplace("deleteAddress", jsonHandler<DeleteAddress::Request, DeleteAddress::Response>(std::bind(&PaymentServiceJsonRpcServer::handleDeleteAddress, this, std::placeholders::_1, std::placeholders::_2)));
@@ -136,21 +134,11 @@ std::error_code PaymentServiceJsonRpcServer::handleCreateAddress(const CreateAdd
   }
 }
 
-std::error_code PaymentServiceJsonRpcServer::handleExportWallet(const ExportWallet::Request &request, const ExportWallet::Response &)
-{
-  return service.exportWallet(request.exportFilename);
-}
-
-std::error_code PaymentServiceJsonRpcServer::handleExportWalletKeys(const ExportWalletKeys::Request &request, const ExportWalletKeys::Response &)
-{
-  return service.exportWallet(request.exportFilename, true);
-}
-
 std::error_code PaymentServiceJsonRpcServer::handleCreateAddressList(const CreateAddressList::Request& request, CreateAddressList::Response& response) {
   return service.createAddressList(request.spendSecretKeys, request.reset, response.addresses);
 }
 
-std::error_code PaymentServiceJsonRpcServer::handleSave(const Save::Request &, const Save::Response &)
+std::error_code PaymentServiceJsonRpcServer::handleSave(const Save::Request &, const Save::Response &) 
 {
   return service.saveWalletNoThrow();
 }

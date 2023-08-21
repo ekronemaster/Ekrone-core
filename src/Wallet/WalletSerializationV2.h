@@ -94,4 +94,4 @@ private:
   std::unordered_set<crypto::PublicKey> m_deletedKeys;
 };
 
-} //namespace cn
+} //namespace CryptoNote

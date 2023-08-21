@@ -1,7 +1,6 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2011-2017 The Cryptonote developers
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -15,13 +14,11 @@ struct Hash {
   uint8_t data[32];
 };
 
-struct EllipticCurvePoint
-{
+struct EllipticCurvePoint {
   uint8_t data[32];
 };
 
-struct EllipticCurveScalar
-{
+struct EllipticCurveScalar {
   uint8_t data[32];
 };
 
@@ -48,4 +45,3 @@ struct Signature {
 const struct EllipticCurveScalar I = {{0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
 }
-

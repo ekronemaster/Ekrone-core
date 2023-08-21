@@ -1,4 +1,5 @@
 // Copyright (c) 2012-2016, The CryptoNote developers, The Bytecoin developers
+// Copyright (c) 2018-2020 Ekrone Network & UlraNote Devs
 //
 // This file is part of Bytecoin.
 //
@@ -18,7 +19,7 @@
 #pragma once
 
 #include <cstddef>
-#include <cstdint>
+#include <cinttypes>
 #include <functional>
 #include <queue>
 #include <stack>
@@ -53,7 +54,8 @@ struct NativeContextGroup {
 struct OperationContext {
   NativeContext *context;
   bool interrupted;
-  uint32_t events;
+  
+  std::uint32_t events;
 };
 
 struct ContextPair {
@@ -85,17 +87,13 @@ public:
   void pushTimer(int timer);
 
 #ifdef __x86_64__
-#if __WORDSIZE == 64
+# if __WORDSIZE == 64
   static const int SIZEOF_PTHREAD_MUTEX_T = 40;
-#else
+# else
   static const int SIZEOF_PTHREAD_MUTEX_T = 32;
-#endif
-#else
-#if defined(__aarch64__)
-  static const int SIZEOF_PTHREAD_MUTEX_T = 48;
+# endif
 #else
   static const int SIZEOF_PTHREAD_MUTEX_T = 24;
-#endif
 #endif
 
 private:

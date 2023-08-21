@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2023 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2023 Ekrone Infinity Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -55,7 +55,7 @@ bool PaymentGateService::init(int argc, char** argv) {
   logging::LoggerRef log(logger, "main");
 
   if (config.gateConfiguration.testnet) {
-    log(logging::INFO, logging::MAGENTA) << "/!\\ Starting in testnet mode /!\\";
+    log(logging::INFO) << "Starting in testnet mode";
     currencyBuilder.testnet(true);
   }
 
@@ -224,7 +224,7 @@ void PaymentGateService::runWalletService(const cn::Currency& currency, cn::INod
 
   std::unique_ptr<cn::WalletGreen> wallet(new cn::WalletGreen(*dispatcher, currency, node, logger));
 
-  service = new payment_service::WalletService(currency, *dispatcher, node, *wallet, *wallet, walletConfiguration, logger, config.gateConfiguration.testnet);
+  service = new payment_service::WalletService(currency, *dispatcher, node, *wallet, *wallet, walletConfiguration, logger);
   std::unique_ptr<payment_service::WalletService> serviceGuard(service);
   try {
     service->init();

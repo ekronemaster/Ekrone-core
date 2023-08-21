@@ -1,8 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2020 Karbo developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -11,10 +9,10 @@
 #include <string>
 #include <unordered_map>
 #include <map>
-#include <parallel_hashmap/phmap.h>
+
 #include "crypto/hash.h"
 #include "CryptoNoteBasic.h"
-using phmap::flat_hash_map;
+
 namespace cn {
 
 class ISerializer;
@@ -93,7 +91,7 @@ public:
     archive & lastGeneratedTxNumber;
   }
 private:
-  flat_hash_map<uint32_t, uint64_t> index;
+  std::unordered_map<uint32_t, uint64_t> index;
   uint64_t lastGeneratedTxNumber;
 };
 

@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2020 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -33,9 +33,9 @@ namespace {
 //DO NOT CHANGE IT
 struct WalletRecordDto {
   PublicKey spendPublicKey;
-  SecretKey spendSecretKey; 
-  uint64_t actualBalance = 0;
+  SecretKey spendSecretKey;
   uint64_t pendingBalance = 0;
+  uint64_t actualBalance = 0;
   uint64_t creationTimestamp = 0;
 };
 
@@ -101,6 +101,7 @@ struct WalletTransferDto {
   std::string address;
   uint64_t amount;
   uint8_t type;
+
   uint32_t version;
 };
 
@@ -475,31 +476,24 @@ void WalletSerializer::saveTransfers(common::IOutputStream& destination, CryptoC
   }
 }
 
-void WalletSerializer::load(const crypto::chacha8_key &key, common::IInputStream &source)
-{
+void WalletSerializer::load(const crypto::chacha8_key &key, common::IInputStream& source) {
   cn::BinaryInputStreamSerializer s(source);
   s.beginObject("wallet");
 
   uint32_t version = loadVersion(source);
 
-  if (version > SERIALIZATION_VERSION)
-  {
+  if (version > SERIALIZATION_VERSION) {
     throw std::system_error(make_error_code(error::WRONG_VERSION));
-  }
-  else if (version > 2)
-  {
+  } else if (version > 2) {
     loadWallet(source, key, version);
-  }
-  else
-  {
+  } else {
     loadWalletV1(source, key);
   }
 
   s.endObject();
 }
 
-void WalletSerializer::loadWallet(common::IInputStream &source, const crypto::chacha8_key &key, uint32_t version)
-{
+void WalletSerializer::loadWallet(common::IInputStream& source, const crypto::chacha8_key &key, uint32_t version) {
   cn::CryptoContext cryptoContext;
 
   bool details = false;
@@ -521,7 +515,7 @@ void WalletSerializer::loadWallet(common::IInputStream &source, const crypto::ch
     loadTransfers(source, cryptoContext, version);
   }
 
-  if (version < 5) {
+  if (version < 3) {
     updateTransfersSign();
     cache = false;
   }
@@ -529,20 +523,20 @@ void WalletSerializer::loadWallet(common::IInputStream &source, const crypto::ch
   if (cache) {
     loadBalances(source, cryptoContext);
     loadTransfersSynchronizer(source, cryptoContext);
-    if (version < 5) {
+    if (version < 3) {
       loadObsoleteSpentOutputs(source, cryptoContext);
     }
 
     loadUnlockTransactionsJobs(source, cryptoContext);
 
-    if (version < 5) {
+    if (version < 3) {
       loadObsoleteChange(source, cryptoContext);
     }
 
-    if (version > 3) {
+    if (version >= 3) {
       loadUncommitedTransactions(source, cryptoContext);
 
-      if (version >= 5) {
+      if (version >= 3) {
         initTransactionPool();
       }
     }
@@ -555,8 +549,7 @@ void WalletSerializer::loadWallet(common::IInputStream &source, const crypto::ch
   }
 }
 
-void WalletSerializer::loadWalletV1(common::IInputStream &source, const crypto::chacha8_key &key)
-{
+void WalletSerializer::loadWalletV1(common::IInputStream& source, const crypto::chacha8_key &key) {
   cn::CryptoContext cryptoContext;
 
   cn::BinaryInputStreamSerializer encrypted(source);
@@ -666,7 +659,7 @@ void WalletSerializer::loadWallets(common::IInputStream& source, CryptoContext& 
   deserializeEncrypted(count, "wallets_count", cryptoContext, source);
   cryptoContext.incIv();
 
-  bool isTrackingMode;
+  bool isTrackingMode{false};
 
   for (uint64_t i = 0; i < count; ++i) {
     WalletRecordDto dto;
@@ -722,6 +715,7 @@ void WalletSerializer::subscribeWallets() {
     auto& subscription = m_synchronizer.addSubscription(sub);
     bool r = index.modify(it, [&subscription] (WalletRecord& rec) { rec.container = &subscription.getContainer(); });
     assert(r);
+    std::ignore = r;
 
     subscription.addObserver(&m_transfersObserver);
   }
@@ -773,6 +767,7 @@ void WalletSerializer::loadUnlockTransactionsJobs(common::IInputStream& source, 
     cryptoContext.incIv();
 
     assert(dto.walletIndex < walletsSize);
+    std::ignore = walletsSize;
 
     UnlockTransactionJob job;
     job.blockHeight = dto.blockHeight;

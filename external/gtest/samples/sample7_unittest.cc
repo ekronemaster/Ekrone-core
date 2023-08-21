@@ -26,6 +26,8 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+// Author: vladl@google.com (Vlad Losev)
 
 // This sample shows how to test common properties of multiple
 // implementations of an interface (aka interface tests) using
@@ -35,6 +37,7 @@
 
 // The interface and its implementations are in this header.
 #include "prime_tables.h"
+
 #include "gtest/gtest.h"
 namespace {
 
@@ -48,7 +51,9 @@ using ::testing::Values;
 // SetUp() method and delete them in TearDown() method.
 typedef PrimeTable* CreatePrimeTableFunc();
 
-PrimeTable* CreateOnTheFlyPrimeTable() { return new OnTheFlyPrimeTable(); }
+PrimeTable* CreateOnTheFlyPrimeTable() {
+  return new OnTheFlyPrimeTable();
+}
 
 template <size_t max_precalculated>
 PrimeTable* CreatePreCalculatedPrimeTable() {
@@ -61,11 +66,11 @@ PrimeTable* CreatePreCalculatedPrimeTable() {
 // create and store an instance of PrimeTable.
 class PrimeTableTestSmpl7 : public TestWithParam<CreatePrimeTableFunc*> {
  public:
-  ~PrimeTableTestSmpl7() override { delete table_; }
-  void SetUp() override { table_ = (*GetParam())(); }
-  void TearDown() override {
+  virtual ~PrimeTableTestSmpl7() { delete table_; }
+  virtual void SetUp() { table_ = (*GetParam())(); }
+  virtual void TearDown() {
     delete table_;
-    table_ = nullptr;
+    table_ = NULL;
   }
 
  protected:
@@ -106,8 +111,8 @@ TEST_P(PrimeTableTestSmpl7, CanGetNextPrime) {
 //
 // Here, we instantiate our tests with a list of two PrimeTable object
 // factory functions:
-INSTANTIATE_TEST_SUITE_P(OnTheFlyAndPreCalculated, PrimeTableTestSmpl7,
-                         Values(&CreateOnTheFlyPrimeTable,
-                                &CreatePreCalculatedPrimeTable<1000>));
+INSTANTIATE_TEST_CASE_P(OnTheFlyAndPreCalculated, PrimeTableTestSmpl7,
+                        Values(&CreateOnTheFlyPrimeTable,
+                               &CreatePreCalculatedPrimeTable<1000>));
 
 }  // namespace

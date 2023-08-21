@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2023 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2023 Ekrone Infinity Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -59,14 +59,12 @@ bool ConfigurationManager::init(int argc, char** argv) {
   po::notify(cmdOptions);
 
   if (cmdOptions.count("help")) {
-    std::cout << EKR_PAYMENT_SERVICE_RELEASE_VERSION << std::endl;
     std::cout << cmdOptionsDesc << std::endl;
     return false;
   }
 
   if (get_arg(cmdOptions, command_line::arg_version))
   {
-    std::cout << EKR_PAYMENT_SERVICE_RELEASE_VERSION << std::endl;
     return false;
   }
 

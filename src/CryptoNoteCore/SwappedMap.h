@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -146,19 +145,7 @@ template<class Key, class T> bool SwappedMap<Key, T>::open(const std::string& it
       uint32_t itemSize;
       m_indexesFile.read(reinterpret_cast<char*>(&itemSize), sizeof itemSize);
       if (!m_indexesFile) {
-        if (!m_indexesFile.eof())
-        { //fail it only if the other IO occured
-          return false;
-        }
-        else
-        {
-          std::cout << "Blockchain indexes file appears to be corrupted. Attempting automatic recovery by rewinding to " << std::to_string(i) << std::endl;
-          m_indexesFile.clear();                                       //clear the error
-          m_indexesFile.seekp(0);                                      //retain compability with C98
-          m_indexesFile.write(reinterpret_cast<char *>(&i), sizeof i); //update the count
-          m_indexesFile.flush();                                       //commit
-          break;
-        }
+        return false;
       }
 
       if (valid) {

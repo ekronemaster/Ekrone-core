@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -132,11 +131,11 @@ private:
 };
 
 BlockchainExplorer::BlockchainExplorer(INode& node, logging::ILogger& logger) :
-  synchronized(false),
-  observersCounter(0),
   node(node),
   logger(logger, "BlockchainExplorer"),
-  state(NOT_INITIALIZED) {
+  state(NOT_INITIALIZED),
+  synchronized(false),
+  observersCounter(0) {
 }
 
 BlockchainExplorer::~BlockchainExplorer() {}

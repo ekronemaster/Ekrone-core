@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -44,23 +43,19 @@ namespace cn {
     return false;
   }
 
-  std::vector<crypto::Hash> BlockIndex::buildSparseChain(const crypto::Hash &startBlockId) const
-  {
+  std::vector<crypto::Hash> BlockIndex::buildSparseChain(const crypto::Hash& startBlockId) const {
     assert(m_index.count(startBlockId) > 0);
 
-    uint32_t startBlockHeight = 0;
+    uint32_t startBlockHeight{0};
+    getBlockHeight(startBlockId, startBlockHeight);
+
     std::vector<crypto::Hash> result;
-    if (getBlockHeight(startBlockId, startBlockHeight))
-    {
-      size_t sparseChainEnd = static_cast<size_t>(startBlockHeight + 1);
-      for (size_t i = 1; i <= sparseChainEnd; i *= 2)
-      {
-        result.emplace_back(m_container[sparseChainEnd - i]);
-      }
+    size_t sparseChainEnd = static_cast<size_t>(startBlockHeight + 1);
+    for (size_t i = 1; i <= sparseChainEnd; i *= 2) {
+      result.emplace_back(m_container[sparseChainEnd - i]);
     }
 
-    if (result.back() != m_container[0])
-    {
+    if (result.back() != m_container[0]) {
       result.emplace_back(m_container[0]);
     }
 

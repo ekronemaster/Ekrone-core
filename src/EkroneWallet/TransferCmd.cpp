@@ -1,5 +1,5 @@
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2018-2022 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2022 Ekrone Infinity Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -18,7 +18,7 @@ namespace cn
     m_currency(currency),
     m_remote_address(remote_fee_address),
     fake_outs_count(0),
-    fee(currency.minimumFeeV2()) {
+    fee(currency.minimumFee()) {
   }
 
   bool transfer_cmd::parseTx(LoggerRef& logger, const std::vector<std::string> &args)

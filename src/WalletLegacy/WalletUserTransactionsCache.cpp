@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2017-2020 Ekrone developers
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -35,15 +35,14 @@ struct LegacyDepositInfo {
   uint32_t outputInTransaction;
 };
 
-void serialize(LegacyDeposit &deposit, ISerializer &serializer)
-{
-  auto creatingTxId = static_cast<uint64_t>(deposit.creatingTransactionId);
+void serialize(LegacyDeposit& deposit, ISerializer& serializer) {
+  uint64_t creatingTxId = static_cast<uint64_t>(deposit.creatingTransactionId);
   serializer(creatingTxId, "creating_transaction_id");
   deposit.creatingTransactionId = static_cast<size_t>(creatingTxId);
 
-  auto spendingTxId = static_cast<uint64_t>(deposit.spendingTransactionId);
-  serializer(spendingTxId, "spending_transaction_id");
-  deposit.spendingTransactionId = static_cast<size_t>(spendingTxId);
+  uint64_t spendingTxIx = static_cast<uint64_t>(deposit.spendingTransactionId);
+  serializer(spendingTxIx, "spending_transaction_id");
+  deposit.creatingTransactionId = static_cast<size_t>(spendingTxIx);
 
   serializer(deposit.term, "term");
   serializer(deposit.amount, "amount");
@@ -331,8 +330,8 @@ std::deque<std::unique_ptr<WalletLegacyEvent>> WalletUserTransactionsCache::onTr
     events.push_back(std::unique_ptr<WalletLegacyEvent>(new WalletTransactionUpdatedEvent(id)));
 
     if (tr.firstDepositId != WALLET_LEGACY_INVALID_DEPOSIT_ID) {
-      for (auto dId = tr.firstDepositId; dId < tr.firstDepositId + tr.depositCount; ++dId) {
-        m_unconfirmedTransactions.eraseCreatedDeposit(dId);
+      for (auto id = tr.firstDepositId; id < tr.firstDepositId + tr.depositCount; ++id) {
+        m_unconfirmedTransactions.eraseCreatedDeposit(id);
       }
     }
   }
@@ -348,6 +347,7 @@ std::deque<std::unique_ptr<WalletLegacyEvent>> WalletUserTransactionsCache::onTr
   TransactionId id = cn::WALLET_LEGACY_INVALID_TRANSACTION_ID;
   if (m_unconfirmedTransactions.findTransactionId(transactionHash, id)) {
     m_unconfirmedTransactions.erase(transactionHash);
+    // LOG_ERROR("Unconfirmed transaction is deleted: id = " << id << ", hash = " << transactionHash);
     assert(false);
   } else {
     id = findTransactionByHash(transactionHash);
@@ -370,11 +370,10 @@ std::deque<std::unique_ptr<WalletLegacyEvent>> WalletUserTransactionsCache::onTr
 
     std::vector<DepositId> unspentDeposits = getDepositIdsBySpendingTransaction(id);
 
-    std::for_each(unspentDeposits.begin(), unspentDeposits.end(), [this](DepositId dId)
-                  {
-                    Deposit &deposit = getDeposit(dId);
-                    deposit.spendingTransactionId = WALLET_LEGACY_INVALID_TRANSACTION_ID;
-                  });
+    std::for_each(unspentDeposits.begin(), unspentDeposits.end(), [this] (DepositId id) {
+      Deposit& deposit = getDeposit(id);
+      deposit.spendingTransactionId = WALLET_LEGACY_INVALID_TRANSACTION_ID;
+    });
 
     DepositIdSequenceIterator depositIdSequenceStart(tr.firstDepositId);
     DepositIdSequenceIterator depositIdSequenceEnd(tr.firstDepositId + tr.depositCount);
@@ -384,6 +383,7 @@ std::deque<std::unique_ptr<WalletLegacyEvent>> WalletUserTransactionsCache::onTr
       events.push_back(std::unique_ptr<WalletLegacyEvent>(new WalletDepositsUpdatedEvent(std::move(unspentDeposits))));
     }
   } else {
+    // LOG_ERROR("Transaction wasn't found: " << transactionHash);
     assert(false);
   }
 
@@ -543,8 +543,6 @@ void WalletUserTransactionsCache::reset() {
   m_transfers.clear();
   m_deposits.clear();
   m_unconfirmedTransactions.reset();
-  m_transactionOutputToDepositIndex.clear();
-  m_paymentsIndex.clear();
 }
 
 std::vector<TransactionId> WalletUserTransactionsCache::deleteOutdatedTransactions() {
@@ -600,9 +598,8 @@ std::vector<DepositId> WalletUserTransactionsCache::createNewDeposits(Transactio
     const Currency& currency, uint32_t height) {
   std::vector<DepositId> deposits;
 
-  for (const auto &deposit : depositOutputs)
-  {
-    auto id = insertNewDeposit(deposit, creatingTransactionId, currency, height);
+  for (size_t i = 0; i < depositOutputs.size(); i++) {
+    auto id = insertNewDeposit(depositOutputs[i], creatingTransactionId, currency, height);
     deposits.push_back(id);
   }
   return deposits;
@@ -629,12 +626,10 @@ std::vector<DepositId> WalletUserTransactionsCache::processSpentDeposits(Transac
   std::vector<DepositId> deposits;
   deposits.reserve(spentDepositOutputs.size());
 
-  for (const auto &spentDepositOutput : spentDepositOutputs)
-  {
-    auto depositId = getDepositId(spentDepositOutput.transactionHash, spentDepositOutput.outputInTransaction);
+  for (size_t i = 0; i < spentDepositOutputs.size(); i++) {
+    auto depositId = getDepositId(spentDepositOutputs[i].transactionHash, spentDepositOutputs[i].outputInTransaction);
     assert(depositId != WALLET_LEGACY_INVALID_DEPOSIT_ID);
-    if (depositId == WALLET_LEGACY_INVALID_DEPOSIT_ID)
-    {
+    if (depositId == WALLET_LEGACY_INVALID_DEPOSIT_ID) {
       throw std::invalid_argument("processSpentDeposits error: requested deposit doesn't exist");
     }
 
@@ -657,12 +652,10 @@ DepositId WalletUserTransactionsCache::getDepositId(const Hash& creatingTransact
 std::vector<DepositId> WalletUserTransactionsCache::getDepositIdsBySpendingTransaction(TransactionId transactionId) {
   std::vector<DepositId> ids;
 
-  for (DepositId dId = 0; dId < m_deposits.size(); ++dId)
-  {
-    const auto &deposit = m_deposits[dId].deposit;
+  for (DepositId dId = 0; dId < m_deposits.size(); ++dId) {
+    auto& deposit = m_deposits[dId].deposit;
 
-    if (deposit.spendingTransactionId == transactionId)
-    {
+    if (deposit.spendingTransactionId == transactionId) {
       ids.push_back(dId);
     }
   }

@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2023 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2023 Ekrone Infinity Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -16,10 +16,12 @@
 namespace payment_service
 {
 
+const uint32_t DEFAULT_ANONYMITY_LEVEL = 4;
+
 class RequestSerializationError : public std::exception
 {
 public:
-  const char *what() const throw() override { return "Request error"; }
+ const char *what() const throw() override { return "Request error"; }
 };
 
 struct Save
@@ -44,36 +46,6 @@ struct Reset {
   };
 
   struct Response {
-    void serialize(const cn::ISerializer &serializer) const;
-  };
-};
-
-struct ExportWallet
-{
-  struct Request
-  {
-    std::string exportFilename;
-
-    void serialize(cn::ISerializer &serializer);
-  };
-
-  struct Response
-  {
-    void serialize(const cn::ISerializer &serializer) const;
-  };
-};
-
-struct ExportWalletKeys
-{
-  struct Request
-  {
-    std::string exportFilename;
-
-    void serialize(cn::ISerializer &serializer);
-  };
-
-  struct Response
-  {
     void serialize(const cn::ISerializer &serializer) const;
   };
 };
@@ -236,7 +208,7 @@ struct CreateAddressList
   struct Request
   {
     std::vector<std::string> spendSecretKeys;
-    bool reset = false;
+    bool reset;
     void serialize(cn::ISerializer &serializer);
   };
 

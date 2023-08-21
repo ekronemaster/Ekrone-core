@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2023 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2023 Ekrone Infinity Developers
 //
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -31,6 +32,7 @@ public:
 
   void relayTransaction(const cn::Transaction& transaction, const Callback& callback) override { callback(std::error_code()); }
   void getRandomOutsByAmounts(std::vector<uint64_t>&& amounts, uint64_t outsCount,
+  
     std::vector<cn::COMMAND_RPC_GET_RANDOM_OUTPUTS_FOR_AMOUNTS::outs_for_amount>& result, const Callback& callback) override {
   }
   void getNewBlocks(std::vector<crypto::Hash>&& knownBlockIds, std::vector<cn::block_complete_entry>& newBlocks, uint32_t& startHeight, const Callback& callback) override {
@@ -62,11 +64,12 @@ public:
 
   void getTransactions(const std::vector<crypto::Hash>& transactionHashes, std::vector<cn::TransactionDetails>& transactions,
     const Callback& callback) override { }
-  void getTransaction(const crypto::Hash &transactionHash, cn::Transaction &transaction, const Callback &callback) override {}
-
+	
+ 
   void getPoolTransactions(uint64_t timestampBegin, uint64_t timestampEnd, uint32_t transactionsNumberLimit, std::vector<cn::TransactionDetails>& transactions, uint64_t& transactionsNumberWithinTimestamps,
     const Callback& callback) override { }
 
+  
   void getTransactionsByPaymentId(const crypto::Hash& paymentId, std::vector<cn::TransactionDetails>& transactions, 
     const Callback& callback) override { }
 

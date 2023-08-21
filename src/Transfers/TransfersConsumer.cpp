@@ -1,8 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2014-2016 SDN developers
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -379,18 +378,7 @@ std::error_code createTransfers(
   auto txPubKey = tx.getTransactionPublicKey();
   auto txHash = tx.getTransactionHash();
   std::vector<PublicKey> temp_keys;	
-  std::lock_guard<std::mutex> lk(seen_mutex);
-
-  if (account.spendSecretKey == NULL_SECRET_KEY)
-  {
-    KeyPair deterministic_tx_keys;
-    bool spending = generateDeterministicTransactionKeys(tx.getTransactionInputsHash(), account.viewSecretKey, deterministic_tx_keys) && deterministic_tx_keys.publicKey == txPubKey;
-
-    if (spending)
-    {
-      //m_logger(WARNING, BRIGHT_YELLOW) << "Spending in tx " << common::podToHex(tx.getTransactionHash());
-    }
-  }
+  std::lock_guard<std::mutex> lk(seen_mutex);	
 
   for (auto idx : outputs) {
 

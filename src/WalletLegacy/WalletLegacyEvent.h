@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -177,39 +176,6 @@ public:
 private:
   uint64_t m_balance;
 };
-
-/* investments */
-
-class WalletActualInvestmentBalanceUpdatedEvent : public WalletLegacyEvent
-{
-public:
-  WalletActualInvestmentBalanceUpdatedEvent(uint64_t balance) : m_balance(balance) {}
-  virtual ~WalletActualInvestmentBalanceUpdatedEvent() {}
-
-  virtual void notify(tools::ObserverManager<cn::IWalletLegacyObserver>& observer)
-  {
-    observer.notify(&IWalletLegacyObserver::actualInvestmentBalanceUpdated, m_balance);
-  }
-private:
-  uint64_t m_balance;
-};
-
-class WalletPendingInvestmentBalanceUpdatedEvent : public WalletLegacyEvent
-{
-public:
-  WalletPendingInvestmentBalanceUpdatedEvent(uint64_t balance) : m_balance(balance) {}
-  virtual ~WalletPendingInvestmentBalanceUpdatedEvent() {}
-
-  virtual void notify(tools::ObserverManager<cn::IWalletLegacyObserver>& observer)
-  {
-    observer.notify(&IWalletLegacyObserver::pendingInvestmentBalanceUpdated, m_balance);
-  }
-private:
-  uint64_t m_balance;
-};
-
-
-
 
 
 } /* namespace cn */

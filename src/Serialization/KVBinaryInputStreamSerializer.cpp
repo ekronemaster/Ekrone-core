@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -71,7 +70,7 @@ size_t readVarint(common::IInputStream& s) {
 
 std::string readString(common::IInputStream& s) {
   auto size = readVarint(s);
-  if (size > 128*1024*1024) {
+  if (size > 100 * 1024 * 1024) {
     throw std::runtime_error("string size is too big");
   }
 
@@ -131,6 +130,7 @@ JsonValue loadValue(common::IInputStream& stream, uint8_t type) {
   case BIN_KV_SERIALIZE_TYPE_ARRAY:  return loadArray(stream, type);
   default:
     throw std::runtime_error("Unknown data type");
+    break;
   }
 }
 

@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -16,7 +15,7 @@ void read(IInputStream& in, void* data, size_t size) {
   while (size > 0) {
     size_t readSize = in.readSome(data, size);
     if (readSize == 0) {
-      throw std::runtime_error("Reading from IInputStream failed");
+      throw std::runtime_error("Failed to read from IInputStream");
     }
 
     data = static_cast<uint8_t*>(data) + readSize;
@@ -85,7 +84,7 @@ void readVarint(IInputStream& in, uint8_t& value) {
     temp |= static_cast<size_t>(piece & 0x7f) << shift;
     if ((piece & 0x80) == 0) {
       if (piece == 0 && shift != 0) {
-        throw std::runtime_error("readVarint, unrepresentable value");
+        throw std::runtime_error("readVarint, invalid value representation");
       }
 
       break;
@@ -107,7 +106,7 @@ void readVarint(IInputStream& in, uint16_t& value) {
     temp |= static_cast<size_t>(piece & 0x7f) << shift;
     if ((piece & 0x80) == 0) {
       if (piece == 0 && shift != 0) {
-        throw std::runtime_error("readVarint, unrepresentable value");
+        throw std::runtime_error("readVarint, invalid value representation");
       }
 
       break;
@@ -129,7 +128,7 @@ void readVarint(IInputStream& in, uint32_t& value) {
     temp |= static_cast<size_t>(piece & 0x7f) << shift;
     if ((piece & 0x80) == 0) {
       if (piece == 0 && shift != 0) {
-        throw std::runtime_error("readVarint, unrepresentable value");
+        throw std::runtime_error("readVarint, invalid value representation");
       }
 
       break;
@@ -151,7 +150,7 @@ void readVarint(IInputStream& in, uint64_t& value) {
     temp |= static_cast<uint64_t>(piece & 0x7f) << shift;
     if ((piece & 0x80) == 0) {
       if (piece == 0 && shift != 0) {
-        throw std::runtime_error("readVarint, unrepresentable value");
+        throw std::runtime_error("readVarint, invalid value representation");
       }
 
       break;
@@ -165,7 +164,7 @@ void write(IOutputStream& out, const void* data, size_t size) {
   while (size > 0) {
     size_t writtenSize = out.writeSome(data, size);
     if (writtenSize == 0) {
-      throw std::runtime_error("IOutputStream could not be written to");
+      throw std::runtime_error("Failed to write to IOutputStream");
     }
 
     data = static_cast<const uint8_t*>(data) + writtenSize;

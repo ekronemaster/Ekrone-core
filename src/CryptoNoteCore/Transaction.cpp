@@ -1,9 +1,11 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2023 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2023 Ekrone Infinity Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#include <memory>
 
 #include "ITransaction.h"
 #include "TransactionApiExtra.h"
@@ -194,6 +196,11 @@ namespace cn {
     return getObjectHash(*static_cast<const TransactionPrefix*>(&transaction));
   }
 
+  Hash TransactionImpl::getTransactionInputsHash() const
+  {
+    return getObjectHash(transaction.inputs);
+  }
+
   PublicKey TransactionImpl::getTransactionPublicKey() const {
     PublicKey pk(NULL_PUBLIC_KEY);
     extra.getPublicKey(pk);
@@ -208,11 +215,6 @@ namespace cn {
     checkIfSigning();
     transaction.unlockTime = unlockTime;
     invalidateHash();
-  }
-
-  Hash TransactionImpl::getTransactionInputsHash() const
-  {
-    return getObjectHash(transaction.inputs);
   }
 
   bool TransactionImpl::getTransactionSecretKey(SecretKey& key) const {
@@ -237,8 +239,8 @@ namespace cn {
 
     secretKey = key;
   }
-
-  void TransactionImpl::setDeterministicTransactionSecretKey(const SecretKey& key)
+  
+    void TransactionImpl::setDeterministicTransactionSecretKey(const SecretKey& key)
   {
     checkIfSigning();
     KeyPair deterministicTxKeys;
@@ -251,6 +253,8 @@ namespace cn {
 
     secretKey = deterministicTxKeys.secretKey;
   }
+
+
 
   size_t TransactionImpl::addInput(const KeyInput& input) {
     checkIfSigning();

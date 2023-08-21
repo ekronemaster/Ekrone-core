@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -52,7 +51,6 @@ enum WalletErrorCodes {
   DEPOSIT_AMOUNT_TOO_SMALL,
   DEPOSIT_DOESNOT_EXIST,
   DEPOSIT_LOCKED,
-  DEPOSIT_WRONG_TERM,
   DESTINATION_ADDRESS_REQUIRED,
   DESTINATION_ADDRESS_NOT_FOUND,
   DAEMON_NOT_SYNCED
@@ -111,8 +109,7 @@ public:
     case DESTINATION_ADDRESS_REQUIRED:  return  "Destination address required";
     case DESTINATION_ADDRESS_NOT_FOUND: return "Destination address not found";
     case DEPOSIT_LOCKED:           return "Deposit is locked";
-    case DEPOSIT_WRONG_TERM:       return "Incorrect term";
-    case DAEMON_NOT_SYNCED:        return "Daemon is not synchronized";
+    case DAEMON_NOT_SYNCED:         return "Daemon is not synchronized";
         default:
       return "Unknown error";
     }

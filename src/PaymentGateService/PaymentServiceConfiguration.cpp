@@ -1,25 +1,27 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2023 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2023 Ekrone Infinity Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "PaymentServiceConfiguration.h"
-#include "CryptoNoteConfig.h"
 
 #include <iostream>
 #include <algorithm>
 #include <boost/program_options.hpp>
 
+
 namespace po = boost::program_options;
 
 namespace payment_service {
 
+
+
 void Configuration::initOptions(boost::program_options::options_description& desc) {
   desc.add_options()
       ("bind-address", po::value<std::string>()->default_value("0.0.0.0"), "payment service bind address")
-      ("bind-port", po::value<uint16_t>()->default_value(cn::PAYMENT_GATE_DEFAULT_PORT), "payment service bind port")
+      ("bind-port", po::value<uint16_t>()->default_value(8070), "payment service bind port")
       ("rpc-user", po::value<std::string>()->default_value(""), "username to use the payment service. If authorization is not required, leave it empty")
       ("rpc-password", po::value<std::string>()->default_value(""), "password to use the payment service. If authorization is not required, leave it empty")
       ("container-file,w", po::value<std::string>(), "container file")
@@ -77,15 +79,6 @@ void Configuration::init(const boost::program_options::variables_map& options) {
 
   if (options.count("bind-port") != 0 && (!options["bind-port"].defaulted() || bindPort == 0)) {
     bindPort = options["bind-port"].as<uint16_t>();
-  }
-
-  if (testnet)
-  {
-    bindPort = cn::TESTNET_PAYMENT_GATE_DEFAULT_PORT;
-    if (!options["bind-port"].defaulted())
-    {
-      bindPort = options["bind-port"].as<uint16_t>();
-    }
   }
 
   if (options.count("rpc-user") != 0 && !options["rpc-user"].defaulted()) {

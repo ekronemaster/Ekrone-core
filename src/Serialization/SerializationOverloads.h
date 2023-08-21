@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+// Copyright (c) 2018-2020 Ekrone Network & UlraNote Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,6 +13,7 @@
 #include <cstring>
 #include <list>
 #include <map>
+#include <stdexcept>
 #include <string>
 #include <set>
 #include <type_traits>
@@ -20,10 +21,7 @@
 #include <map>
 #include <unordered_map>
 #include <unordered_set>
-#include <parallel_hashmap/phmap.h>
 
-using phmap::flat_hash_map;
-using phmap::parallel_flat_hash_map;
 namespace cn
 {
 
@@ -248,80 +246,68 @@ bool serialize(std::unordered_map<K, V, Hash> &value, common::StringView name, c
 }
 
 template <typename K, typename V, typename Hash>
-bool serialize(flat_hash_map<K, V, Hash> &value, common::StringView name, cn::ISerializer &serializer)
+bool serialize(std::unordered_multimap<K, V, Hash> &value, common::StringView name, cn::ISerializer &serializer)
+{
+  return serializeMap(value, name, serializer, [&value](size_t size) { value.reserve(size); });
+}
+
+template <typename K, typename V, typename Hash>
+bool serialize(std::map<K, V, Hash> &value, common::StringView name, cn::ISerializer &serializer)
 {
   return serializeMap(value, name, serializer, [](size_t size) {});
 }
 
 template <typename K, typename V, typename Hash>
-bool serialize(parallel_flat_hash_map<K, V, Hash> &value, common::StringView name, cn::ISerializer &serializer)
+bool serialize(std::multimap<K, V, Hash> &value, common::StringView name, cn::ISerializer &serializer)
 {
   return serializeMap(value, name, serializer, [](size_t size) {});
 }
 
-  template <typename K, typename V, typename Hash>
-  bool serialize(std::unordered_multimap<K, V, Hash> & value, common::StringView name, cn::ISerializer & serializer)
+template <size_t size>
+bool serialize(std::array<uint8_t, size> &value, common::StringView name, cn::ISerializer &s)
+{
+  return s.binary(value.data(), value.size(), name);
+}
+
+template <typename T1, typename T2>
+void serialize(std::pair<T1, T2> &value, ISerializer &s)
+{
+  s(value.first, "first");
+  s(value.second, "second");
+}
+
+template <typename Element, typename Iterator>
+void writeSequence(Iterator begin, Iterator end, common::StringView name, ISerializer &s)
+{
+  size_t size = std::distance(begin, end);
+  s.beginArray(size, name);
+  for (Iterator i = begin; i != end; ++i)
   {
-    return serializeMap(value, name, serializer, [&value](size_t size) { value.reserve(size); });
+    s(const_cast<Element &>(*i), "");
+  }
+  s.endArray();
+}
+
+template <typename Element, typename Iterator>
+void readSequence(Iterator outputIterator, common::StringView name, ISerializer &s)
+{
+  size_t size = 0;
+  s.beginArray(size, name);
+
+  while (size--)
+  {
+    Element e;
+    s(e, "");
+    *outputIterator++ = std::move(e);
   }
 
-  template <typename K, typename V, typename Hash>
-  bool serialize(std::map<K, V, Hash> & value, common::StringView name, cn::ISerializer & serializer)
-  {
-    return serializeMap(value, name, serializer, [](size_t size) {});
-  }
+  s.endArray();
+}
 
-  template <typename K, typename V, typename Hash>
-  bool serialize(std::multimap<K, V, Hash> & value, common::StringView name, cn::ISerializer & serializer)
-  {
-    return serializeMap(value, name, serializer, [](size_t size) {});
-  }
+//convinience function since we change block height type
+void serializeBlockHeight(ISerializer &s, uint32_t &blockHeight, common::StringView name);
 
-  template <size_t size>
-  bool serialize(std::array<uint8_t, size> & value, common::StringView name, cn::ISerializer & s)
-  {
-    return s.binary(value.data(), value.size(), name);
-  }
-
-  template <typename T1, typename T2>
-  void serialize(std::pair<T1, T2> & value, ISerializer & s)
-  {
-    s(value.first, "first");
-    s(value.second, "second");
-  }
-
-  template <typename Element, typename Iterator>
-  void writeSequence(Iterator begin, Iterator end, common::StringView name, ISerializer & s)
-  {
-    size_t size = std::distance(begin, end);
-    s.beginArray(size, name);
-    for (Iterator i = begin; i != end; ++i)
-    {
-      s(const_cast<Element &>(*i), "");
-    }
-    s.endArray();
-  }
-
-  template <typename Element, typename Iterator>
-  void readSequence(Iterator outputIterator, common::StringView name, ISerializer & s)
-  {
-    size_t size = 0;
-    s.beginArray(size, name);
-
-    while (size--)
-    {
-      Element e;
-      s(e, "");
-      *outputIterator++ = std::move(e);
-    }
-
-    s.endArray();
-  }
-
-  //convinience function since we change block height type
-  void serializeBlockHeight(ISerializer & s, uint32_t & blockHeight, common::StringView name);
-
-  //convinience function since we change global output index type
-  void serializeGlobalOutputIndex(ISerializer & s, uint32_t & globalOutputIndex, common::StringView name);
+//convinience function since we change global output index type
+void serializeGlobalOutputIndex(ISerializer &s, uint32_t &globalOutputIndex, common::StringView name);
 
 } // namespace cn

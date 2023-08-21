@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -176,5 +175,4 @@ namespace command_line
   extern const arg_descriptor<bool> arg_help;
   extern const arg_descriptor<bool> arg_version;
   extern const arg_descriptor<std::string> arg_data_dir;
-  extern const command_line::arg_descriptor<bool> arg_testnet_on;
 }

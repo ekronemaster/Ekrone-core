@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -75,15 +74,12 @@ NetNodeConfig::NetNodeConfig() {
 
 bool NetNodeConfig::init(const boost::program_options::variables_map& vm)
 {
-  testnet = vm[command_line::arg_testnet_on.name].as<bool>();
   if (vm.count(arg_p2p_bind_ip.name) != 0 && (!vm[arg_p2p_bind_ip.name].defaulted() || bindIp.empty())) {
     bindIp = command_line::get_arg(vm, arg_p2p_bind_ip);
   }
 
-  if (vm.count(arg_p2p_bind_port.name) != 0 && (!vm[arg_p2p_bind_port.name].defaulted()))  {
+  if (vm.count(arg_p2p_bind_port.name) != 0 && (!vm[arg_p2p_bind_port.name].defaulted() || bindPort == 0)) {
     bindPort = command_line::get_arg(vm, arg_p2p_bind_port);
-  }  else  {
-    bindPort = testnet ? TESTNET_P2P_DEFAULT_PORT : P2P_DEFAULT_PORT;
   }
 
   if (vm.count(arg_p2p_external_port.name) != 0 && (!vm[arg_p2p_external_port.name].defaulted() || externalPort == 0)) {
@@ -140,6 +136,10 @@ void NetNodeConfig::setTestnet(bool isTestnet) {
 }
 
 std::string NetNodeConfig::getP2pStateFilename() const {
+  if (testnet) {
+    return "testnet_" + p2pStateFilename;
+  }
+
   return p2pStateFilename;
 }
 

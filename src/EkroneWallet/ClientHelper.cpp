@@ -1,4 +1,5 @@
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2018-2022 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2022 Ekrone Infinity Developers
 //
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -50,7 +51,7 @@ namespace cn
     else if (deposit.spendingTransactionId == cn::WALLET_LEGACY_INVALID_TRANSACTION_ID)
       status_str = "Unlocked";
     else
-      status_str = "Withdrawn";
+      status_str = "Spent";
 
     return status_str;
   }
@@ -120,8 +121,8 @@ namespace cn
       std::setw(20) << makeCenteredString(20, deposit_amount(deposit, currency)) << " | " <<
       std::setw(20) << makeCenteredString(20, deposit_interest(deposit, currency)) << " | " <<
       std::setw(16) << makeCenteredString(16, deposit_unlock_height(deposit, txInfo)) << " | " <<
-      std::setw(12) << makeCenteredString(12, deposit_status(deposit));
-    
+      std::setw(10) << makeCenteredString(10, deposit_status(deposit));
+
     std::string as_str = full_info.str();
 
     return as_str;
@@ -154,14 +155,14 @@ namespace cn
     std::stringstream ss_interest(makeCenteredString(20, format_interest));
     std::stringstream ss_height(makeCenteredString(16, deposit_height(txInfo)));
     std::stringstream ss_unlockheight(makeCenteredString(16, deposit_unlock_height(deposit, txInfo)));
-    std::stringstream ss_status(makeCenteredString(12, deposit_status(deposit)));
+    std::stringstream ss_status(makeCenteredString(10, deposit_status(deposit)));
 
     ss_id >> std::setw(8);
     ss_amount >> std::setw(20);
     ss_interest >> std::setw(20);
     ss_height >> std::setw(16);
     ss_unlockheight >> std::setw(16);
-    ss_status >> std::setw(12);
+    ss_status >> std::setw(10);
 
     listed_deposit = ss_id.str() + " | " + ss_amount.str() + " | " + ss_interest.str() + " | " + ss_height.str() + " | "
       + ss_unlockheight.str() + " | " + ss_status.str() + "\n";
@@ -214,13 +215,13 @@ namespace cn
 
   bool client_helper::confirm_deposit(uint64_t term, uint64_t amount, bool is_testnet, const Currency& currency, logging::LoggerRef logger)
   {
-    uint64_t interest = currency.calculateInterestV3(amount, term);
-    uint64_t min_term = is_testnet ? parameters::TESTNET_DEPOSIT_MIN_TERM_V3 : parameters::DEPOSIT_MIN_TERM_V3;
+    // uint64_t interest = currency.calculateInterestV3(amount, term);
+    // uint64_t min_term = is_testnet ? parameters::TESTNET_DEPOSIT_MIN_TERM : parameters::DEPOSIT_MIN_TERM;
 
     logger(logging::INFO) << "Confirm deposit details:\n"
-      << "\tAmount: " << currency.formatAmount(amount) << "\n"
-      << "\tMonths: " << term / min_term << "\n"
-      << "\tInterest: " << currency.formatAmount(interest) << "\n";
+      << "\tAmount: " << currency.formatAmount(amount) << "\n";
+      // << "\tMonths: " << term / min_term << "\n"
+      // << "\tInterest: " << currency.formatAmount(interest) << "\n";
 
     logger(logging::INFO) << "Is this correct? (Y/N): \n";
 
@@ -415,30 +416,5 @@ namespace cn
       logger(logging::ERROR, logging::BRIGHT_RED) << "Failed to store wallet: " << e.what();
       throw std::runtime_error("error saving wallet file '" + walletFilename + "'");
     }
-  }
-  
-  std::stringstream client_helper::balances(std::unique_ptr<cn::IWalletLegacy>& wallet, const Currency& currency)
-  {
-    std::stringstream balances;
-    
-    uint64_t full_balance = wallet->actualBalance() + wallet->pendingBalance() + wallet->actualDepositBalance() + wallet->pendingDepositBalance();
-    std::string full_balance_text = "Total Balance: " + currency.formatAmount(full_balance) + "\n";
-
-    uint64_t non_deposit_unlocked_balance = wallet->actualBalance();
-    std::string non_deposit_unlocked_balance_text = "Available: " + currency.formatAmount(non_deposit_unlocked_balance) + "\n";
-
-    uint64_t non_deposit_locked_balance = wallet->pendingBalance();
-    std::string non_deposit_locked_balance_text = "Locked: " + currency.formatAmount(non_deposit_locked_balance) + "\n";
-
-    uint64_t deposit_unlocked_balance = wallet->actualDepositBalance();
-    std::string deposit_locked_balance_text = "Unlocked Balance: " + currency.formatAmount(deposit_unlocked_balance) + "\n";
-
-    uint64_t deposit_locked_balance = wallet->pendingDepositBalance();
-    std::string deposit_unlocked_balance_text = "Locked Deposits: " + currency.formatAmount(deposit_locked_balance) + "\n";
-
-    balances << full_balance_text << non_deposit_unlocked_balance_text << non_deposit_locked_balance_text
-      << deposit_unlocked_balance_text << deposit_locked_balance_text; 
-
-    return balances;
   }
 }

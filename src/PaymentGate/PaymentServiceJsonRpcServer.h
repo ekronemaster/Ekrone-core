@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2023 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2023 Ekrone Infinity Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -26,7 +26,7 @@ public:
   virtual ~PaymentServiceJsonRpcServer() = default;
 
 protected:
-  void processJsonRpcRequest(const common::JsonValue& req, common::JsonValue& resp) override;
+   void processJsonRpcRequest(const common::JsonValue& req, common::JsonValue& resp) override;
 
 private:
   WalletService& service;
@@ -62,10 +62,8 @@ private:
 
   std::unordered_map<std::string, HandlerFunction> handlers;
 
-  std::error_code handleReset(const Reset::Request &request, const Reset::Response &response);
+ std::error_code handleReset(const Reset::Request &request, const Reset::Response &response);
   std::error_code handleSave(const Save::Request& request, const Save::Response& response);
-  std::error_code handleExportWallet(const ExportWallet::Request &request, const ExportWallet::Response &response);
-  std::error_code handleExportWalletKeys(const ExportWalletKeys::Request &request, const ExportWalletKeys::Response &response);
   std::error_code handleCreateIntegrated(const CreateIntegrated::Request& request, CreateIntegrated::Response& response);
   std::error_code handleSplitIntegrated(const SplitIntegrated::Request& request, SplitIntegrated::Response& response);
   std::error_code handleCreateAddress(const CreateAddress::Request& request, CreateAddress::Response& response);

@@ -1,8 +1,8 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Copyright (c) 2016-2019, The Karbo developers
+// Copyright (c) 2017-2020 Ekrone developers
 
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -42,9 +42,9 @@ bool Checkpoints::add_checkpoint(uint32_t height, const std::string &hash_str) {
     logger(DEBUGGING) << "Checkpoint already exists for height " << height;
     return false;
   }
-  
-  m_points[height] = h;
 
+  m_points[height] = h;
+  
   return true;
 }
 //---------------------------------------------------------------------------
@@ -77,18 +77,9 @@ bool Checkpoints::is_alternative_block_allowed(uint32_t  blockchain_height, uint
   if (0 == block_height)
     return false;
 
-  uint32_t lowest_height = blockchain_height - cn::parameters::CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW;
-
-  if (blockchain_height < cn::parameters::CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW)
-  {
-    lowest_height = 0;
-  }
-
-  if (block_height < lowest_height && !is_in_checkpoint_zone(block_height))
-  {
+  if (block_height < blockchain_height - cn::parameters::CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW && !is_in_checkpoint_zone(block_height)) {
     logger(logging::DEBUGGING, logging::WHITE)
-        << "<< Checkpoints.cpp << "
-        << "Reorganization depth too deep : " << (blockchain_height - block_height) << ". Block Rejected";
+      << "<< Checkpoints.cpp << " << "Reorganization depth too deep : " << (blockchain_height - block_height) << ". Block Rejected";
     return false;
   }
 
@@ -115,11 +106,7 @@ std::vector<uint32_t> Checkpoints::getCheckpointHeights() const {
 
 bool Checkpoints::load_checkpoints_from_dns()
 {
-  std::string domain("checkpoints.ekrone.id");
-  if (m_testnet)
-  {
-    domain = "testpoints.ekrone.gq";
-  }
+  std::string domain("*");
   std::vector<std::string>records;
 
   logger(logging::DEBUGGING) << "<< Checkpoints.cpp << " << "Fetching DNS checkpoint records from " << domain;
@@ -139,15 +126,15 @@ bool Checkpoints::load_checkpoints_from_dns()
     char c;
     if (del == std::string::npos) continue;
     if ((ss.fail() || ss.get(c)) || !common::podFromHex(hash_str, hash)) {
-      logger(logging::INFO) << "<< Checkpoints.cpp << " << "Failed to parse DNS checkpoint record: " << record;
+      logger(logging::INFO, RED) << "- Checkpoints.cpp - " << "Failed to parse DNS checkpoint record: " << record;
       continue;
     }
 
     if (!(0 == m_points.count(height))) {
-      logger(DEBUGGING) << "<< Checkpoints.cpp << " << "Checkpoint already exists for height: " << height << ". Ignoring DNS checkpoint.";
+      logger(DEBUGGING) << "- Checkpoints.cpp - " << "Checkpoint already exists for height: " << height << ". Ignoring DNS checkpoint.";
     } else {
       add_checkpoint(height, hash_str);
-	  logger(DEBUGGING) << "<< Checkpoints.cpp << " << "Added DNS checkpoint: " << height_str << ":" << hash_str;
+	    logger(DEBUGGING) << "<< Checkpoints.cpp << " << "Added DNS checkpoint: " << height_str << ":" << hash_str;
     }
   }
 
@@ -156,19 +143,9 @@ bool Checkpoints::load_checkpoints_from_dns()
 
 bool Checkpoints::load_checkpoints()
 {
-  if (m_testnet)
+  for (const auto& cp : cn::CHECKPOINTS) 
   {
-    for (const auto &cp : cn::TESTNET_CHECKPOINTS)
-    {
-      add_checkpoint(cp.height, cp.blockId);
-    }
-  }
-  else
-  {
-    for (const auto &cp : cn::CHECKPOINTS)
-    {
-      add_checkpoint(cp.height, cp.blockId);
-    }
+    add_checkpoint(cp.height, cp.blockId);    
   }
   return true;
 }
@@ -197,7 +174,5 @@ bool Checkpoints::load_checkpoints_from_file(const std::string& fileName) {
 	logger(logging::INFO) << "Loaded " << m_points.size() << " checkpoints from "	<< fileName;
 	return true;
 }
-
-void Checkpoints::set_testnet(bool testnet) { m_testnet = testnet; }
 
 }

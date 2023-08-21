@@ -33,12 +33,10 @@ const int keccakf_piln[24] =
 
 void keccakf(uint64_t st[25], int rounds)
 {
-    int i;
-    int j;
-    uint64_t t;
-    uint64_t bc[5];
+    int i, j, round;
+    uint64_t t, bc[5];
 
-    for (int round = 0; round < rounds; round++) {
+    for (round = 0; round < rounds; round++) {
 
         // Theta
         for (i = 0; i < 5; i++)     
@@ -79,9 +77,11 @@ int keccak(const uint8_t *in, int inlen, uint8_t *md, int mdlen)
 {
     state_t st;
     uint8_t temp[144];
-    int i;
-    int rsiz;
-    int rsizw;
+    int i, rsiz, rsizw;
+
+    /* for some reason the enum from hash-ops.h is not valid here when
+       compiling - is this a C vs C++ thing? Anyhow, lets just redefine it for 
+       now. */
 
     const int HASH_DATA_AREA = 136;
 
@@ -97,6 +97,7 @@ int keccak(const uint8_t *in, int inlen, uint8_t *md, int mdlen)
     }
     
     // last block and padding
+    if (inlen > 0)
     memcpy(temp, in, inlen);
     temp[inlen++] = 1;
     memset(temp + inlen, 0, rsiz - inlen);

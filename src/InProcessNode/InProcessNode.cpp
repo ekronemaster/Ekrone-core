@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -933,69 +932,6 @@ void InProcessNode::getTransactionsByPaymentId(const crypto::Hash& paymentId, st
       callback
     )
   );
-}
-
-void InProcessNode::getTransaction(const crypto::Hash &transactionHash, cn::Transaction &transaction, const Callback &callback)
-{
-  std::unique_lock<std::mutex> lock(mutex);
-  if (state != INITIALIZED)
-  {
-    lock.unlock();
-    callback(make_error_code(cn::error::NOT_INITIALIZED));
-    return;
-  }
-
-  ioService.post(
-      std::bind(
-          static_cast<
-              void (InProcessNode::*)(
-                  const crypto::Hash &,
-                  cn::Transaction &,
-                  const Callback &)>(&InProcessNode::getTransactionAsync),
-          this,
-          std::cref(transactionHash),
-          std::ref(transaction),
-          callback));
-}
-
-void InProcessNode::getTransactionAsync(const crypto::Hash &transactionHash, cn::Transaction &transaction, const Callback &callback)
-{
-  std::error_code ec = core.executeLocked(
-      std::bind(
-          static_cast<
-              std::error_code (InProcessNode::*)(
-                  const crypto::Hash &,
-                  cn::Transaction &)>(&InProcessNode::doGetTransaction),
-          this,
-          std::cref(transactionHash),
-          std::ref(transaction)));
-  callback(ec);
-}
-
-std::error_code InProcessNode::doGetTransaction(const crypto::Hash &transactionHash, cn::Transaction &transaction)
-{
-  try
-  {
-    std::list<Transaction> txs;
-    std::list<crypto::Hash> missed_txs;
-    std::vector<crypto::Hash> transactionHashes;
-    transactionHashes.push_back(transactionHash);
-    core.getTransactions(transactionHashes, txs, missed_txs, true);
-    if (missed_txs.size() > 0)
-    {
-      return make_error_code(cn::error::REQUEST_ERROR);
-    }
-    transaction = std::move(txs.front());
-  }
-  catch (std::system_error &e)
-  {
-    return e.code();
-  }
-  catch (std::exception &)
-  {
-    return make_error_code(cn::error::INTERNAL_NODE_ERROR);
-  }
-  return std::error_code();
 }
 
 void InProcessNode::getTransactionsByPaymentIdAsync(const crypto::Hash& paymentId, std::vector<TransactionDetails>& transactions, const Callback& callback) {

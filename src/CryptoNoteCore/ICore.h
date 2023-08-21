@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2022 Ekrone Infinity Developers
 //
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -9,10 +10,10 @@
 
 #include <cstdint>
 #include <list>
-#include <memory>
-#include <system_error>
 #include <utility>
 #include <vector>
+#include <system_error>
+#include <memory>
 
 #include <CryptoNote.h>
 #include "CryptoNoteCore/Difficulty.h"
@@ -50,6 +51,7 @@ public:
 
   virtual bool addObserver(ICoreObserver* observer) = 0;
   virtual bool removeObserver(ICoreObserver* observer) = 0;
+  
   virtual bool saveBlockchain() = 0;
 
   virtual bool have_block(const crypto::Hash& id) = 0;
@@ -74,7 +76,6 @@ public:
   virtual i_cryptonote_protocol* get_protocol() = 0;
   virtual bool handle_incoming_tx(const BinaryArray& tx_blob, tx_verification_context& tvc, bool keeped_by_block) = 0; //Deprecated. Should be removed with CryptoNoteProtocolHandler.
   virtual std::vector<Transaction> getPoolTransactions() = 0;
-  virtual bool getPoolTransaction(const crypto::Hash &tx_hash, Transaction &transaction) = 0;
   virtual bool getPoolChanges(const crypto::Hash& tailBlockId, const std::vector<crypto::Hash>& knownTxsIds,
                               std::vector<Transaction>& addedTxs, std::vector<crypto::Hash>& deletedTxsIds) = 0;
   virtual bool getPoolChangesLite(const crypto::Hash& tailBlockId, const std::vector<crypto::Hash>& knownTxsIds,
@@ -98,10 +99,10 @@ public:
                               uint64_t& reward, int64_t& emissionChange) = 0;
   virtual bool scanOutputkeysForIndices(const KeyInput& txInToKey, std::list<std::pair<crypto::Hash, size_t>>& outputReferences) = 0;
   virtual bool getBlockDifficulty(uint32_t height, difficulty_type& difficulty) = 0;
-  virtual bool getBlockTimestamp(uint32_t height, uint64_t &timestamp) = 0;
   virtual bool getBlockContainingTx(const crypto::Hash& txId, crypto::Hash& blockId, uint32_t& blockHeight) = 0;
+  virtual bool getBlockTimestamp(uint32_t height, uint64_t &timestamp) = 0;
   virtual bool getMultisigOutputReference(const MultisignatureInput& txInMultisig, std::pair<crypto::Hash, size_t>& outputReference) = 0;
-  virtual bool getTransaction(const crypto::Hash &id, Transaction &tx, bool checkTxPool = false) = 0;
+
   virtual bool getGeneratedTransactionsNumber(uint32_t height, uint64_t& generatedTransactions) = 0;
   virtual bool getOrphanBlocksByHeight(uint32_t height, std::vector<Block>& blocks) = 0;
   virtual bool getBlocksByTimestamp(uint64_t timestampBegin, uint64_t timestampEnd, uint32_t blocksNumberLimit, std::vector<Block>& blocks, uint32_t& blocksNumberWithinTimestamps) = 0;

@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -219,11 +218,13 @@ bool BlockchainExplorerDataBuilder::fillTransactionDetails(const Transaction& tr
     return false;
   }
   transactionDetails.totalInputsAmount = core.currency().getTransactionAllInputsAmount(transaction, transactionDetails.blockHeight);
-  transactionDetails.fee = core.currency().getTransactionFee(transaction, transactionDetails.blockHeight);
+
   if (transaction.inputs.size() > 0 && transaction.inputs.front().type() == typeid(BaseInput)) {
     //It's gen transaction
+    transactionDetails.fee = 0;
     transactionDetails.mixin = 0;
   } else {
+    transactionDetails.fee = inputsAmount < transactionDetails.totalOutputsAmount ? cn::parameters::MINIMUM_FEE : core.currency().getTransactionFee(transaction, transactionDetails.blockHeight);
     uint64_t mixin;
     if (!getMixin(transaction, mixin)) {
       return false;

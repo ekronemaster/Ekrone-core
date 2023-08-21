@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -38,7 +37,7 @@ namespace std {
 
 namespace cn {
 
-using UserDeposits = std::vector<DepositInfo>;
+typedef std::vector<DepositInfo> UserDeposits;
 
 class WalletUserTransactionsCache
 {
@@ -124,8 +123,9 @@ private:
 
   void eraseCreatedDeposit(DepositId id);
 
-  using UserTransfers = std::vector<WalletLegacyTransfer>;
-  using UserTransactions = std::vector<WalletLegacyTransaction>;
+  typedef std::vector<WalletLegacyTransfer> UserTransfers;
+  typedef std::vector<WalletLegacyTransaction> UserTransactions;
+  typedef std::vector<DepositInfo> UserDeposits;
   using Offset = UserTransactions::size_type;
   using UserPaymentIndex = std::unordered_map<PaymentId, std::vector<Offset>, boost::hash<PaymentId>>;
 

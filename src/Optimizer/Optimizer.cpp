@@ -1,5 +1,6 @@
 // Copyright (c) 2019 Helder Garcia <helder.garcia@gmail.com>
 // Copyright (c) 2019, The Karbo developers
+// Copyright (c) 2017-2023 Ekrone Infinity Developers
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
@@ -46,12 +47,12 @@ const uint64_t DEFAULT_THRESHOLD = UINT64_C(100);
 namespace {
   const command_line::arg_descriptor<std::string> arg_address   = {"address", "Address of the wallet to optimize inputs. If not provided, all addresses will be checked and, if applicable, optimized using polling interval between each interaction. Default: All", "", true};
   const command_line::arg_descriptor<std::string> arg_ip        = {"walletd-ip", "IP address of walletd. Default: 127.0.0.1", "127.0.0.1"};
-  const command_line::arg_descriptor<uint16_t>    arg_rpc_port  = {"walletd-port", "RPC port of walletd. Default: " + PAYMENT_GATE_DEFAULT_PORT, PAYMENT_GATE_DEFAULT_PORT};
+  const command_line::arg_descriptor<uint16_t>    arg_rpc_port  = {"walletd-port", "RPC port of walletd. Default: 8070", 8070};
   const command_line::arg_descriptor<std::string> arg_user      = {"walletd-user", "RPC user. Default: none", "", true};
   const command_line::arg_descriptor<std::string> arg_pass      = {"walletd-password", "RPC password. Default: none", "", true};
   const command_line::arg_descriptor<uint16_t>    arg_interval  = {"interval", "polling interval in seconds. Default: 5. Minimum: 1. Maximum: 120.", 5, true};
   const command_line::arg_descriptor<uint16_t>    arg_duration  = {"duration", "maximum execution time, in minutes. Default: 0 (unlimited)", 0, true};
-  const command_line::arg_descriptor<uint64_t>    arg_threshold = {"threshold", "Only outputs lesser than the threshold value will be included into optimization. Default: 100 (0.000100 EKR)", DEFAULT_THRESHOLD, true};
+  const command_line::arg_descriptor<uint64_t>    arg_threshold = {"threshold", "Only outputs lesser than the threshold value will be included into optimization. Default: 100 (0.000100 Ekr)", DEFAULT_THRESHOLD, true};
   const command_line::arg_descriptor<uint16_t>    arg_anonimity = {"anonymity", "Privacy level. Higher values give more privacy but bigger transactions. Default: 0", 0, true};
   const command_line::arg_descriptor<bool>        arg_preview   = {"preview", "print on screen what it would be doing, but not really doing it", false, true};
   logging::ConsoleLogger log;

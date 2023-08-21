@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+// Copyright (c) 2018-2020 Ekrone Network & Ekrone Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -9,5 +9,5 @@
 
 namespace cn
 {
- const static boost::uuids::uuid CRYPTONOTE_NETWORK = { { 0xFF, 0x00, 0xA1, 0xB2, 0xC7, 0x5F, 0x82, 0x77, 0xF5, 0x12, 0xA3, 0x36, 0xE7, 0xE3, 0xDD, 0x12 } };
+ const static boost::uuids::uuid CRYPTONOTE_NETWORK = { { 0xE5, 0xAA, 0x16, 0xB1, 0x35, 0xE5, 0xB4, 0x70, 0x15, 0xA7, 0x5F, 0xDD, 0xC7, 0x12, 0xA1, 0x36 } };
 }

@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2020 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -40,7 +40,7 @@ class WalletLegacy :
   ITransfersObserver {
 
 public:
-  WalletLegacy(const cn::Currency& currency, INode& node, logging::ILogger& loggerGroup, bool testnet);
+  WalletLegacy(const cn::Currency& currency, INode& node, logging::ILogger& loggerGroup);
   virtual ~WalletLegacy();
 
   virtual void addObserver(IWalletLegacyObserver* observer) override;
@@ -62,9 +62,9 @@ public:
   virtual uint64_t actualBalance() override;
   virtual uint64_t pendingBalance() override;
   virtual uint64_t actualDepositBalance() override;
-  virtual uint64_t actualInvestmentBalance() override;  
+    
   virtual uint64_t pendingDepositBalance() override;
-  virtual uint64_t pendingInvestmentBalance() override;  
+   
 
   virtual size_t getTransactionCount() override;
   virtual size_t getTransferCount() override;
@@ -86,7 +86,7 @@ public:
                                         const WalletLegacyTransfer& transfer,
                                         uint64_t fee,
                                         const std::string& extra = "",
-                                        uint64_t mixIn = parameters::MINIMUM_MIXIN,
+                                        uint64_t mixIn = 5,
                                         uint64_t unlockTimestamp = 0,
                                         const std::vector<TransactionMessage>& messages = std::vector<TransactionMessage>(),
                                         uint64_t ttl = 0) override;
@@ -94,14 +94,14 @@ public:
                                         std::vector<WalletLegacyTransfer>& transfers,
                                         uint64_t fee,
                                         const std::string& extra = "",
-                                        uint64_t mixIn = parameters::MINIMUM_MIXIN,
+                                        uint64_t mixIn = 5,
                                         uint64_t unlockTimestamp = 0,
                                         const std::vector<TransactionMessage>& messages = std::vector<TransactionMessage>(),
                                         uint64_t ttl = 0) override;
   virtual size_t estimateFusion(const uint64_t& threshold);
   virtual std::list<TransactionOutputInformation> selectFusionTransfersToSend(uint64_t threshold, size_t minInputCount, size_t maxInputCount);
   virtual TransactionId sendFusionTransaction(const std::list<TransactionOutputInformation>& fusionInputs, uint64_t fee, const std::string& extra = "", uint64_t mixIn = 0, uint64_t unlockTimestamp = 0);
-  virtual TransactionId deposit(uint32_t term, uint64_t amount, uint64_t fee, uint64_t mixIn = parameters::MINIMUM_MIXIN) override;
+  virtual TransactionId deposit(uint32_t term, uint64_t amount, uint64_t fee, uint64_t mixIn = 5) override;
   virtual TransactionId withdrawDeposit(const DepositId& depositId, uint64_t fee) override;
   virtual TransactionId withdrawDeposits(const std::vector<DepositId>& depositIds, uint64_t fee) override;
   virtual std::error_code cancelTransaction(size_t transactionId) override;
@@ -147,8 +147,7 @@ private:
   uint64_t calculateActualDepositBalance();
   uint64_t calculateActualInvestmentBalance();
   uint64_t calculatePendingDepositBalance();
-  uint64_t calculatePendingInvestmentBalance();
-  uint64_t getWalletMaximum();
+  uint64_t calculatePendingInvestmentBalance();  
   uint64_t dustBalance();
 
   uint64_t calculateActualBalance();
@@ -197,7 +196,6 @@ private:
   tools::ObserverManager<cn::IWalletLegacyObserver> m_observerManager;
 
   std::unique_ptr<SyncStarter> m_onInitSyncStarter;
-  bool m_testnet;
 };
 
 } //namespace cn

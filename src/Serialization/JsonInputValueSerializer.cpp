@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -15,26 +14,23 @@
 using common::JsonValue;
 using namespace cn;
 
-class serializer_error : public std::runtime_error
-{
-public:
-  explicit serializer_error(const std::string &s) : std::runtime_error("This type of serialization is not supported: " + s){};
-};
-
 JsonInputValueSerializer::JsonInputValueSerializer(const common::JsonValue& value) {
   if (!value.isObject()) {
-    throw serializer_error("Object expected.");
+    throw std::runtime_error("Serializer doesn't support this type of serialization: Object expected.");
   }
 
   chain.push_back(&value);
 }
 
-JsonInputValueSerializer::JsonInputValueSerializer(common::JsonValue&& value) : root(std::move(value)) {
-  if (!this->root.isObject()) {
-    throw serializer_error("Object expected.");
+JsonInputValueSerializer::JsonInputValueSerializer(common::JsonValue&& value) : value(std::move(value)) {
+  if (!this->value.isObject()) {
+    throw std::runtime_error("Serializer doesn't support this type of serialization: Object expected.");
   }
 
-  chain.push_back(&this->root);
+  chain.push_back(&this->value);
+}
+
+JsonInputValueSerializer::~JsonInputValueSerializer() {
 }
 
 ISerializer::SerializerType JsonInputValueSerializer::type() const {

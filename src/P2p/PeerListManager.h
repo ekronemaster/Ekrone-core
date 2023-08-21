@@ -1,8 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2020 Karbo developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -39,15 +37,6 @@ class PeerlistManager {
     >
   > peers_indexed;
 
-  typedef boost::multi_index_container<
-      AnchorPeerlistEntry,
-      boost::multi_index::indexed_by<
-          // access by anchor_peerlist_entry::net_adress
-          boost::multi_index::ordered_unique<boost::multi_index::tag<by_addr>, boost::multi_index::member<AnchorPeerlistEntry, NetworkAddress, &AnchorPeerlistEntry::adr>>,
-          // sort by anchor_peerlist_entry::first_seen
-          boost::multi_index::ordered_non_unique<boost::multi_index::tag<by_time>, boost::multi_index::member<AnchorPeerlistEntry, int64_t, &AnchorPeerlistEntry::first_seen>>>>
-      anchor_peers_indexed;
-
 public:
 
   class Peerlist {
@@ -72,8 +61,6 @@ public:
   bool get_peerlist_full(std::list<PeerlistEntry>& pl_gray, std::list<PeerlistEntry>& pl_white) const;
   bool get_white_peer_by_index(PeerlistEntry& p, size_t i) const;
   bool get_gray_peer_by_index(PeerlistEntry& p, size_t i) const;
-  bool append_with_peer_anchor(const AnchorPeerlistEntry &pr);
-
   bool append_with_peer_white(const PeerlistEntry& pr);
   bool append_with_peer_gray(const PeerlistEntry& pr);
   bool set_peer_just_seen(PeerIdType peer, uint32_t ip, uint32_t port);
@@ -87,15 +74,12 @@ public:
 
   Peerlist& getWhite();
   Peerlist& getGray();
-  bool get_and_empty_anchor_peerlist(std::vector<AnchorPeerlistEntry> &apl);
-  bool remove_from_peer_anchor(const NetworkAddress &addr);
 
 private:
   std::string m_config_folder;
   bool m_allow_local_ip;
   peers_indexed m_peers_gray;
   peers_indexed m_peers_white;
-  anchor_peers_indexed m_peers_anchor;
   Peerlist m_whitePeerlist;
   Peerlist m_grayPeerlist;
 };

@@ -1,4 +1,5 @@
 // Copyright (c) 2012-2016, The CryptoNote developers, The Bytecoin developers
+// Copyright (c) 2018-2020 Ekrone Network & UlraNote Devs
 //
 // This file is part of Bytecoin.
 //
@@ -17,14 +18,15 @@
 
 #include "TcpConnection.h"
 
+#include <arpa/inet.h>
+#include <cassert>
+#include <sys/epoll.h>
+#include <unistd.h>
+#include <stdexcept>
+
 #include <System/ErrorMessage.h>
 #include <System/InterruptedException.h>
 #include <System/Ipv4Address.h>
-#include <arpa/inet.h>
-#include <cassert>
-#include <stdexcept>
-#include <sys/epoll.h>
-#include <unistd.h>
 
 namespace platform_system {
 
@@ -47,6 +49,7 @@ TcpConnection::~TcpConnection() {
     assert(contextPair.writeContext == nullptr);
     int result = close(connection);
     assert(result != -1);
+    std::ignore = result;
   }
 }
 

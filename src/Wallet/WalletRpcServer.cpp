@@ -1,14 +1,13 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2020 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "WalletRpcServer.h"
 
 #include <fstream>
-
 #include "Common/CommandLine.h"
 #include "Common/StringTools.h"
 #include "CryptoNoteCore/CryptoNoteFormatUtils.h"
@@ -64,12 +63,12 @@ wallet_rpc_server::wallet_rpc_server(
   :
   HttpServer(dispatcher, log),
   logger(log, "WalletRpc"),
-  m_currency(currency),
-  m_walletFilename(walletFile),
   m_dispatcher(dispatcher),
   m_stopComplete(dispatcher),
   m_wallet(w),
-  m_node(n) {
+  m_node(n),
+  m_currency(currency),
+  m_walletFilename(walletFile) {
 }
 //------------------------------------------------------------------------------------------------------------------------------
 bool wallet_rpc_server::run() {
@@ -199,7 +198,7 @@ bool wallet_rpc_server::on_transfer(const wallet_rpc::COMMAND_RPC_TRANSFER::requ
     ttl = static_cast<uint64_t>(time(nullptr)) + req.ttl;
   }
 
-  uint64_t actualFee = cn::parameters::MINIMUM_FEE_V2;
+  uint64_t actualFee = cn::parameters::MINIMUM_FEE;
 
   std::string extraString;
   std::copy(extra.begin(), extra.end(), std::back_inserter(extraString));
@@ -297,7 +296,7 @@ bool wallet_rpc_server::on_optimize(const wallet_rpc::COMMAND_RPC_OPTIMIZE::requ
   std::vector<cn::WalletLegacyTransfer> transfers;
   std::vector<cn::TransactionMessage> messages;
   std::string extraString;
-  uint64_t fee = cn::parameters::MINIMUM_FEE_V2;
+  uint64_t fee = cn::parameters::MINIMUM_FEE;
   uint64_t mixIn = 0;
   uint64_t unlockTimestamp = 0;
   uint64_t ttl = 0;
@@ -483,13 +482,7 @@ bool wallet_rpc_server::on_create_integrated(const wallet_rpc::COMMAND_RPC_CREAT
     const bool valid = cn::parseAccountAddressString(prefix, 
                                                             addr,
                                                             address_str);
-
-    if (!valid)
-    {
-      logger(logging::ERROR) << "Failed to parse address!";
-      throw JsonRpc::JsonRpcError(cn::error::BAD_ADDRESS, "Failed to parse address!");
-    }
-
+    std::ignore = valid;
     cn::BinaryArray ba;
     cn::toBinaryArray(addr, ba);
     std::string keys = common::asString(ba);

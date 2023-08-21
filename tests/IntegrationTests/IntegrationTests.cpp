@@ -1,11 +1,11 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2014-2016 SDN developers
+// Copyright (c) 2017-2020 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "gtest/gtest.h"
 #include <Logging/LoggerRef.h>
-#include <thread>
 
 #include "../IntegrationTestLib/BaseFunctionalTests.h"
 #include "../IntegrationTestLib/NodeObserver.h"
@@ -63,7 +63,7 @@ public:
     logging::ConsoleLogger m_logger;
     for (auto& n: inodes) {
       
-      std::unique_ptr<cn::IWalletLegacy> wallet(new cn::WalletLegacy(m_currency, *n, m_logger, true));
+      std::unique_ptr<cn::IWalletLegacy> wallet(new cn::WalletLegacy(m_currency, *n, m_logger));
       std::unique_ptr<WalletLegacyObserver> observer(new WalletLegacyObserver());
 
       wallet->initAndGenerate(walletPassword);
@@ -120,7 +120,7 @@ public:
 
     std::vector<cn::TransactionMessage> messages;
     std::string extraString;
-    fee = cn::parameters::MINIMUM_FEE_V2;
+    fee = cn::parameters::MINIMUM_FEE;
     uint64_t mixIn = 0;
     uint64_t unlockTimestamp = 0;
     uint64_t ttl = 0;

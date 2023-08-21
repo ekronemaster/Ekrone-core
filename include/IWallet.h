@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2023 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2023 Ekrone Infinity Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -14,8 +14,7 @@
 #include "CryptoNote.h"
 #include "CryptoNoteConfig.h"
 
-namespace cn
-{
+namespace cn {
 
 typedef size_t DepositId;
 
@@ -24,8 +23,7 @@ const size_t WALLET_INVALID_TRANSFER_ID = std::numeric_limits<size_t>::max();
 const size_t WALLET_INVALID_DEPOSIT_ID = std::numeric_limits<size_t>::max();
 const uint32_t WALLET_UNCONFIRMED_TRANSACTION_HEIGHT = std::numeric_limits<uint32_t>::max();
 
-enum class WalletTransactionState : uint8_t
-{
+enum class WalletTransactionState : uint8_t {
   SUCCEEDED = 0,
   FAILED,
   CANCELLED,
@@ -39,8 +37,7 @@ enum class WalletSaveLevel : uint8_t {
   SAVE_ALL
 };
 
-enum WalletEventType
-{
+enum WalletEventType {
   TRANSACTION_CREATED,
   TRANSACTION_UPDATED,
   BALANCE_UNLOCKED,
@@ -48,8 +45,7 @@ enum WalletEventType
   SYNC_COMPLETED,
 };
 
-struct WalletTransactionCreatedData
-{
+struct WalletTransactionCreatedData {
   size_t transactionIndex;
 };
 
@@ -68,19 +64,16 @@ struct Deposit
   std::string address;
 };
 
-struct WalletTransactionUpdatedData
-{
+struct WalletTransactionUpdatedData {
   size_t transactionIndex;
 };
 
-struct WalletSynchronizationProgressUpdated
-{
+struct WalletSynchronizationProgressUpdated {
   uint32_t processedBlockCount;
   uint32_t totalBlockCount;
 };
 
-struct WalletEvent
-{
+struct WalletEvent {
   WalletEventType type;
   union {
     WalletTransactionCreatedData transactionCreated;
@@ -89,8 +82,7 @@ struct WalletEvent
   };
 };
 
-struct WalletTransaction
-{
+struct WalletTransaction {
   WalletTransactionState state;
   uint64_t timestamp;
   uint32_t blockHeight;
@@ -106,45 +98,39 @@ struct WalletTransaction
   bool isBase;
 };
 
-enum class WalletTransferType : uint8_t
-{
+enum class WalletTransferType : uint8_t {
   USUAL = 0,
   DONATION,
   CHANGE
 };
 
-struct WalletOrder
-{
+struct WalletOrder {
   std::string address;
   uint64_t amount;
 };
 
-struct WalletMessage
-{
+struct WalletMessage {
   std::string address;
   std::string message;
 };
 
-struct WalletTransfer
-{
+struct WalletTransfer {
   WalletTransferType type;
   std::string address;
   int64_t amount;
 };
 
-struct DonationSettings
-{
+struct DonationSettings {
   std::string address;
   uint64_t threshold = 0;
 };
 
-struct TransactionParameters
-{
+struct TransactionParameters {
   std::vector<std::string> sourceAddresses;
   std::vector<WalletOrder> destinations;
   std::vector<WalletMessage> messages;
-  uint64_t fee = cn::parameters::MINIMUM_FEE_V2;
-  uint64_t mixIn = cn::parameters::MINIMUM_MIXIN;
+  uint64_t fee = cn::parameters::MINIMUM_FEE;
+  uint64_t mixIn = 0;
   std::string extra;
   DepositId firstDepositId = WALLET_INVALID_DEPOSIT_ID;
   size_t depositCount = 0;
@@ -153,14 +139,12 @@ struct TransactionParameters
   std::string changeDestination;
 };
 
-struct WalletTransactionWithTransfers
-{
+struct WalletTransactionWithTransfers {
   WalletTransaction transaction;
   std::vector<WalletTransfer> transfers;
 };
 
-struct TransactionsInBlockInfo
-{
+struct TransactionsInBlockInfo {
   crypto::Hash blockHash;
   std::vector<WalletTransactionWithTransfers> transactions;
 };
@@ -171,8 +155,7 @@ struct DepositsInBlockInfo
   std::vector<Deposit> deposits;
 };
 
-class IWallet
-{
+class IWallet {
 public:
   virtual ~IWallet() = default;
 
@@ -198,7 +181,7 @@ public:
 
   virtual std::string getAddress(size_t index) const = 0;
   virtual KeyPair getAddressSpendKey(size_t index) const = 0;
-  virtual KeyPair getAddressSpendKey(const std::string &address) const = 0;
+  virtual KeyPair getAddressSpendKey(const std::string& address) const = 0;
   virtual KeyPair getViewKey() const = 0;
   virtual std::string createAddress() = 0;
   virtual std::string createAddress(const crypto::SecretKey &spendSecretKey) = 0;
@@ -206,10 +189,11 @@ public:
   virtual std::vector<std::string> createAddressList(const std::vector<crypto::SecretKey> &spendSecretKeys, bool reset = true) = 0;
   virtual void deleteAddress(const std::string &address) = 0;
 
+
   virtual uint64_t getActualBalance() const = 0;
-  virtual uint64_t getActualBalance(const std::string &address) const = 0;
+  virtual uint64_t getActualBalance(const std::string& address) const = 0;
   virtual uint64_t getPendingBalance() const = 0;
-  virtual uint64_t getPendingBalance(const std::string &address) const = 0;
+  virtual uint64_t getPendingBalance(const std::string& address) const = 0;
 
   virtual uint64_t getLockedDepositBalance() const = 0;
   virtual uint64_t getLockedDepositBalance(const std::string &address) const = 0;
@@ -225,17 +209,14 @@ public:
 
   virtual std::vector<TransactionsInBlockInfo> getTransactions(const crypto::Hash &blockHash, size_t count) const = 0;
   virtual std::vector<TransactionsInBlockInfo> getTransactions(uint32_t blockIndex, size_t count) const = 0;
-
-
-
   virtual std::vector<crypto::Hash> getBlockHashes(uint32_t blockIndex, size_t count) const = 0;
   virtual uint32_t getBlockCount() const = 0;
   virtual std::vector<WalletTransactionWithTransfers> getUnconfirmedTransactions() const = 0;
   virtual std::vector<size_t> getDelayedTransactionIds() const = 0;
 
-  virtual size_t transfer(const TransactionParameters &sendingTransaction, crypto::SecretKey &transactionSK) = 0;
+  virtual size_t transfer(const TransactionParameters& sendingTransaction, crypto::SecretKey &transactionSK) = 0;
 
-  virtual size_t makeTransaction(const TransactionParameters &sendingTransaction) = 0;
+  virtual size_t makeTransaction(const TransactionParameters& sendingTransaction) = 0;
   virtual void commitTransaction(size_t transactionId) = 0;
   virtual void rollbackUncommitedTransaction(size_t transactionId) = 0;
 
@@ -246,4 +227,4 @@ public:
   virtual WalletEvent getEvent() = 0;
 };
 
-} // namespace cn
+}

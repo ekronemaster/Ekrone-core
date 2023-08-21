@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+//Copyright (c) 2017-2023 Ekrone Infinity Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -23,7 +23,6 @@
 
 #include "Common/StringTools.h"
 #include "CryptoNoteCore/CryptoNoteBasicImpl.h"
-#include "CryptoNoteCore/CryptoNoteFormatUtils.h"
 #include "CryptoNoteCore/CryptoNoteTools.h"
 #include "Rpc/CoreRpcServerCommandsDefinitions.h"
 #include "Rpc/HttpClient.h"
@@ -53,13 +52,13 @@ std::error_code interpretResponseStatus(const std::string& status) {
 }
 
 NodeRpcProxy::NodeRpcProxy(const std::string& nodeHost, unsigned short nodePort) :
-  m_nodeHost(nodeHost),
-  m_nodePort(nodePort),
-  m_rpcTimeout(10000),
-  m_pullInterval(5000),
-  m_lastLocalBlockTimestamp(0),
-  m_connected(true) {
-    resetInternalState();
+    m_rpcTimeout(10000),
+    m_pullInterval(5000),
+    m_nodeHost(nodeHost),
+    m_nodePort(nodePort),
+    m_lastLocalBlockTimestamp(0),
+    m_connected(true) {
+  resetInternalState();
 }
 
 NodeRpcProxy::~NodeRpcProxy() {
@@ -153,9 +152,7 @@ void NodeRpcProxy::workerThread(const INode::Callback& initialized_callback) {
     contextGroup.wait();
     // Make sure all remote spawns are executed
     m_dispatcher->yield();
-  } catch (std::exception& e) {
-    // TODO Make this pass through file log
-    std::cout << "Exception while attempting to make a worker thread: " << e.what();
+  } catch (std::exception&) {
   }
 
   m_dispatcher = nullptr;
@@ -420,7 +417,6 @@ void NodeRpcProxy::getBlocks(const std::vector<crypto::Hash>& blockHashes, std::
   callback(std::error_code());
 }
 
-
 void NodeRpcProxy::getTransactions(const std::vector<crypto::Hash>& transactionHashes, std::vector<TransactionDetails>& transactions, const Callback& callback) {
   std::lock_guard<std::mutex> lock(m_mutex);
   if (m_state != STATE_INITIALIZED) {
@@ -461,7 +457,7 @@ void NodeRpcProxy::isSynchronized(bool& syncStatus, const Callback& callback) {
     return;
   }
 
-  syncStatus = getPeerCount() > 0 && getLastLocalBlockHeight() >= getLastKnownBlockHeight();
+  syncStatus = getPeerCount() > 0 && m_nodeHeight + 1 >= getLastKnownBlockHeight();
   callback(std::error_code());
 }
 
@@ -499,6 +495,25 @@ std::error_code NodeRpcProxy::doGetNewBlocks(std::vector<crypto::Hash>& knownBlo
     newBlocks = std::move(rsp.blocks);
     startHeight = static_cast<uint32_t>(rsp.start_height);
   }
+
+  return ec;
+}
+
+std::error_code NodeRpcProxy::doGetBlock(const uint32_t blockHeight, f_block_details_response& block)
+{
+  COMMAND_RPC_GET_BLOCK_DETAILS_BY_HEIGHT::request req = AUTO_VAL_INIT(req);
+  COMMAND_RPC_GET_BLOCK_DETAILS_BY_HEIGHT::response resp = AUTO_VAL_INIT(resp);
+
+  req.blockHeight = blockHeight;
+
+  std::error_code ec = jsonCommand("get_block_details_by_height", req, resp);
+
+  if (ec)
+  {
+    return ec;
+  }
+
+  block = std::move(resp.block);
 
   return ec;
 }
@@ -584,52 +599,6 @@ std::error_code NodeRpcProxy::doGetPoolSymmetricDifference(std::vector<crypto::H
   }
 
   return ec;
-}
-
-std::error_code NodeRpcProxy::doGetTransaction(const crypto::Hash &transactionHash, cn::Transaction &transaction)
-{
-  COMMAND_RPC_GET_TRANSACTIONS::request req = AUTO_VAL_INIT(req);
-  COMMAND_RPC_GET_TRANSACTIONS::response resp = AUTO_VAL_INIT(resp);
-
-  req.txs_hashes.push_back(common::podToHex(transactionHash));
-
-  std::error_code ec = jsonCommand("/gettransactions", req, resp);
-  if (ec)
-  {
-    return ec;
-  }
-
-  if (resp.missed_tx.size() > 0)
-  {
-    return make_error_code(cn::error::REQUEST_ERROR);
-  }
-
-  BinaryArray tx_blob;
-  if (!common::fromHex(resp.txs_as_hex[0], tx_blob))
-  {
-    return make_error_code(error::INTERNAL_NODE_ERROR);
-  }
-
-  crypto::Hash tx_hash = NULL_HASH;
-  crypto::Hash tx_prefixt_hash = NULL_HASH;
-  if (!parseAndValidateTransactionFromBinaryArray(tx_blob, transaction, tx_hash, tx_prefixt_hash) || tx_hash != transactionHash)
-  {
-    return make_error_code(error::INTERNAL_NODE_ERROR);
-  }
-
-  return ec;
-}
-
-void NodeRpcProxy::getTransaction(const crypto::Hash &transactionHash, cn::Transaction &transaction, const Callback &callback)
-{
-  std::lock_guard<std::mutex> lock(m_mutex);
-  if (m_state != STATE_INITIALIZED)
-  {
-    callback(make_error_code(error::NOT_INITIALIZED));
-    return;
-  }
-
-  scheduleRequest(std::bind(&NodeRpcProxy::doGetTransaction, this, std::cref(transactionHash), std::ref(transaction)), callback);
 }
 
 void NodeRpcProxy::scheduleRequest(std::function<std::error_code()>&& procedure, const Callback& callback) {

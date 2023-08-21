@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -206,8 +205,7 @@ TEST_F(NodeTest, generateBlockchain)
     std::string password = "pass";
     cn::WalletGreen wallet(dispatcher, currency, *mainNode, logger);
 
-    std::string walletFile("wallet.bin", std::ios::binary | std::ios::trunc);
-    wallet.initialize(walletFile, password);
+    wallet.initialize(password);
 
     std::string minerAddress = wallet.createAddress();
     daemon.startMining(1, minerAddress);
@@ -222,8 +220,8 @@ TEST_F(NodeTest, generateBlockchain)
 
     daemon.stopMining();
 
-    
-    wallet.save();
+    std::ofstream walletFile("wallet.bin", std::ios::binary | std::ios::trunc);
+    wallet.save(walletFile);
     wallet.shutdown();
 
     dumpBlockchainInfo(*mainNode);
@@ -259,7 +257,7 @@ TEST_F(NodeTest, addMoreBlocks)
     cn::WalletGreen wallet(dispatcher, currency, *mainNode, logger);
 
     {
-      std::string walletFile("wallet.bin", std::ios::binary);
+      std::ifstream walletFile("wallet.bin", std::ios::binary);
       wallet.load(walletFile, password);
     }
 
@@ -277,7 +275,7 @@ TEST_F(NodeTest, addMoreBlocks)
     daemon.stopMining();
 
     std::ofstream walletFile("wallet.bin", std::ios::binary | std::ios::trunc);
-    wallet.save();
+    wallet.save(walletFile);
     wallet.shutdown();
 
     dumpBlockchainInfo(*mainNode);

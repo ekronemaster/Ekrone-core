@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -33,8 +32,11 @@ void insertOrPush(JsonValue& js, common::StringView name, const T& value) {
 
 }
 
-JsonOutputStreamSerializer::JsonOutputStreamSerializer() {
+JsonOutputStreamSerializer::JsonOutputStreamSerializer() : root(JsonValue::OBJECT) {
   chain.push_back(&root);
+}
+
+JsonOutputStreamSerializer::~JsonOutputStreamSerializer() {
 }
 
 ISerializer::SerializerType JsonOutputStreamSerializer::type() const {
@@ -72,27 +74,27 @@ void JsonOutputStreamSerializer::endArray() {
 }
 
 bool JsonOutputStreamSerializer::operator()(uint64_t& value, common::StringView name) {
-  auto v = static_cast<int64_t>(value);
+  int64_t v = static_cast<int64_t>(value);
   return operator()(v, name);
 }
 
 bool JsonOutputStreamSerializer::operator()(uint16_t& value, common::StringView name) {
-  auto v = static_cast<uint64_t>(value);
+  uint64_t v = static_cast<uint64_t>(value);
   return operator()(v, name);
 }
 
 bool JsonOutputStreamSerializer::operator()(int16_t& value, common::StringView name) {
-  auto v = static_cast<int64_t>(value);
+  int64_t v = static_cast<int64_t>(value);
   return operator()(v, name);
 }
 
 bool JsonOutputStreamSerializer::operator()(uint32_t& value, common::StringView name) {
-  auto v = static_cast<uint64_t>(value);
+  uint64_t v = static_cast<uint64_t>(value);
   return operator()(v, name);
 }
 
 bool JsonOutputStreamSerializer::operator()(int32_t& value, common::StringView name) {
-  auto v = static_cast<int64_t>(value);
+  int64_t v = static_cast<int64_t>(value);
   return operator()(v, name);
 }
 

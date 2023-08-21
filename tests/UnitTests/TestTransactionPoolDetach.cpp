@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2017 The Cryptonote developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2014-2016 SDN developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -116,7 +116,7 @@ public:
     generator(m_currency),
     m_node(generator),
     m_sync(m_node, m_currency.genesisBlockHash()),
-    m_transfersSync(m_currency, m_logger, m_sync, m_node) {
+    m_transfersSync(m_currency, m_sync, m_node) {
   }
 
   void addAccounts(size_t count) {
@@ -254,7 +254,7 @@ namespace {
 
 
 TEST_F(DetachTest, testBlockchainDetach) {
-  uint64_t sendAmount = 7000000000000;
+  uint64_t sendAmount = 70000000000000;
   auto fee = m_currency.minimumFee();
 
   addMinerAccount();
@@ -343,8 +343,8 @@ TEST_F(DetachTest, testDetachWithWallet) {
   auto fee = m_currency.minimumFee();
 
   generator.generateEmptyBlocks(5);
-  WalletLegacy Alice(m_currency, m_node, m_logger, true);
-  WalletLegacy Bob(m_currency, m_node, m_logger, true);
+  WalletLegacy Alice(m_currency, m_node);
+  WalletLegacy Bob(m_currency, m_node);
 
   CompletionWalletObserver AliceCompleted, BobCompleted;
   AliceCompleted.syncCompleted = std::promise<std::error_code>();
@@ -394,8 +394,7 @@ TEST_F(DetachTest, testDetachWithWallet) {
 
   WalletSendObserver wso;
   Alice.addObserver(&wso);
-  crypto::SecretKey transactionSK;
-  Alice.sendTransaction(transactionSK, tr, fee);
+  Alice.sendTransaction(tr, fee);
   std::error_code sendError;
   wso.waitForSendEnd(sendError);
   Alice.removeObserver(&wso);

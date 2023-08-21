@@ -1,9 +1,6 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2019 The TurtleCoin developers
-// Copyright (c) 2016-2020 The Karbo developers
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -42,6 +39,12 @@ namespace cn
     uint32_t packet_max_size;
     uint32_t config_id;
     uint32_t send_peerlist_sz;
+  };
+
+  enum P2PProtocolVersion : uint8_t {
+    V0 = 0,
+    V1 = 1,
+    CURRENT = V1
   };
 
   struct basic_node_data

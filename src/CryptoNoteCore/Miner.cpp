@@ -1,7 +1,8 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2020 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2020 Ekrone developers
+
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -20,6 +21,7 @@
 #include <boost/utility/value_init.hpp>
 
 #include "crypto/crypto.h"
+#include "Common/Base64.h"
 #include "Common/CommandLine.h"
 #include "Common/StringTools.h"
 #include "Serialization/SerializationTools.h"
@@ -32,32 +34,32 @@ using namespace logging;
 namespace cn
 {
 
-  Miner::Miner(const Currency& currency, IMinerHandler& handler, logging::ILogger& log) :
+  miner::miner(const Currency& currency, IMinerHandler& handler, logging::ILogger& log) :
     m_currency(currency),
     logger(log, "miner"),
     m_stop(true),
     m_template(boost::value_initialized<Block>()),
     m_template_no(0),
-    m_handler(handler),
-    m_starter_nonce(0),
-    m_threads_total(0),
-    m_pausers_count(0),
     m_diffic(0),
+    m_handler(handler),
+    m_pausers_count(0),
+    m_threads_total(0),
+    m_starter_nonce(0),
+    m_last_hr_merge_time(0),
+    m_hashes(0),
     m_do_print_hashrate(false),
     m_do_mining(false),
-    m_update_block_template_interval(5),
-    m_update_merge_hr_interval(2),
     m_current_hash_rate(0),
-    m_last_hr_merge_time(0),
-    m_hashes(0)
+    m_update_block_template_interval(5),
+    m_update_merge_hr_interval(2)
   {
   }
   //-----------------------------------------------------------------------------------------------------
-  Miner::~Miner() {
+  miner::~miner() {
     stop();
   }
   //-----------------------------------------------------------------------------------------------------
-  bool Miner::set_block_template(const Block& bl, const difficulty_type& di) {
+  bool miner::set_block_template(const Block& bl, const difficulty_type& di) {
     std::lock_guard<decltype(m_template_lock)> lk(m_template_lock);
 
     m_template = bl;
@@ -67,7 +69,7 @@ namespace cn
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
-  bool Miner::on_block_chain_update() {
+  bool miner::on_block_chain_update() {
     if (!is_mining()) {
       return true;
     }
@@ -75,7 +77,7 @@ namespace cn
     return request_block_template();
   }
   //-----------------------------------------------------------------------------------------------------
-  bool Miner::request_block_template() {
+  bool miner::request_block_template() {
     Block bl = boost::value_initialized<Block>();
     difficulty_type di = 0;
     uint32_t height;
@@ -94,7 +96,7 @@ namespace cn
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
-  bool Miner::on_idle()
+  bool miner::on_idle()
   {
     m_update_block_template_interval.call([&](){
       if(is_mining()) 
@@ -110,7 +112,7 @@ namespace cn
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
-  void Miner::do_print_hashrate(bool do_hr)
+  void miner::do_print_hashrate(bool do_hr)
   {
     m_do_print_hashrate = do_hr;
   }
@@ -121,7 +123,7 @@ namespace cn
   }
 
   //-----------------------------------------------------------------------------------------------------
-  void Miner::merge_hr()
+  void miner::merge_hr()
   {
     if(m_last_hr_merge_time && is_mining()) {
       m_current_hash_rate = m_hashes * 1000 / (millisecondsSinceEpoch() - m_last_hr_merge_time + 1);
@@ -141,7 +143,7 @@ namespace cn
     m_hashes = 0;
   }
 
-  bool Miner::init(const MinerConfig& config) {
+  bool miner::init(const MinerConfig& config) {
     if (!config.extraMessages.empty()) {
       std::string buff;
       if (!common::loadFileToString(config.extraMessages, buff)) {
@@ -155,7 +157,7 @@ namespace cn
         boost::algorithm::trim(extra_vec[i]);
         if(!extra_vec[i].size())
           continue;
-        BinaryArray ba = common::asBinaryArray(common::base64Decode(extra_vec[i]));
+        BinaryArray ba = common::asBinaryArray(tools::base_64::decode(extra_vec[i]));
         if(buff != "0")
           m_extra_messages[i] = ba;
       }
@@ -167,7 +169,8 @@ namespace cn
         loadFromJson(m_config, filebuf);
       }
 
-      logger(INFO) << "Loaded " << m_extra_messages.size() << " extra messages, current index " << m_config.current_extra_message_index;
+      logger(INFO, GREEN) << "Loaded " << m_extra_messages.size() << " extra messages, current index " << m_config.current_extra_message_index;
+
     }
 
     if(!config.startMining.empty()) {
@@ -185,12 +188,12 @@ namespace cn
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
-  bool Miner::is_mining()
+  bool miner::is_mining()
   {
     return !m_stop;
   }
   //-----------------------------------------------------------------------------------------------------
-  bool Miner::start(const AccountPublicAddress& adr, size_t threads_count)
+  bool miner::start(const AccountPublicAddress& adr, size_t threads_count)
   {   
     if (is_mining()) {
       logger(ERROR) << "Starting miner but it's already started";
@@ -215,15 +218,15 @@ namespace cn
     m_stop = false;
 
     for (uint32_t i = 0; i != threads_count; i++) {
-      m_threads.push_back(std::thread(std::bind(&Miner::worker_thread, this, i)));
+      m_threads.push_back(std::thread(std::bind(&miner::worker_thread, this, i)));
     }
 
-    logger(INFO) << "Mining has started with " << threads_count << " threads, good luck!";
+    logger(INFO, GREEN) << "Mining has started with " << threads_count << " threads, good luck!";
     return true;
   }
   
   //-----------------------------------------------------------------------------------------------------
-  uint64_t Miner::get_speed()
+  uint64_t miner::get_speed()
   {
     if(is_mining())
       return m_current_hash_rate;
@@ -232,13 +235,13 @@ namespace cn
   }
   
   //-----------------------------------------------------------------------------------------------------
-  void Miner::send_stop_signal() 
+  void miner::send_stop_signal() 
   {
     m_stop = true;
   }
 
   //-----------------------------------------------------------------------------------------------------
-  bool Miner::stop()
+  bool miner::stop()
   {
     send_stop_signal();
     std::lock_guard<std::mutex> lk(m_threads_lock);
@@ -248,11 +251,11 @@ namespace cn
     }
 
     m_threads.clear();
-    logger(INFO) << "Mining has been stopped, " << m_threads.size() << " finished" ;
+    logger(INFO, YELLOW) << "- Miner.cpp - " << "Mining has been stopped, " << m_threads.size() << " finished" ;
     return true;
   }
   //-----------------------------------------------------------------------------------------------------
-  bool Miner::find_nonce_for_given_block(crypto::cn_context &context, Block& bl, const difficulty_type& diffic) {
+  bool miner::find_nonce_for_given_block(crypto::cn_context &context, Block& bl, const difficulty_type& diffic) {
 
     unsigned nthreads = std::thread::hardware_concurrency();
 
@@ -310,14 +313,14 @@ namespace cn
     return false;
   }
   //-----------------------------------------------------------------------------------------------------
-  void Miner::on_synchronized()
+  void miner::on_synchronized()
   {
     if(m_do_mining) {
       start(m_mine_address, m_threads_total);
     }
   }
   //-----------------------------------------------------------------------------------------------------
-  void Miner::pause()
+  void miner::pause()
   {
     std::lock_guard<std::mutex> lk(m_miners_count_lock);
     ++m_pausers_count;
@@ -325,7 +328,7 @@ namespace cn
       logger(TRACE) << "MINING PAUSED";
   }
   //-----------------------------------------------------------------------------------------------------
-  void Miner::resume()
+  void miner::resume()
   {
     std::lock_guard<std::mutex> lk(m_miners_count_lock);
     --m_pausers_count;
@@ -338,9 +341,9 @@ namespace cn
       logger(TRACE) << "MINING RESUMED";
   }
   //-----------------------------------------------------------------------------------------------------
-  bool Miner::worker_thread(uint32_t th_local_index)
+  bool miner::worker_thread(uint32_t th_local_index)
   {
-    logger(INFO) << "Miner thread was started ["<< th_local_index << "]";
+    logger(INFO, GREEN) << "Miner thread was started ["<< th_local_index << "]";
     uint32_t nonce = m_starter_nonce + th_local_index;
     difficulty_type local_diff = 0;
     uint32_t local_template_ver = 0;
@@ -397,7 +400,7 @@ namespace cn
       nonce += m_threads_total;
       ++m_hashes;
     }
-    logger(INFO) << "Miner thread stopped ["<< th_local_index << "]";
+    logger(INFO, YELLOW) << "Miner thread stopped ["<< th_local_index << "]";
     return true;
   }
   //-----------------------------------------------------------------------------------------------------

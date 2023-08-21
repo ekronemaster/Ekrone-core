@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
-// Copyright (c) 2017-2018 The Circle Foundation & Ekrone Devs
-// Copyright (c) 2018-2023 Ekrone Network & Ekrone Devs
-//
+// Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
+// Copyright (c) 2018-2019 Conceal Network & Conceal Devs
+// Copyright (c) 2017-2020 Ekrone developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -17,8 +17,8 @@ namespace crypto {
 bool serialize(PublicKey& pubKey, common::StringView name, cn::ISerializer& serializer);
 bool serialize(SecretKey& secKey, common::StringView name, cn::ISerializer& serializer);
 bool serialize(Hash& h, common::StringView name, cn::ISerializer& serializer);
-bool serialize(chacha8_iv &chacha8, common::StringView name, cn::ISerializer &serializer);
-bool serialize(KeyImage &keyImage, common::StringView name, cn::ISerializer &serializer);
+bool serialize(chacha8_iv& chacha8, common::StringView name, cn::ISerializer& serializer);
+bool serialize(KeyImage& keyImage, common::StringView name, cn::ISerializer& serializer);
 bool serialize(Signature& sig, common::StringView name, cn::ISerializer& serializer);
 bool serialize(EllipticCurveScalar& ecScalar, common::StringView name, cn::ISerializer& serializer);
 bool serialize(EllipticCurvePoint& ecPoint, common::StringView name, cn::ISerializer& serializer);
