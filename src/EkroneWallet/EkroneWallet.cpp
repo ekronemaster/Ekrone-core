@@ -744,22 +744,12 @@ bool ultranote_wallet::init(const boost::program_options::variables_map& vm) {
   if (m_generate_new.empty() && m_wallet_file_arg.empty()) {
     std::cout << "  " << ENDL
     << "  " << ENDL
-      << "  XXXXXXX       XXXXXXXUUUUUUUU     UUUUUUUUNNNNNNNN        NNNNNNNNIIIIIIIIII" << ENDL
-      << "  X:::::X       X:::::XU::::::U     U::::::UN:::::::N       N::::::NI::::::::I" << ENDL
-      << "  X:::::X       X:::::XU::::::U     U::::::UN::::::::N      N::::::NI::::::::I" << ENDL
-      << "  X::::::X     X::::::XUU:::::U     U:::::UUN:::::::::N     N::::::NII::::::II" << ENDL
-      << "  XXX:::::X   X:::::XXX U:::::U     U:::::U N::::::::::N    N::::::N  I::::I  " << ENDL
-      << "     X:::::X X:::::X    U:::::D     D:::::U N:::::::::::N   N::::::N  I::::I  " << ENDL
-      << "      X:::::X:::::X     U:::::D     D:::::U N:::::::N::::N  N::::::N  I::::I  " << ENDL
-      << "       X:::::::::X      U:::::D     D:::::U N::::::N N::::N N::::::N  I::::I  " << ENDL
-      << "       X:::::::::X      U:::::D     D:::::U N::::::N  N::::N:::::::N  I::::I  " << ENDL
-      << "      X:::::X:::::X     U:::::D     D:::::U N::::::N   N:::::::::::N  I::::I  " << ENDL
-      << "     X:::::X X:::::X    U:::::D     D:::::U N::::::N    N::::::::::N  I::::I  " << ENDL
-      << "  XXX:::::X   X:::::XXX U::::::U   U::::::U N::::::N     N:::::::::N  I::::I  " << ENDL
-      << "  X::::::X     X::::::X U:::::::UUU:::::::U N::::::N      N::::::::NII::::::II" << ENDL
-      << "  X:::::X       X:::::X  UU:::::::::::::UU  N::::::N       N:::::::NI::::::::I" << ENDL
-      << "  X:::::X       X:::::X    UU:::::::::UU    N::::::N        N::::::NI::::::::I" << ENDL
-      << "  XXXXXXX       XXXXXXX      UUUUUUUUU      NNNNNNNN         NNNNNNNIIIIIIIIII" << ENDL
+        << "         ???????????  ??????????  ??????? ????   ???????????   " << ENDL
+        << "         ??????????? ??????????????????????????  ???????????   " << ENDL
+        << "         ??????  ??????? ???????????   ????????? ?????????     " << ENDL
+        << "         ??????  ??????? ???????????   ???????????????????     " << ENDL
+        << "         ???????????  ??????  ??????????????? ??????????????   " << ENDL
+        << "         ???????????  ??????  ??? ??????? ???  ?????????????   " << ENDL
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
     << "  " << ENDL
     << "  " << ENDL;
@@ -1057,7 +1047,7 @@ bool ultranote_wallet::new_wallet(const std::string &wallet_file, const std::str
     std::string secretKeysData = std::string(reinterpret_cast<char*>(&keys.spendSecretKey), sizeof(keys.spendSecretKey)) + std::string(reinterpret_cast<char*>(&keys.viewSecretKey), sizeof(keys.viewSecretKey));
     std::string guiKeys = tools::base_58::encode_addr(cn::parameters::CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX, secretKeysData);
 
-    logger(INFO, BRIGHT_GREEN) << "Ekronewallet is an open-source, client-side, free wallet which allow you to send and receive XUNI instantly on the blockchain. You are  in control of your funds & your keys. When you generate a new wallet, login, send, receive or deposit $ekrone everything happens locally. Your seed is never transmitted, received or stored. That's why its imperative to write, print or save your seed somewhere safe. The backup of keys is your responsibility. If you lose your seed, your account can not be recovered. The Ekrone Team doesn't take any responsibility for lost funds due to nonexistent/missing/lost private keys." << std::endl << std::endl;
+    logger(INFO, BRIGHT_GREEN) << "Ekronewallet is an open-source, client-side, free wallet which allow you to send and receive EKR instantly on the blockchain. You are  in control of your funds & your keys. When you generate a new wallet, login, send, receive or deposit $ekrone everything happens locally. Your seed is never transmitted, received or stored. That's why its imperative to write, print or save your seed somewhere safe. The backup of keys is your responsibility. If you lose your seed, your account can not be recovered. The Ekrone Team doesn't take any responsibility for lost funds due to nonexistent/missing/lost private keys." << std::endl << std::endl;
 
     std::cout << "Wallet Address: " << BrightMagentaMsg(m_wallet->getAddress()) << std::endl;
     std::cout << "Private spend key: " << BrightMagentaMsg(common::podToHex(keys.spendSecretKey)) << std::endl;
