@@ -1,0 +1,15 @@
+[Unit]
+Description=Ekrone Gold Wallet
+After=network.target
+
+[Service]
+User=USER
+Group=USER
+Restart=on-failure
+RestartSec=5s
+
+ExecStart=/usr/bin/walletd --config=/etc/XUNI/paymentgate.conf
+GuessMainPID=no
+
+[Install]
+WantedBy=multi-user.target

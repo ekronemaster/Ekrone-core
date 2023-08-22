@@ -1,0 +1,14 @@
+[Unit]
+Description=Ekrone Gold Walletd
+After=Ekroned.service
+
+[Service]
+User=YOUR_USER
+Group=YOUR_USER
+
+WorkingDirectory=/home/YOUR_USER/.Ekrone
+ExecStart=/usr/bin/Ekrone-walletd --data-dir /home/YOUR_USER/.Ekrone --rpc-user RPC_USER --rpc-password RPC_PASSWORD -w /path/to/wallet/file -p PASSWORD --daemon-port 43000
+GuessMainPID=no
+
+[Install]
+WantedBy=multi-user.target
