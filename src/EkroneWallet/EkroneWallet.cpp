@@ -615,7 +615,7 @@ ekrone_wallet::ekrone_wallet(platform_system::Dispatcher& dispatcher, const cn::
   m_consoleHandler.setHandler("ext_help", boost::bind(&ekrone_wallet::extended_help, this, boost::arg<1>()), "Show this help");
   m_consoleHandler.setHandler("exit", boost::bind(&ekrone_wallet::exit, this, _1), "Close wallet");  
   m_consoleHandler.setHandler("balance_proof", boost::bind(&ekrone_wallet::get_reserve_proof, this, _1), "all|<amount> [<message>] - Generate a signature proving that you own at least <amount>, optionally with a challenge string <message>. ");
-  m_consoleHandler.setHandler("save_keys", boost::bind(&ekrone_wallet::save_keys_to_file, this, boost::arg<1>()), "Saves wallet private keys to \"<wallet_name>_ultranote_backup.txt\"");
+  m_consoleHandler.setHandler("save_keys", boost::bind(&ekrone_wallet::save_keys_to_file, this, boost::arg<1>()), "Saves wallet private keys to \"<wallet_name>_ekrone_backup.txt\"");
   m_consoleHandler.setHandler("list_deposits", boost::bind(&ekrone_wallet::list_deposits, this, boost::arg<1>()), "Show all known deposits from this wallet");
   m_consoleHandler.setHandler("deposit", boost::bind(&ekrone_wallet::deposit, this, boost::arg<1>()), "deposit <months> <amount> - Create a deposit");
   m_consoleHandler.setHandler("withdraw", boost::bind(&ekrone_wallet::withdraw, this, boost::arg<1>()), "withdraw <id> - Withdraw a deposit");
@@ -662,7 +662,7 @@ std::string ekrone_wallet::wallet_menu(bool do_ext)
     menu_item += "\"reset\"                       - Reset cached blockchain data and starts synchronizing from block 0.\n";
     menu_item += "\"transfer <address> <amount>\" - Transfers <amount> to <address>. | [-p<payment_id>] [<amount_2>]...[<amount_N>] [<address_2>]...[<address_n>]\n";
     menu_item += "\"save\"                        - Save wallet synchronized blockchain data.\n";
-    menu_item += "\"save_keys\"                   - Saves wallet private keys to \"<wallet_name>_ultranote_backup.txt\".\n";
+    menu_item += "\"save_keys\"                   - Saves wallet private keys to \"<wallet_name>_ekrone_backup.txt\".\n";
     menu_item += "\"withdraw <id>\"               - Withdraw a deposit from the blockchain.\n";
   }
 
