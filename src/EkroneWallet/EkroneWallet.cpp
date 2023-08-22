@@ -547,7 +547,7 @@ bool processServerFeeAddressResponse(const std::string& response, std::string& f
     return true;
 }
 
-std::string ekrone-wallet::get_commands_str(bool do_ext) {
+std::string ekrone_wallet::get_commands_str(bool do_ext) {
   std::stringstream ss;
   ss << "";
 
@@ -565,22 +565,22 @@ std::string ekrone-wallet::get_commands_str(bool do_ext) {
   return ss.str();
 }
 
-bool ekrone-wallet::help(const std::vector<std::string> &args/* = std::vector<std::string>()*/) {
+bool ekrone_wallet::help(const std::vector<std::string> &args/* = std::vector<std::string>()*/) {
   success_msg_writer() << get_commands_str(false);
   return true;
 }
 
-bool ekrone-wallet::extended_help(const std::vector<std::string> &args/* = std::vector<std::string>()*/) {
+bool ekrone_wallet::extended_help(const std::vector<std::string> &args/* = std::vector<std::string>()*/) {
   success_msg_writer() << get_commands_str(true);
   return true;
 }
 
-bool ekrone-wallet::exit(const std::vector<std::string> &args) {
+bool ekrone_wallet::exit(const std::vector<std::string> &args) {
   m_consoleHandler.requestStop();
   return true;
 }
 
-ekrone-wallet::ekrone-wallet(platform_system::Dispatcher& dispatcher, const cn::Currency& currency, logging::LoggerManager& log) :
+ekrone_wallet::ekrone_wallet(platform_system::Dispatcher& dispatcher, const cn::Currency& currency, logging::LoggerManager& log) :
   m_dispatcher(dispatcher),
   m_daemon_port(0),
   m_currency(currency),
@@ -589,40 +589,40 @@ ekrone-wallet::ekrone-wallet(platform_system::Dispatcher& dispatcher, const cn::
   m_refresh_progress_reporter(*this),
   m_initResultPromise(nullptr),
   m_walletSynchronized(false) {
-  m_consoleHandler.setHandler("create_integrated", boost::bind(&ekrone-wallet::create_integrated, this, _1), "create_integrated <payment_id> - Create an integrated address with a payment ID");
-  m_consoleHandler.setHandler("export_keys", boost::bind(&ekrone-wallet::export_keys, this, _1), "Show the secret keys of the current wallet");
-  m_consoleHandler.setHandler("balance", boost::bind(&ekrone-wallet::show_balance, this, _1), "Show current wallet balance");
-  m_consoleHandler.setHandler("sign_message", boost::bind(&ekrone-wallet::sign_message, this, _1), "Sign a message with your wallet keys");
-  m_consoleHandler.setHandler("verify_signature", boost::bind(&ekrone-wallet::verify_signature, this, _1), "Verify a signed message");
-  m_consoleHandler.setHandler("incoming_transfers", boost::bind(&ekrone-wallet::show_incoming_transfers, this, _1), "Show incoming transfers");
-  m_consoleHandler.setHandler("outgoing_transfers", boost::bind(&ekrone-wallet::show_outgoing_transfers, this, _1), "Show outgoing transfers");
-  m_consoleHandler.setHandler("list_transfers", boost::bind(&ekrone-wallet::listTransfers, this, _1), "list_transfers <height> - Show all known transfers from a certain (optional) block height");
-  m_consoleHandler.setHandler("payments", boost::bind(&ekrone-wallet::show_payments, this, _1), "payments <payment_id_1> [<payment_id_2> ... <payment_id_N>] - Show payments <payment_id_1>, ... <payment_id_N>");
-  m_consoleHandler.setHandler("get_tx_proof", boost::bind(&ekrone-wallet::get_tx_proof, this, _1), "Generate a signature to prove payment: <txid> <address> [<txkey>]");
-  m_consoleHandler.setHandler("bc_height", boost::bind(&ekrone-wallet::show_blockchain_height, this, _1), "Show blockchain height");
-  m_consoleHandler.setHandler("show_dust", boost::bind(&ekrone-wallet::show_dust, this, _1), "Show the number of unmixable dust outputs");
-  m_consoleHandler.setHandler("outputs", boost::bind(&ekrone-wallet::show_num_unlocked_outputs, this, _1), "Show the number of unlocked outputs available for a transaction");
-  m_consoleHandler.setHandler("optimize", boost::bind(&ekrone-wallet::optimize_outputs, this, _1), "Combine many available outputs into a few by sending a transaction to self");
-  m_consoleHandler.setHandler("optimize_all", boost::bind(&ekrone-wallet::optimize_all_outputs, this, _1), "Optimize your wallet several times so you can send large transactions");  
-  m_consoleHandler.setHandler("transfer", boost::bind(&ekrone-wallet::transfer, this, _1),
+  m_consoleHandler.setHandler("create_integrated", boost::bind(&ekrone_wallet::create_integrated, this, _1), "create_integrated <payment_id> - Create an integrated address with a payment ID");
+  m_consoleHandler.setHandler("export_keys", boost::bind(&ekrone_wallet::export_keys, this, _1), "Show the secret keys of the current wallet");
+  m_consoleHandler.setHandler("balance", boost::bind(&ekrone_wallet::show_balance, this, _1), "Show current wallet balance");
+  m_consoleHandler.setHandler("sign_message", boost::bind(&ekrone_wallet::sign_message, this, _1), "Sign a message with your wallet keys");
+  m_consoleHandler.setHandler("verify_signature", boost::bind(&ekrone_wallet::verify_signature, this, _1), "Verify a signed message");
+  m_consoleHandler.setHandler("incoming_transfers", boost::bind(&ekrone_wallet::show_incoming_transfers, this, _1), "Show incoming transfers");
+  m_consoleHandler.setHandler("outgoing_transfers", boost::bind(&ekrone_wallet::show_outgoing_transfers, this, _1), "Show outgoing transfers");
+  m_consoleHandler.setHandler("list_transfers", boost::bind(&ekrone_wallet::listTransfers, this, _1), "list_transfers <height> - Show all known transfers from a certain (optional) block height");
+  m_consoleHandler.setHandler("payments", boost::bind(&ekrone_wallet::show_payments, this, _1), "payments <payment_id_1> [<payment_id_2> ... <payment_id_N>] - Show payments <payment_id_1>, ... <payment_id_N>");
+  m_consoleHandler.setHandler("get_tx_proof", boost::bind(&ekrone_wallet::get_tx_proof, this, _1), "Generate a signature to prove payment: <txid> <address> [<txkey>]");
+  m_consoleHandler.setHandler("bc_height", boost::bind(&ekrone_wallet::show_blockchain_height, this, _1), "Show blockchain height");
+  m_consoleHandler.setHandler("show_dust", boost::bind(&ekrone_wallet::show_dust, this, _1), "Show the number of unmixable dust outputs");
+  m_consoleHandler.setHandler("outputs", boost::bind(&ekrone_wallet::show_num_unlocked_outputs, this, _1), "Show the number of unlocked outputs available for a transaction");
+  m_consoleHandler.setHandler("optimize", boost::bind(&ekrone_wallet::optimize_outputs, this, _1), "Combine many available outputs into a few by sending a transaction to self");
+  m_consoleHandler.setHandler("optimize_all", boost::bind(&ekrone_wallet::optimize_all_outputs, this, _1), "Optimize your wallet several times so you can send large transactions");  
+  m_consoleHandler.setHandler("transfer", boost::bind(&ekrone_wallet::transfer, this, _1),
     "transfer <addr_1> <amount_1> [<addr_2> <amount_2> ... <addr_N> <amount_N>] [-p payment_id]"
     " - Transfer <amount_1>,... <amount_N> to <address_1>,... <address_N>, respectively. ");
-  m_consoleHandler.setHandler("set_log", boost::bind(&ekrone-wallet::set_log, this, _1), "set_log <level> - Change current log level, <level> is a number 0-4");
-  m_consoleHandler.setHandler("address", boost::bind(&ekrone-wallet::print_address, this, _1), "Show current wallet public address");
-  m_consoleHandler.setHandler("save", boost::bind(&ekrone-wallet::save, this, _1), "Save wallet synchronized data");
-  m_consoleHandler.setHandler("reset", boost::bind(&ekrone-wallet::reset, this, _1), "Discard cache data and start synchronizing from the start");
-  m_consoleHandler.setHandler("help", boost::bind(&ekrone-wallet::help, this, _1), "Show this help");
-  m_consoleHandler.setHandler("ext_help", boost::bind(&ekrone-wallet::extended_help, this, boost::arg<1>()), "Show this help");
-  m_consoleHandler.setHandler("exit", boost::bind(&ekrone-wallet::exit, this, _1), "Close wallet");  
-  m_consoleHandler.setHandler("balance_proof", boost::bind(&ekrone-wallet::get_reserve_proof, this, _1), "all|<amount> [<message>] - Generate a signature proving that you own at least <amount>, optionally with a challenge string <message>. ");
-  m_consoleHandler.setHandler("save_keys", boost::bind(&ekrone-wallet::save_keys_to_file, this, boost::arg<1>()), "Saves wallet private keys to \"<wallet_name>_ultranote_backup.txt\"");
-  m_consoleHandler.setHandler("list_deposits", boost::bind(&ekrone-wallet::list_deposits, this, boost::arg<1>()), "Show all known deposits from this wallet");
-  m_consoleHandler.setHandler("deposit", boost::bind(&ekrone-wallet::deposit, this, boost::arg<1>()), "deposit <months> <amount> - Create a deposit");
-  m_consoleHandler.setHandler("withdraw", boost::bind(&ekrone-wallet::withdraw, this, boost::arg<1>()), "withdraw <id> - Withdraw a deposit");
-  m_consoleHandler.setHandler("deposit_info", boost::bind(&ekrone-wallet::deposit_info, this, boost::arg<1>()), "deposit_info <id> - Get infomation for deposit <id>");
+  m_consoleHandler.setHandler("set_log", boost::bind(&ekrone_wallet::set_log, this, _1), "set_log <level> - Change current log level, <level> is a number 0-4");
+  m_consoleHandler.setHandler("address", boost::bind(&ekrone_wallet::print_address, this, _1), "Show current wallet public address");
+  m_consoleHandler.setHandler("save", boost::bind(&ekrone_wallet::save, this, _1), "Save wallet synchronized data");
+  m_consoleHandler.setHandler("reset", boost::bind(&ekrone_wallet::reset, this, _1), "Discard cache data and start synchronizing from the start");
+  m_consoleHandler.setHandler("help", boost::bind(&ekrone_wallet::help, this, _1), "Show this help");
+  m_consoleHandler.setHandler("ext_help", boost::bind(&ekrone_wallet::extended_help, this, boost::arg<1>()), "Show this help");
+  m_consoleHandler.setHandler("exit", boost::bind(&ekrone_wallet::exit, this, _1), "Close wallet");  
+  m_consoleHandler.setHandler("balance_proof", boost::bind(&ekrone_wallet::get_reserve_proof, this, _1), "all|<amount> [<message>] - Generate a signature proving that you own at least <amount>, optionally with a challenge string <message>. ");
+  m_consoleHandler.setHandler("save_keys", boost::bind(&ekrone_wallet::save_keys_to_file, this, boost::arg<1>()), "Saves wallet private keys to \"<wallet_name>_ultranote_backup.txt\"");
+  m_consoleHandler.setHandler("list_deposits", boost::bind(&ekrone_wallet::list_deposits, this, boost::arg<1>()), "Show all known deposits from this wallet");
+  m_consoleHandler.setHandler("deposit", boost::bind(&ekrone_wallet::deposit, this, boost::arg<1>()), "deposit <months> <amount> - Create a deposit");
+  m_consoleHandler.setHandler("withdraw", boost::bind(&ekrone_wallet::withdraw, this, boost::arg<1>()), "withdraw <id> - Withdraw a deposit");
+  m_consoleHandler.setHandler("deposit_info", boost::bind(&ekrone_wallet::deposit_info, this, boost::arg<1>()), "deposit_info <id> - Get infomation for deposit <id>");
 }
 
-std::string ekrone-wallet::wallet_menu(bool do_ext)
+std::string ekrone_wallet::wallet_menu(bool do_ext)
 {
   std::string menu_item;
 
@@ -671,13 +671,13 @@ std::string ekrone-wallet::wallet_menu(bool do_ext)
 
 /* This function shows the number of outputs in the wallet
   that are below the dust threshold */
-bool ekrone-wallet::show_dust(const std::vector<std::string>& args) {
+bool ekrone_wallet::show_dust(const std::vector<std::string>& args) {
   logger(INFO, BRIGHT_WHITE) << "Dust outputs: " << m_wallet->dustBalance() << std::endl;
 	return true;
 }
 
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::set_log(const std::vector<std::string> &args) {
+bool ekrone_wallet::set_log(const std::vector<std::string> &args) {
   if (args.size() != 1) {
     fail_msg_writer() << "use: set_log <log_level_number_0-4>";
     return true;
@@ -701,7 +701,7 @@ bool ekrone-wallet::set_log(const std::vector<std::string> &args) {
 bool key_import = true;
 
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::init(const boost::program_options::variables_map& vm) {
+bool ekrone_wallet::init(const boost::program_options::variables_map& vm) {
   handle_command_line(vm);
 
   if (!m_daemon_address.empty() && (!m_daemon_host.empty() || 0 != m_daemon_port)) {
@@ -945,7 +945,7 @@ if (key_import) {
 /* adding support for 25 word electrum seeds. however, we have to ensure that all old wallets that are
 not deterministic, dont get a seed to avoid any loss of funds.
 */
-std::string ekrone-wallet::generate_mnemonic(crypto::SecretKey &private_spend_key) {
+std::string ekrone_wallet::generate_mnemonic(crypto::SecretKey &private_spend_key) {
 
   std::string mnemonic_str;
 
@@ -956,7 +956,7 @@ std::string ekrone-wallet::generate_mnemonic(crypto::SecretKey &private_spend_ke
   return mnemonic_str;
 }
 //----------------------------------------------------------------------------------------------------
-void ekrone-wallet::log_incorrect_words(std::vector<std::string> words) {
+void ekrone_wallet::log_incorrect_words(std::vector<std::string> words) {
   seed_language::Base *language = seed_language::Singleton<seed_language::English>::instance();
   const std::vector<std::string> &dictionary = language->get_word_list();
 
@@ -967,7 +967,7 @@ void ekrone-wallet::log_incorrect_words(std::vector<std::string> words) {
   }
 }
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::is_valid_mnemonic(std::string &mnemonic_phrase, crypto::SecretKey &private_spend_key) {
+bool ekrone_wallet::is_valid_mnemonic(std::string &mnemonic_phrase, crypto::SecretKey &private_spend_key) {
 
   static std::string languages[] = {"English"};
   static const int num_of_languages = 1;
@@ -998,7 +998,7 @@ bool ekrone-wallet::is_valid_mnemonic(std::string &mnemonic_phrase, crypto::Secr
 
 
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::deinit() {
+bool ekrone_wallet::deinit() {
   m_wallet->removeObserver(this);
   m_node->removeObserver(static_cast<INodeObserver*>(this));
   m_node->removeObserver(static_cast<INodeRpcProxyObserver*>(this));
@@ -1009,7 +1009,7 @@ bool ekrone-wallet::deinit() {
   return close_wallet();
 }
 //----------------------------------------------------------------------------------------------------
-void ekrone-wallet::handle_command_line(const boost::program_options::variables_map& vm) {
+void ekrone_wallet::handle_command_line(const boost::program_options::variables_map& vm) {
   m_wallet_file_arg = command_line::get_arg(vm, arg_wallet_file);
   m_generate_new = command_line::get_arg(vm, arg_generate_new_wallet);
   m_daemon_address = command_line::get_arg(vm, arg_daemon_address);
@@ -1017,7 +1017,7 @@ void ekrone-wallet::handle_command_line(const boost::program_options::variables_
   m_daemon_port = command_line::get_arg(vm, arg_daemon_port);
 }
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::new_wallet(const std::string &wallet_file, const std::string& password) {
+bool ekrone_wallet::new_wallet(const std::string &wallet_file, const std::string& password) {
   m_wallet_file = wallet_file;
 
   m_wallet.reset(new WalletLegacy(m_currency, *m_node, logManager));
@@ -1073,7 +1073,7 @@ bool ekrone-wallet::new_wallet(const std::string &wallet_file, const std::string
   return true;
 }
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::new_wallet(crypto::SecretKey &secret_key, crypto::SecretKey &view_key, const std::string &wallet_file, const std::string& password) {
+bool ekrone_wallet::new_wallet(crypto::SecretKey &secret_key, crypto::SecretKey &view_key, const std::string &wallet_file, const std::string& password) {
                 m_wallet_file = wallet_file;
 
                 m_wallet.reset(new WalletLegacy(m_currency, *m_node.get(), logManager));
@@ -1127,7 +1127,7 @@ bool ekrone-wallet::new_wallet(crypto::SecretKey &secret_key, crypto::SecretKey 
                 }
 
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::close_wallet()
+bool ekrone_wallet::close_wallet()
 {
   try {
     cn::WalletHelper::storeWallet(*m_wallet, m_wallet_file);
@@ -1143,7 +1143,7 @@ bool ekrone-wallet::close_wallet()
 }
 
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::save(const std::vector<std::string> &args)
+bool ekrone_wallet::save(const std::vector<std::string> &args)
 {
   try {
     cn::WalletHelper::storeWallet(*m_wallet, m_wallet_file);
@@ -1155,7 +1155,7 @@ bool ekrone-wallet::save(const std::vector<std::string> &args)
   return true;
 }
 
-bool ekrone-wallet::reset(const std::vector<std::string> &args) {
+bool ekrone_wallet::reset(const std::vector<std::string> &args) {
   {
     std::unique_lock<std::mutex> lock(m_walletSynchronizedMutex);
     m_walletSynchronized = false;
@@ -1174,7 +1174,7 @@ bool ekrone-wallet::reset(const std::vector<std::string> &args) {
   return true;
 }
 
-bool ekrone-wallet::start_mining(const std::vector<std::string>& args) {
+bool ekrone_wallet::start_mining(const std::vector<std::string>& args) {
   COMMAND_RPC_START_MINING::request req;
   req.miner_address = m_wallet->getAddress();
 
@@ -1220,7 +1220,7 @@ bool ekrone-wallet::start_mining(const std::vector<std::string>& args) {
   return true;
 }
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::stop_mining(const std::vector<std::string>& args)
+bool ekrone_wallet::stop_mining(const std::vector<std::string>& args)
 {
   COMMAND_RPC_STOP_MINING::request req;
   COMMAND_RPC_STOP_MINING::response res;
@@ -1243,7 +1243,7 @@ bool ekrone-wallet::stop_mining(const std::vector<std::string>& args)
   return true;
 }
 
-bool ekrone-wallet::get_reserve_proof(const std::vector<std::string> &args)
+bool ekrone_wallet::get_reserve_proof(const std::vector<std::string> &args)
 {
 	if (args.size() != 1 && args.size() != 2) {
 		fail_msg_writer() << "Usage: get_reserve_proof (all|<amount>) [<message>]";
@@ -1288,7 +1288,7 @@ bool ekrone-wallet::get_reserve_proof(const std::vector<std::string> &args)
 }
 
 
-bool ekrone-wallet::get_tx_proof(const std::vector<std::string> &args)
+bool ekrone_wallet::get_tx_proof(const std::vector<std::string> &args)
 {
   if(args.size() != 2 && args.size() != 3) {
     fail_msg_writer() << "Usage: get_tx_proof <txid> <dest_address> [<txkey>]";
@@ -1344,13 +1344,13 @@ bool ekrone-wallet::get_tx_proof(const std::vector<std::string> &args)
 }
 
 //----------------------------------------------------------------------------------------------------
-void ekrone-wallet::initCompleted(std::error_code result) {
+void ekrone_wallet::initCompleted(std::error_code result) {
   if (m_initResultPromise.get() != nullptr) {
     m_initResultPromise->set_value(result);
   }
 }
 //----------------------------------------------------------------------------------------------------
-void ekrone-wallet::connectionStatusUpdated(bool connected) {
+void ekrone_wallet::connectionStatusUpdated(bool connected) {
   if (connected) {
     logger(INFO, GREEN) << "Wallet connected to daemon.";
   } else {
@@ -1358,7 +1358,7 @@ void ekrone-wallet::connectionStatusUpdated(bool connected) {
   }
 }
 //----------------------------------------------------------------------------------------------------
-void ekrone-wallet::externalTransactionCreated(cn::TransactionId transactionId)  {
+void ekrone_wallet::externalTransactionCreated(cn::TransactionId transactionId)  {
   WalletLegacyTransaction txInfo;
   m_wallet->getTransaction(transactionId, txInfo);
 
@@ -1386,20 +1386,20 @@ void ekrone-wallet::externalTransactionCreated(cn::TransactionId transactionId) 
   }
 }
 //----------------------------------------------------------------------------------------------------
-void ekrone-wallet::synchronizationCompleted(std::error_code result) {
+void ekrone_wallet::synchronizationCompleted(std::error_code result) {
   std::unique_lock<std::mutex> lock(m_walletSynchronizedMutex);
   m_walletSynchronized = true;
   m_walletSynchronizedCV.notify_one();
 }
 
-void ekrone-wallet::synchronizationProgressUpdated(uint32_t current, uint32_t total) {
+void ekrone_wallet::synchronizationProgressUpdated(uint32_t current, uint32_t total) {
   std::unique_lock<std::mutex> lock(m_walletSynchronizedMutex);
   if (!m_walletSynchronized) {
     m_refresh_progress_reporter.update(current, false);
   }
 }
 
-bool ekrone-wallet::show_balance(const std::vector<std::string>& args/* = std::vector<std::string>()*/) {
+bool ekrone_wallet::show_balance(const std::vector<std::string>& args/* = std::vector<std::string>()*/) {
   success_msg_writer() << "available balance: " << m_currency.formatAmount(m_wallet->actualBalance()) <<
     ", locked amount: " << m_currency.formatAmount(m_wallet->pendingBalance()) <<
     ", total amount: " << m_currency.formatAmount(m_wallet->actualBalance() + m_wallet->pendingBalance());
@@ -1407,7 +1407,7 @@ bool ekrone-wallet::show_balance(const std::vector<std::string>& args/* = std::v
   return true;
 }
 
-bool ekrone-wallet::sign_message(const std::vector<std::string>& args)
+bool ekrone_wallet::sign_message(const std::vector<std::string>& args)
 {
   if(args.size() < 1)
   {
@@ -1428,7 +1428,7 @@ bool ekrone-wallet::sign_message(const std::vector<std::string>& args)
   return true;	
 }
 
-bool ekrone-wallet::verify_signature(const std::vector<std::string>& args)
+bool ekrone_wallet::verify_signature(const std::vector<std::string>& args)
 {
   if (args.size() != 3)
   {
@@ -1469,7 +1469,7 @@ bool ekrone-wallet::verify_signature(const std::vector<std::string>& args)
 /* CREATE INTEGRATED ADDRESS */
 /* take a payment Id as an argument and generate an integrated wallet address */
 
-bool ekrone-wallet::create_integrated(const std::vector<std::string>& args/* = std::vector<std::string>()*/) 
+bool ekrone_wallet::create_integrated(const std::vector<std::string>& args/* = std::vector<std::string>()*/) 
 {
 
   /* check if there is a payment id */
@@ -1516,7 +1516,7 @@ bool ekrone-wallet::create_integrated(const std::vector<std::string>& args/* = s
 /* ---------------------------------------------------------------------------------------- */
 
 
-bool ekrone-wallet::export_keys(const std::vector<std::string>& args/* = std::vector<std::string>()*/) {
+bool ekrone_wallet::export_keys(const std::vector<std::string>& args/* = std::vector<std::string>()*/) {
   AccountKeys keys;
   m_wallet->getAccountKeys(keys);
 
@@ -1542,7 +1542,7 @@ bool ekrone-wallet::export_keys(const std::vector<std::string>& args/* = std::ve
   return true;
 }
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::show_incoming_transfers(const std::vector<std::string>& args) {
+bool ekrone_wallet::show_incoming_transfers(const std::vector<std::string>& args) {
   bool hasTransfers = false;
   size_t transactionsCount = m_wallet->getTransactionCount();
   for (size_t trantransactionNumber = 0; trantransactionNumber < transactionsCount; ++trantransactionNumber) {
@@ -1560,7 +1560,7 @@ bool ekrone-wallet::show_incoming_transfers(const std::vector<std::string>& args
 }
 
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::show_outgoing_transfers(const std::vector<std::string>& args) {
+bool ekrone_wallet::show_outgoing_transfers(const std::vector<std::string>& args) {
   bool hasTransfers = false;
   size_t transactionsCount = m_wallet->getTransactionCount();
   for (size_t trantransactionNumber = 0; trantransactionNumber < transactionsCount; ++trantransactionNumber) {
@@ -1578,7 +1578,7 @@ bool ekrone-wallet::show_outgoing_transfers(const std::vector<std::string>& args
 }
 
 
-bool ekrone-wallet::listTransfers(const std::vector<std::string>& args) {
+bool ekrone_wallet::listTransfers(const std::vector<std::string>& args) {
   bool haveTransfers = false;
   bool haveBlockHeight = false;
   std::string blockHeightString = ""; 
@@ -1628,7 +1628,7 @@ bool ekrone-wallet::listTransfers(const std::vector<std::string>& args) {
   return true;
 }
 
-bool ekrone-wallet::show_payments(const std::vector<std::string> &args) {
+bool ekrone_wallet::show_payments(const std::vector<std::string> &args) {
   if (args.empty()) {
     fail_msg_writer() << "expected at least one payment ID";
     return true;
@@ -1675,7 +1675,7 @@ bool ekrone-wallet::show_payments(const std::vector<std::string> &args) {
   return true;
 }
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::show_blockchain_height(const std::vector<std::string>& args) {
+bool ekrone_wallet::show_blockchain_height(const std::vector<std::string>& args) {
   try {
     uint64_t bc_height = m_node->getLastLocalBlockHeight();
     success_msg_writer() << bc_height;
@@ -1686,7 +1686,7 @@ bool ekrone-wallet::show_blockchain_height(const std::vector<std::string>& args)
   return true;
 }
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::show_num_unlocked_outputs(const std::vector<std::string>& args) {
+bool ekrone_wallet::show_num_unlocked_outputs(const std::vector<std::string>& args) {
   try {
     std::vector<TransactionOutputInformation> unlocked_outputs = m_wallet->getUnspentOutputs();
     success_msg_writer() << "Count: " << unlocked_outputs.size();
@@ -1700,7 +1700,7 @@ bool ekrone-wallet::show_num_unlocked_outputs(const std::vector<std::string>& ar
   return true;
 }
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::optimize_outputs(const std::vector<std::string>& args) {
+bool ekrone_wallet::optimize_outputs(const std::vector<std::string>& args) {
   try {
     cn::WalletHelper::SendCompleteResultObserver sent;
     WalletHelper::IWalletRemoveObserverGuard removeGuard(*m_wallet, sent);
@@ -1752,7 +1752,7 @@ bool ekrone-wallet::optimize_outputs(const std::vector<std::string>& args) {
 //----------------------------------------------------------------------------------------------------
 
 
-bool ekrone-wallet::optimize_all_outputs(const std::vector<std::string>& args) {
+bool ekrone_wallet::optimize_all_outputs(const std::vector<std::string>& args) {
 
   uint64_t num_unlocked_outputs = 0;
 
@@ -1818,7 +1818,7 @@ bool ekrone-wallet::optimize_all_outputs(const std::vector<std::string>& args) {
 
 //----------------------------------------------------------------------------------------------------
 
-std::string ekrone-wallet::resolveAlias(const std::string& aliasUrl) {
+std::string ekrone_wallet::resolveAlias(const std::string& aliasUrl) {
   std::string host;
 	std::string uri;
 	std::vector<std::string>records;
@@ -1838,7 +1838,7 @@ std::string ekrone-wallet::resolveAlias(const std::string& aliasUrl) {
 //----------------------------------------------------------------------------------------------------
 
 /* This extracts the fee address from the remote node */
-std::string ekrone-wallet::getFeeAddress() {
+std::string ekrone_wallet::getFeeAddress() {
   
   HttpClient httpClient(m_dispatcher, m_daemon_host, m_daemon_port);
 
@@ -1866,7 +1866,7 @@ std::string ekrone-wallet::getFeeAddress() {
 }
 
 
-bool ekrone-wallet::transfer(const std::vector<std::string> &args) {
+bool ekrone_wallet::transfer(const std::vector<std::string> &args) {
   try {
     TransferCommand cmd(m_currency, m_remote_node_address);
 
@@ -1967,7 +1967,7 @@ bool ekrone-wallet::transfer(const std::vector<std::string> &args) {
   return true;
 }
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::run() {
+bool ekrone_wallet::run() {
   {
     std::unique_lock<std::mutex> lock(m_walletSynchronizedMutex);
     while (!m_walletSynchronized) {
@@ -1982,24 +1982,24 @@ bool ekrone-wallet::run() {
   return true;
 }
 //----------------------------------------------------------------------------------------------------
-void ekrone-wallet::stop() {
+void ekrone_wallet::stop() {
   m_consoleHandler.requestStop();
 }
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::print_address(const std::vector<std::string> &args/* = std::vector<std::string>()*/) {
+bool ekrone_wallet::print_address(const std::vector<std::string> &args/* = std::vector<std::string>()*/) {
   success_msg_writer() << m_wallet->getAddress();
   return true;
 }
 //----------------------------------------------------------------------------------------------------
-bool ekrone-wallet::process_command(const std::vector<std::string> &args) {
+bool ekrone_wallet::process_command(const std::vector<std::string> &args) {
   return m_consoleHandler.runCommand(args);
 }
 
-void ekrone-wallet::printConnectionError() const {
+void ekrone_wallet::printConnectionError() const {
   fail_msg_writer() << "wallet failed to connect to daemon (" << m_daemon_address << ").";
 }
 
-bool ekrone-wallet::save_keys_to_file(const std::vector<std::string>& args)
+bool ekrone_wallet::save_keys_to_file(const std::vector<std::string>& args)
 {
   if (!args.empty())
   {
@@ -2037,7 +2037,7 @@ bool ekrone-wallet::save_keys_to_file(const std::vector<std::string>& args)
   return true;
 }
 
-bool ekrone-wallet::list_deposits(const std::vector<std::string> &args)
+bool ekrone_wallet::list_deposits(const std::vector<std::string> &args)
 {
   bool haveDeposits = m_wallet->getDepositCount() > 0;
 
@@ -2063,7 +2063,7 @@ bool ekrone-wallet::list_deposits(const std::vector<std::string> &args)
   return true;
 }
 
-bool ekrone-wallet::deposit(const std::vector<std::string> &args)
+bool ekrone_wallet::deposit(const std::vector<std::string> &args)
 {
   if (args.size() != 2)
   {
@@ -2173,7 +2173,7 @@ bool ekrone-wallet::deposit(const std::vector<std::string> &args)
   return true;
 }
 
-bool ekrone-wallet::withdraw(const std::vector<std::string> &args)
+bool ekrone_wallet::withdraw(const std::vector<std::string> &args)
 {
   if (args.size() != 1)
   {
@@ -2234,7 +2234,7 @@ bool ekrone-wallet::withdraw(const std::vector<std::string> &args)
   return true;
 }
 
-bool ekrone-wallet::deposit_info(const std::vector<std::string> &args)
+bool ekrone_wallet::deposit_info(const std::vector<std::string> &args)
 {
   if (args.size() != 1)
   {
@@ -2252,7 +2252,7 @@ bool ekrone-wallet::deposit_info(const std::vector<std::string> &args)
   return true;
 }
 
-bool ekrone-wallet::confirm_deposit(uint64_t term, uint64_t amount)
+bool ekrone_wallet::confirm_deposit(uint64_t term, uint64_t amount)
 {
   uint64_t interest = m_currency.calculateInterest(amount, term);
 
