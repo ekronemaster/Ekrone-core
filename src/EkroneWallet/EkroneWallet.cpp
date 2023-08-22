@@ -671,7 +671,7 @@ std::string ekrone_wallet::wallet_menu(bool do_ext)
 
 /* This function shows the number of outputs in the wallet
   that are below the dust threshold */
-bool ::show_dust(const std::vector<std::string>& args) {
+bool ekrone_wallet::show_dust(const std::vector<std::string>& args) {
   logger(INFO, BRIGHT_WHITE) << "Dust outputs: " << m_wallet->dustBalance() << std::endl;
 	return true;
 }
