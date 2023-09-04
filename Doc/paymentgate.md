@@ -36,9 +36,9 @@ daemon-port=30000           #
 
 ##### Minimal Configuration
 Here is minimal cofiguration example required to run the daemon:
-`/etc/XUNI/paymentgate.conf`
+`/etc/ekr/paymentgate.conf`
 ```ini
-container-file=/etc/XUNI/container.iwallet
+container-file=/etc/ekr/container.iwallet
 bind-port=8070
 bind-address=127.0.0.1
 container-password=sectet123

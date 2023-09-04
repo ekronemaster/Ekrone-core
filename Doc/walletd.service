@@ -8,7 +8,7 @@ Group=USER
 Restart=on-failure
 RestartSec=5s
 
-ExecStart=/usr/bin/walletd --config=/etc/XUNI/paymentgate.conf
+ExecStart=/usr/bin/walletd --config=/etc/ekr/paymentgate.conf
 GuessMainPID=no
 
 [Install]

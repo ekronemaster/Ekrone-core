@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2017 The Cryptonote developers
 // Copyright (c) 2017-2018 The Circle Foundation & Conceal Devs
 // Copyright (c) 2018-2019 Conceal Network & Conceal Devs
-// Copyright (c) 2017-2022 UltraNote Infinity Developers
+// Copyright (c) 2017-2022 Ekrone Developers
 //
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -477,8 +477,8 @@ bool processServerAliasResponse(const std::string& s, std::string& address) {
   try {
   //   
   // Courtesy of Monero Project
-		// make sure the txt record has "oa1:xuni" and find it
-		auto pos = s.find("oa1:xuni");
+		// make sure the txt record has "oa1:ekr" and find it
+		auto pos = s.find("oa1:ekr");
 		if (pos == std::string::npos)
 			return false;
 		// search from there to find "recipient_address="
@@ -1047,7 +1047,7 @@ bool ekrone_wallet::new_wallet(const std::string &wallet_file, const std::string
     std::string secretKeysData = std::string(reinterpret_cast<char*>(&keys.spendSecretKey), sizeof(keys.spendSecretKey)) + std::string(reinterpret_cast<char*>(&keys.viewSecretKey), sizeof(keys.viewSecretKey));
     std::string guiKeys = tools::base_58::encode_addr(cn::parameters::CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX, secretKeysData);
 
-    logger(INFO, BRIGHT_GREEN) << "UltraNoteIwallet is an open-source, client-side, free wallet which allow you to send and receive XUNI instantly on the blockchain. You are  in control of your funds & your keys. When you generate a new wallet, login, send, receive or deposit $xuni everything happens locally. Your seed is never transmitted, received or stored. That's why its imperative to write, print or save your seed somewhere safe. The backup of keys is your responsibility. If you lose your seed, your account can not be recovered. The UltraNote Team doesn't take any responsibility for lost funds due to nonexistent/missing/lost private keys." << std::endl << std::endl;
+    logger(INFO, BRIGHT_GREEN) << "Ekronewallet is an open-source, client-side, free wallet which allow you to send and receive ekr instantly on the blockchain. You are  in control of your funds & your keys. When you generate a new wallet, login, send, receive or deposit $ekr everything happens locally. Your seed is never transmitted, received or stored. That's why its imperative to write, print or save your seed somewhere safe. The backup of keys is your responsibility. If you lose your seed, your account can not be recovered. The Ekrone Team doesn't take any responsibility for lost funds due to nonexistent/missing/lost private keys." << std::endl << std::endl;
 
     std::cout << "Wallet Address: " << BrightMagentaMsg(m_wallet->getAddress()) << std::endl;
     std::cout << "Private spend key: " << BrightMagentaMsg(common::podToHex(keys.spendSecretKey)) << std::endl;
@@ -1266,7 +1266,7 @@ bool ekrone_wallet::get_reserve_proof(const std::vector<std::string> &args)
 		
 		//logger(INFO, BRIGHT_WHITE) << "\n\n" << sig_str << "\n\n" << std::endl;
 
-		const std::string filename = "reserve_proof_" + args[0] + "_xuni.txt";
+		const std::string filename = "reserve_proof_" + args[0] + "_ekr.txt";
 		boost::system::error_code ec;
 		if (boost::filesystem::exists(filename, ec)) {
 			boost::filesystem::remove(filename, ec);
@@ -1523,7 +1523,7 @@ bool ekrone_wallet::export_keys(const std::vector<std::string>& args/* = std::ve
   std::string secretKeysData = std::string(reinterpret_cast<char*>(&keys.spendSecretKey), sizeof(keys.spendSecretKey)) + std::string(reinterpret_cast<char*>(&keys.viewSecretKey), sizeof(keys.viewSecretKey));
   std::string guiKeys = tools::base_58::encode_addr(cn::parameters::CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX, secretKeysData);
 
-  logger(INFO, BRIGHT_GREEN) << std::endl << "UltraNoteIwallet is an open-source, client-side, free wallet which allow you to send and receive xuni instantly on the blockchain. You are  in control of your funds & your keys. When you generate a new wallet, login, send, receive or deposit $xuni everything happens locally. Your seed is never transmitted, received or stored. That's why its imperative to write, print or save your seed somewhere safe. The backup of keys is your responsibility. If you lose your seed, your account can not be recovered. The UltraNote Team doesn't take any responsibility for lost funds due to nonexistent/missing/lost private keys." << std::endl << std::endl;
+  logger(INFO, BRIGHT_GREEN) << std::endl << "UltraNoteIwallet is an open-source, client-side, free wallet which allow you to send and receive ekr instantly on the blockchain. You are  in control of your funds & your keys. When you generate a new wallet, login, send, receive or deposit $ekr everything happens locally. Your seed is never transmitted, received or stored. That's why its imperative to write, print or save your seed somewhere safe. The backup of keys is your responsibility. If you lose your seed, your account can not be recovered. The UltraNote Team doesn't take any responsibility for lost funds due to nonexistent/missing/lost private keys." << std::endl << std::endl;
 
   std::cout << "Private spend key: " << common::podToHex(keys.spendSecretKey) << std::endl;
   std::cout << "Private view key: " <<  common::podToHex(keys.viewSecretKey) << std::endl;
@@ -2009,12 +2009,12 @@ bool ekrone_wallet::save_keys_to_file(const std::vector<std::string>& args)
 
   /* remove ".wallet" from the end of the string */
   std::string formatted_wal_str = m_wallet_file.erase(m_wallet_file.size() - 7);
-  std::ofstream backup_file(formatted_wal_str + "_ultranote_backup.txt");
+  std::ofstream backup_file(formatted_wal_str + "_ekrone_backup.txt");
 
   AccountKeys keys;
   m_wallet->getAccountKeys(keys);
 
-  std::string priv_key = "\t\tUltraNote Keys Backup\n\n";
+  std::string priv_key = "\t\tEkrone Keys Backup\n\n";
   priv_key += "Wallet file name: " + m_wallet_file + "\n";
   priv_key += "Private spend key: " + common::podToHex(keys.spendSecretKey) + "\n";
   priv_key += "Private view key: " +  common::podToHex(keys.viewSecretKey) + "\n";
@@ -2032,7 +2032,7 @@ bool ekrone_wallet::save_keys_to_file(const std::vector<std::string>& args)
   backup_file << priv_key;
 
   logger(INFO, BRIGHT_GREEN) << "Wallet keys have been saved to the current folder where \"ekronewallet\" is located as \""
-    << formatted_wal_str << "_ultranote_backup.txt\".";
+    << formatted_wal_str << "_ekrone_backup.txt\".";
 
   return true;
 }

@@ -1,4 +1,4 @@
-Ekrone Gold XUNI
+Ekrone Gold
 =====================
 
 Intro

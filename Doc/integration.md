@@ -26,7 +26,7 @@ In this document we'll show how to use  `ekronewallet`. If you need a multi-wall
 2. Run the node daemon `Ekroned`:
 
 ```sh
-	~# ./Ekroned --config-file /etc/XUNI/node.conf
+	~# ./Ekroned --config-file /etc/ekr/node.conf
 ```   
 
 3. Run the wallet in RPC Server mode
