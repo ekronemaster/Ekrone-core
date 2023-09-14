@@ -232,8 +232,8 @@ namespace cryptonote
     const size_t COMMAND_RPC_GET_BLOCKS_FAST_MAX_COUNT = 1000;
 
 #ifdef USE_TESTNET
-    const int P2P_DEFAULT_PORT = 14080;
-    const int RPC_DEFAULT_PORT = 14081;
+    const int P2P_DEFAULT_PORT = 14078;
+    const int RPC_DEFAULT_PORT = 14079;
 #else
     const int P2P_DEFAULT_PORT = 14080;
     const int RPC_DEFAULT_PORT = 14081;
