@@ -288,9 +288,9 @@ namespace cryptonote
             {0xd1, 0x9e, 0xf4, 0xb6, 0xa2, 0x72, 0x96, 0xc2, 0xaa, 0xe4, 0xae, 0x33, 0xde, 0x11, 0x4a, 0xaa}};
 
     const char *const SEED_NODES[] = {
-        "178.63.51.173:23897", // node1
-        "95.217.5.214:23897", // node2
-        "95.217.210.177:23897" // node3
+        "178.63.51.173:14080", // node1
+        "95.217.5.214:14080", // node2
+        "95.217.210.177:14080" // node3
     };
 #endif
 
