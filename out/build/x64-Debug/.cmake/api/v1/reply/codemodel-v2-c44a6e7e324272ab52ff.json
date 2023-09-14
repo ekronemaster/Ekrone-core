@@ -1,0 +1,534 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						6
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						32
+					]
+				},
+				{
+					"build" : "external",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "external"
+				},
+				{
+					"build" : "external/miniupnpc",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "external/miniupnpc",
+					"targetIndexes" : 
+					[
+						30
+					]
+				},
+				{
+					"build" : "external/cryptopp",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8.6"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 2,
+					"source" : "external/cryptopp",
+					"targetIndexes" : 
+					[
+						7,
+						8,
+						26
+					]
+				},
+				{
+					"build" : "external/rocksdb",
+					"childIndexes" : 
+					[
+						5
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 3,
+					"source" : "external/rocksdb",
+					"targetIndexes" : 
+					[
+						1,
+						20,
+						21
+					]
+				},
+				{
+					"build" : "external/rocksdb/third-party/gtest-1.7.0/fused-src/gtest",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8.12"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 3,
+					"source" : "external/rocksdb/third-party/gtest-1.7.0/fused-src/gtest"
+				},
+				{
+					"build" : "src",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src",
+					"targetIndexes" : 
+					[
+						0,
+						2,
+						3,
+						4,
+						5,
+						6,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						22,
+						23,
+						24,
+						25,
+						27,
+						28,
+						29,
+						31,
+						33,
+						34,
+						35,
+						36,
+						37,
+						38
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						6
+					],
+					"name" : "Ekrone",
+					"targetIndexes" : 
+					[
+						0,
+						2,
+						3,
+						4,
+						5,
+						6,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						22,
+						23,
+						24,
+						25,
+						27,
+						28,
+						29,
+						31,
+						32,
+						33,
+						34,
+						35,
+						36,
+						37,
+						38
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "miniupnpc",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						30
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "cryptopp",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						7,
+						8,
+						26
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						4,
+						5
+					],
+					"name" : "rocksdb",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						20,
+						21
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 6,
+					"id" : "blockchain_explorer::@145eef247bfb46b6828c",
+					"jsonFile" : "target-blockchain_explorer-Debug-a79c5a2ac948b80b2516.json",
+					"name" : "blockchain_explorer",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "build_version::@332f6a8a1187c649af53",
+					"jsonFile" : "target-build_version-Debug-e56f7eb3219baaaa163b.json",
+					"name" : "build_version",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "cli::@145eef247bfb46b6828c",
+					"jsonFile" : "target-cli-Debug-488e2626fd8302b2e8c7.json",
+					"name" : "cli",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "common::@145eef247bfb46b6828c",
+					"jsonFile" : "target-common-Debug-699ee691c792d8861fb7.json",
+					"name" : "common",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "crypto::@145eef247bfb46b6828c",
+					"jsonFile" : "target-crypto-Debug-dcb8b49a3d49764cca04.json",
+					"name" : "crypto",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "crypto_test::@145eef247bfb46b6828c",
+					"jsonFile" : "target-crypto_test-Debug-fc8c52e8b3d594fd0b52.json",
+					"name" : "crypto_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "cryptonote_core::@145eef247bfb46b6828c",
+					"jsonFile" : "target-cryptonote_core-Debug-df35bc3538cad0182fbf.json",
+					"name" : "cryptonote_core",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "cryptopp-object::@f81014497799fc9763d2",
+					"jsonFile" : "target-cryptopp-object-Debug-03a2360c37b1c2f9edcc.json",
+					"name" : "cryptopp-object",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "cryptopp-static::@f81014497799fc9763d2",
+					"jsonFile" : "target-cryptopp-static-Debug-e537fc96af493c646c36.json",
+					"name" : "cryptopp-static",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "ekroned::@145eef247bfb46b6828c",
+					"jsonFile" : "target-ekroned-Debug-925b6973c3897e892b43.json",
+					"name" : "ekroned",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "errors::@145eef247bfb46b6828c",
+					"jsonFile" : "target-errors-Debug-814e704316377bc0735a.json",
+					"name" : "errors",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "http::@145eef247bfb46b6828c",
+					"jsonFile" : "target-http-Debug-0789e6566dd5b9d8ba44.json",
+					"name" : "http",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "json_rpc_server::@145eef247bfb46b6828c",
+					"jsonFile" : "target-json_rpc_server-Debug-e081fe66afc34877e5d1.json",
+					"name" : "json_rpc_server",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "logging::@145eef247bfb46b6828c",
+					"jsonFile" : "target-logging-Debug-61e3c20540d167a46954.json",
+					"name" : "logging",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "miner::@145eef247bfb46b6828c",
+					"jsonFile" : "target-miner-Debug-4191672f488a521d69c4.json",
+					"name" : "miner",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "mnemonics::@145eef247bfb46b6828c",
+					"jsonFile" : "target-mnemonics-Debug-0ba70e0b73eea9754d8b.json",
+					"name" : "mnemonics",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "nigel::@145eef247bfb46b6828c",
+					"jsonFile" : "target-nigel-Debug-4170584b884ff521bee0.json",
+					"name" : "nigel",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "node_rpc_proxy::@145eef247bfb46b6828c",
+					"jsonFile" : "target-node_rpc_proxy-Debug-6f9d372c946e80c2b522.json",
+					"name" : "node_rpc_proxy",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "p2p::@145eef247bfb46b6828c",
+					"jsonFile" : "target-p2p-Debug-eeed222eb7c6d9af98b1.json",
+					"name" : "p2p",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "pool::@145eef247bfb46b6828c",
+					"jsonFile" : "target-pool-Debug-6eb628d3a676190d89d0.json",
+					"name" : "pool",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "rocksdb::@332f6a8a1187c649af53",
+					"jsonFile" : "target-rocksdb-Debug-0c386ba070323e1ce4f0.json",
+					"name" : "rocksdb",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "rocksdb-shared::@332f6a8a1187c649af53",
+					"jsonFile" : "target-rocksdb-shared-Debug-8f53ba691597ffe25f36.json",
+					"name" : "rocksdb-shared",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "rpc::@145eef247bfb46b6828c",
+					"jsonFile" : "target-rpc-Debug-fb9932ec7180a9204a22.json",
+					"name" : "rpc",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "serialization::@145eef247bfb46b6828c",
+					"jsonFile" : "target-serialization-Debug-a2f86dfc5aebf41caba8.json",
+					"name" : "serialization",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "service::@145eef247bfb46b6828c",
+					"jsonFile" : "target-service-Debug-534eefcd1fc07de281a9.json",
+					"name" : "service",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "solominer::@145eef247bfb46b6828c",
+					"jsonFile" : "target-solominer-Debug-c5e79644f738299da507.json",
+					"name" : "solominer",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "static::@f81014497799fc9763d2",
+					"jsonFile" : "target-static-Debug-953fca146038a9e745e0.json",
+					"name" : "static",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "sub_wallets::@145eef247bfb46b6828c",
+					"jsonFile" : "target-sub_wallets-Debug-b18cbd748445ed49aeef.json",
+					"name" : "sub_wallets",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "syst::@145eef247bfb46b6828c",
+					"jsonFile" : "target-syst-Debug-185bb71ca6fb816fc711.json",
+					"name" : "syst",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "transfers::@145eef247bfb46b6828c",
+					"jsonFile" : "target-transfers-Debug-ee098b943ac9501b8293.json",
+					"name" : "transfers",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "upnpc-static::@60a6c63e2279a1ce8c58",
+					"jsonFile" : "target-upnpc-static-Debug-4b86d38dd12870e0c8e3.json",
+					"name" : "upnpc-static",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "utilities::@145eef247bfb46b6828c",
+					"jsonFile" : "target-utilities-Debug-a12a1ff872a07cf3d44f.json",
+					"name" : "utilities",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "version::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-version-Debug-fd61d662124cafff97ff.json",
+					"name" : "version",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "wallet::@145eef247bfb46b6828c",
+					"jsonFile" : "target-wallet-Debug-1393388c136bce32d040.json",
+					"name" : "wallet",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "wallet_api::@145eef247bfb46b6828c",
+					"jsonFile" : "target-wallet_api-Debug-9e60ff6cd50282950a67.json",
+					"name" : "wallet_api",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "wallet_backend::@145eef247bfb46b6828c",
+					"jsonFile" : "target-wallet_backend-Debug-852b07ecdacab2d7cbe3.json",
+					"name" : "wallet_backend",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "wallet_service::@145eef247bfb46b6828c",
+					"jsonFile" : "target-wallet_service-Debug-8193acf348c526d6bc9a.json",
+					"name" : "wallet_service",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "zedwallet::@145eef247bfb46b6828c",
+					"jsonFile" : "target-zedwallet-Debug-be7683f8ab3438efcfba.json",
+					"name" : "zedwallet",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "zedwallet++::@145eef247bfb46b6828c",
+					"jsonFile" : "target-zedwallet++-Debug-c611f32fabfc9db8835d.json",
+					"name" : "zedwallet++",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/Administrator/Desktop/nynynyny/Ekrone_core-main/out/build/x64-Debug",
+		"source" : "C:/Users/Administrator/Desktop/nynynyny/Ekrone_core-main"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 2
+	}
+}
