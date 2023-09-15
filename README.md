@@ -8,7 +8,7 @@
 [![license](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://opensource.org/licenses/GPLv3)
 [![discord](https://img.shields.io/discord/1136264162549436496?label=discord)](https://discord.gg/StA2mh7UfZ)
 
-Ekrone (XEKR) is a decentralized blockchain based on CryptoNote, which forms the basis for many currencies. CryptoNote is a so-called “application layer” protocol that enables private transactions, messages and arbitrary data storage, completely decentralized. We made this for internal use, but decided you can use it. Mining is for all with a PC, no need expensive equipment.You can also deposit XEKR on the blockchain and earn interest. Warning: This a project still under development, so be sure you are updated. Happy journey, learn and have fun.
+Ekrone (XEKR) is a decentralized blockchain based on CryptoNote, which forms the basis for many currencies. CryptoNote is a so-called “application layer” protocol that enables private transactions, messages and arbitrary data storage, completely decentralized. Everyone starts somewhere. If you're new or returning, you'll probably want to get in sync with the network so you can use your funds. Syncing from your own node is faster than syncing from a remote node. Here are some handy links to get you there as soon as possible.. Mining is for all with a PC, so no need expensive equipment. Warning: This a project still under development, so be sure you are updated. Happy journey, learn and have fun.
 Feel free to add us anywhere you use Ekrone, including pools and exchanges.
 
 ## Table of Contents
