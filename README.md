@@ -1,9 +1,9 @@
-<a href="https://github.com/ekrone/ekrone">
+<a href="https://github.com/ekronemaster/Ekrone-core-core">
   <img align="right" width="200" height="120" alt="Ekrone" src="resources/ekrone.svg">
 </a>
 
 # Ekrone
-[![build](https://img.shields.io/github/actions/workflow/status/ekronemaster/Ekrone/master-ci.yml?branch=master)](https://github.com/ekronemaster/Ekrone/actions/workflows/master-ci.yml)
+[![build](https://img.shields.io/github/actions/workflow/status/ekronemaster/Ekrone/master-ci.yml?branch=master)](https://github.com/ekronemaster/Ekrone-core/actions/workflows/master-ci.yml)
 [![release](https://img.shields.io/github/v/release/ekronemaster/Ekrone)](https://img.shields.io/github/v/release/ekronemaster/Ekrone)
 [![license](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://opensource.org/licenses/GPLv3)
 [![discord](https://img.shields.io/discord/1136264162549436496?label=discord)](https://discord.gg/StA2mh7UfZ)
@@ -70,7 +70,7 @@ Are you having trouble with Ekrone? We want to help!
 
 - Ask a question we monitor stackoverflow.com for questions tagged with ekrone. You can also chat with the community on Telegram or Discord.
 
-- Report bugs with Ekrone at https://github.com/ekronemaster/Ekrone/issues.
+- Report bugs with Ekrone at https://github.com/ekronemaster/Ekrone-core/issues.
 
 - Join the Discussion and be part of the community at Discord: 
 
@@ -114,7 +114,7 @@ The purpose of publishing prepared Docker images is to make it faster and easier
 
 ## Installation
 
-We offer binary images of the latest releases here: https://github.com/ekronemaster/Ekrone/releases
+We offer binary images of the latest releases here: https://github.com/ekronemaster/Ekrone-core/releases
 
 If you would like to compile yourself, read on.
 
@@ -141,7 +141,7 @@ If you are using Ubuntu 22.04 LTS GCC11 and C++11 now comes as default and no ne
 - `sudo pip3 install cmake`
 - `export CC=gcc-11`
 - `export CXX=g++-11`
-- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone`
+- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone-core`
 - `cd ekrone`
 - `mkdir build`
 - `cd build`
@@ -178,7 +178,7 @@ You need to modify the below command for your version of ubuntu - see https://ap
 * `sudo pip install cmake`
 * `export CC=clang-6.0`
 * `export CXX=clang++-6.0`
-* `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone`
+* `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone-core`
 * `cd ekrone`
 * `mkdir build`
 * `cd build`
@@ -194,7 +194,7 @@ The binaries will be in the `src` folder when you are complete.
 
 #### Build
 
-- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone`
+- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone-core`
 - `cd turtlecoin`
 - `mkdir build`
 - `cd build`
@@ -220,7 +220,7 @@ If using M1 chip, switch gcc@8 to gcc@11 when installing through brew.
 - `brew install --force cmake boost llvm gcc@8`
 - `export CC=gcc-8`
 - `export CXX=g++-8`
-- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone`
+- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone-core`
 - `cd ekrone`
 - `mkdir build`
 - `cd build`
@@ -238,7 +238,7 @@ The binaries will be in the `src` folder when you are complete.
 - `brew install --force cmake boost llvm`
 - `export CC=/usr/local/opt/llvm/bin/clang`
 - `export CXX=/usr/local/opt/llvm/bin/clang++`
-- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone`
+- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone-core`
 - `cd ekrone`
 - `mkdir build`
 - `cd build`
@@ -313,7 +313,7 @@ Once you have a 64 bit image installed, setup proceeds the same as any Linux dis
 
 #### Build
 
-- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone`
+- `git clone -b master --single-branch https://github.com/ekronemaster/Ekrone-core`
 - `cd ekrone`
 - `mkdir build`
 - `cd build`

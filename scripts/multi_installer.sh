@@ -54,7 +54,7 @@ _set_wd() {
             esac
         fi
         mkdir ekrone
-        git clone -b master -q https://github.com/ekrone/ekrone ekrone   >>build.log 2>&1 || _fail "Unable to clone git repository. Please see build.log for more information"
+        git clone -b master -q https://github.com/ekronemaster/Ekrone-core ekrone   >>build.log 2>&1 || _fail "Unable to clone git repository. Please see build.log for more information"
         cd ekrone
     fi
 }
@@ -153,4 +153,4 @@ _set_wd
 _build_ekrone
 
 _note "Installation complete!"
-_note "Look in 'ekrone/build/src/' for the executible binaries. See 'https://github.com/ekrone/ekrone' for more project support. Cowabunga!"
+_note "Look in 'ekrone/build/src/' for the executible binaries. See 'https://github.com/ekronemaster/Ekrone-core' for more project support. Cowabunga!"

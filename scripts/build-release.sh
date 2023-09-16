@@ -115,7 +115,7 @@ then
 fi
 
 # -- Config
-GITHUB_REPO="https://github.com/ekrone/ekrone.git"
+GITHUB_REPO="https://github.com/ekronemaster/Ekrone-core.git"
 CLONE_DIR="$BUILD_DIRECTORY/ekrone-buildall"
 TARGET_DIR="$BUILD_DIRECTORY/ekrone-releases"
 DYNAMIC_RELEASE="ekrone-${TAG_VERSION}-linux-CLI"

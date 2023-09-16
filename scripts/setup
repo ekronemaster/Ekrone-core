@@ -32,7 +32,7 @@ echo -e "\n\n\n== CLONING Ekrone in $sourcefolder"
 # master branch instead, and it will get the source from the last
 # time that we merged development to master, which normally only
 # happens when we create a version release.
-git clone -b development https://github.com/ekrone/ekrone $sourcefolder
+git clone -b development https://github.com/ekronemaster/Ekrone-core $sourcefolder
 cd $sourcefolder
 ls -al
 

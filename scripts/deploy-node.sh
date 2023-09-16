@@ -46,13 +46,13 @@ sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
 echo ""
-echo "###### CLONE KRYPTOKRONA REPOSITORY ######"
+echo "###### CLONE Ekrone REPOSITORY ######"
 echo ""
 if [ -f "ekrone" ]; then
     echo "ekrone repository exists. Skipping..."
     (cd ekrone && git pull)
 else
-    git clone https://github.com/ekrone/ekrone.git
+    git clone https://github.com/ekronemaster/Ekrone-core.git
 fi
 
 echo ""
@@ -79,7 +79,7 @@ docker network create ekrone
 echo ""
 echo "###### RUNNING DOCKER CONTAINER ######"
 echo ""
-docker run -d -p 11898:11898 --volume=$CURRENT_DIR/bootstrap/.ekrone:/usr/src/ekrone/build/src/blockloc --network=ekrone docker pull ghcr.io/ekrone/ekrone:latest 
+docker run -d -p 14081:14081 --volume=$CURRENT_DIR/bootstrap/.ekrone:/usr/src/ekrone/build/src/blockloc --network=ekrone docker pull ghcr.io/ekrone/ekrone:latest 
 
 echo ""
 echo "###### SETTING UP NGINX AND LET'S ENCRYPT ######"
