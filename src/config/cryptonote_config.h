@@ -273,8 +273,8 @@ namespace cryptonote
     const uint32_t DATABASE_DEFAULT_MAX_OPEN_FILES = 100;
     const uint16_t DATABASE_DEFAULT_BACKGROUND_THREADS_COUNT = 2;
 
-    const char LATEST_VERSION_URL[] = "https://github.com/ekronemaster/Ekrone-core-core";
-    const std::string LICENSE_URL = "https://github.com/ekronemaster/Ekrone-core-core/blob/master/LICENSE";
+    const char LATEST_VERSION_URL[] = "https://github.com/ekronemaster/Ekrone-core";
+    const std::string LICENSE_URL = "https://github.com/ekronemaster/Ekrone-core/blob/master/LICENSE";
 
 #ifdef USE_TESTNET
     const static boost::uuids::uuid CRYPTONOTE_NETWORK =
